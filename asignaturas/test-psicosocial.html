@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pon a prueba tus conocimientos - Apoyo Psicosocial</title>
+    <style>
+        :root {
+            --bg-board: #2b3a32;
+            --board-frame: #4a3525;
+            --text-chalk: #f4f4f0;
+            --postit-yellow: #fff3a8;
+            --postit-blue: #a0c4ff;
+            --postit-peach: #ffd6a5;
+            --postit-mint: #b9fbc0;
+            --text-dark: #2b2b2b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: #1e1e1e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1000px;
+            background-color: var(--bg-board);
+            border: 12px solid var(--board-frame);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.5);
+            color: var(--text-chalk);
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header h1 {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+            border-bottom: 2px dashed rgba(255,255,255,0.2);
+            padding-bottom: 10px;
+        }
+
+        header p {
+            font-size: 0.95em;
+            opacity: 0.85;
+            margin-top: 5px;
+            margin-bottom: 20px;
+        }
+
+        /* Selector de Modelos (Pantalla Inicial) */
+        .model-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .model-card {
+            background-color: var(--postit-yellow);
+            color: var(--text-dark);
+            padding: 20px;
+            border-radius: 6px 6px 6px 16px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 3px 5px 12px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .model-card:hover {
+            transform: scale(1.03);
+        }
+
+        .model-card.b { background-color: var(--postit-blue); }
+        .model-card.c { background-color: var(--postit-peach); }
+        .model-card.d { background-color: var(--postit-mint); }
+
+        /* Contenedor del Test */
+        .quiz-body {
+            overflow-y: auto;
+            flex-grow: 1;
+            padding-right: 10px;
+            margin-bottom: 15px;
+        }
+
+        .quiz-body::-webkit-scrollbar {
+            width: 8px;
+        }
+        .quiz-body::-webkit-scrollbar-thumb {
+            background: var(--board-frame);
+            border-radius: 4px;
+        }
+
+        .question-box {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--text-dark);
+            padding: 18px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 2px 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .question-box h3 {
+            font-size: 1em;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.9em;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .option-label:hover {
+            background: rgba(0,0,0,0.05);
+        }
+
+        /* Botones de Acción */
+        .btn-action {
+            background-color: var(--board-frame);
+            color: var(--text-chalk);
+            border: none;
+            padding: 12px 24px;
+            font-size: 1em;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            align-self: flex-start;
+            transition: opacity 0.2s;
+        }
+
+        .btn-action:hover {
+            opacity: 0.85;
+        }
+
+        /* Resultados */
+        .result-box {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--text-dark);
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2em;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .back-nav {
+            margin-top: 15px;
+        }
+
+        .back-btn {
+            color: var(--text-chalk);
+            text-decoration: none;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        .back-btn:hover { opacity: 1; text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <main class="board-container">
+        <header>
+            <h1>Pon a prueba tus conocimientos</h1>
+            <p id="subtitle">Selecciona el modelo de examen para comenzar la autoevaluación (Preguntas con penalización de 1/3 por fallo).</p>
+        </header>
+
+        <!-- PANTALLA 1: SELECCIÓN DE MODELO -->
+        <div id="modelSelection" class="model-selector">
+            <div class="model-card" onclick="cargarModelo('A')">📝 Modelo A<br><small style="font-weight:normal;opacity:0.8;">20 Preguntas Oficiales</small></div>
+            <div class="model-card b" onclick="cargarModelo('B')">📝 Modelo B<br><small style="font-weight:normal;opacity:0.8;">20 Preguntas Oficiales</small></div>
+            <div class="model-card c" onclick="cargarModelo('C')">📝 Modelo C<br><small style="font-weight:normal;opacity:0.8;">20 Preguntas Oficiales</small></div>
+            <div class="model-card d" onclick="cargarModelo('D')">📝 Modelo D (Supuestos)<br><small style="font-weight:normal;opacity:0.8;">20 Supuestos Prácticos</small></div>
+        </div>
+
+        <!-- PANTALLA 2: DESARROLLO DEL TEST -->
+        <div id="quizContainer" class="quiz-body hidden">
+            <form id="testForm"></form>
+            <button type="button" class="btn-action" onclick="corregirExamen()">📊 Finalizar y Corregir</button>
+        </div>
+
+        <!-- PANTALLA 3: RESULTADOS -->
+        <div id="resultContainer" class="result-box hidden">
+            <h2 id="scoreTitle"></h2>
+            <p id="scoreDetails"></p>
+            <button type="button" class="btn-action" style="align-self: center;" onclick="reiniciarSelector()">🔄 Elegir otro modelo</button>
+        </div>
+
+        <div class="back-nav">
+            <a href="apoyo-psicosocial.html" class="back-btn">&larr; Volver a la asignatura</a>
+        </div>
+    </main>
+
+    <script>
+        // BASE DE DATOS DE LOS 4 MODELOS DE EXAMEN
+        const examenesData = {
+            A: [
+                {q: "¿Cómo se define el concepto general de autonomía personal según los contenidos de la unidad?", opts: ["La capacidad exclusiva para tomar decisiones financieras sin depender de terceros.", "La capacidad de mantener el control sobre la propia existencia.", "La obligación de realizar todas las actividades cotidianas bajo supervisión estricta.", "El dominio absoluto de las técnicas avanzadas de relajación mental."], ans: 1},
+                {q: "¿Cuáles son los dos componentes principales en los que se desglosa el concepto de autonomía personal?", opts: ["Autodeterminación e independencia.", "Habilidades cognitivas y destrezas motoras.", "Actividades básicas y actividades instrumentales.", "Socialización y autocuidado domiciliario."], ans: 0},
+                {q: "¿Cómo se define técnicamente la 'independencia' dentro del marco de la autonomía personal?", opts: ["Tomar decisiones propias asumiendo los riesgos correspondientes.", "Ejecutar de forma automática las rutinas de la vida diaria.", "Realizar actividades cotidianas sin ayuda.", "Planificar el cronograma de intervenciones de terapia ocupacional."], ans: 2},
+                {q: "¿Qué tipo de actividades de la vida diaria (AVD) se consideran imprescindibles para la supervivencia y un nivel de autonomía elemental?", opts: ["Las actividades avanzadas (AVDA)", "Las actividades instrumentales (AVDI)", "Las actividades básicas (AVDB)", "Las habilidades académicas funcionales"], ans: 2},
+                {q: "¿Cuál de los siguientes ejemplos corresponde a una Actividad de la Vida Diaria Básica (AVDB)?", opts: ["Manejar dinero y hacer compras autónomas", "Utilizar el transporte público o conducir", "La comida, el vestido y la higiene personal", "Practicar aficiones de ocio y participar socialmente"], ans: 2},
+                {q: "¿Qué caracterizan a las Actividades de la Vida Diaria Instrumentales (AVDI)?", opts: ["Son más complejas y permiten al sujeto adaptarse e integrarse en su entorno.", "Se limitan estrictamente a las funciones vegetativas elementales de supervivencia.", "Requieren siempre la asistencia obligatoria de un auxiliar técnico domiciliario.", "Corresponden exclusivamente al desempeño de un puesto de trabajo remunerado."], ans: 0},
+                {q: "¿Cuál de las siguientes tareas forma parte de las Actividades de la Vida Diaria Avanzadas (AVDA)?", opts: ["El control de esfínteres y el desplazamiento autónomo en el hogar", "El uso del teléfono, la cocina y la toma de medicación pautada", "Disfrutar de una buena calidad de vida mediante aficiones, ocio y relaciones sociales", "La lectura de prospectos de medicamentos y el cálculo matemático básico"], ans: 2},
+                {q: "¿Cómo se definen las 'Habilidades de Autonomía Personal'?", opts: ["Como las capacidades y destrezas de las que dispone una persona para funcionar en su vida diaria.", "Como el conjunto de normas jurídicas que regulan la dependencia en centros residenciales.", "Como las pautas de conducta impuestas por el entorno familiar sobreprotector.", "Como los diagnósticos médicos emitidos por el área de terapia ocupacional."], ans: 0},
+                {q: "¿Qué factor importante señala el texto que menoscava a menudo la autonomía de las personas en situación de dependencia?", opts: ["La falta absoluta de recursos tecnológicos y tiflotecnología", "Las conductas sobreprotectoras o autoritarias", "El exceso de autonomía en el ámbito de las actividades avanzadas", "La escasez de manuales de auto-instrucción cognitiva"], ans: 1},
+                {q: "Dentro de la clasificación de las habilidades de autonomía personal, ¿qué engloba el 'Área del autocuidado'?", opts: ["El manejo de la economía doméstica y las compras en establecimientos", "La autonomía en el aseo, la comida y la higiene, siendo las primeras que se adquieren", "El cumplimiento de horarios y la finalización de tareas asignadas", "La utilización correcta de los transportes públicos y centros médicos"], ans: 1},
+                {q: "¿Qué abarca el 'Área de la autodeterminación' dentro de las habilidades de autonomía personal?", opts: ["La regulación del propio comportamiento, elecciones personales, seguimiento de horarios y resolución de problemas", "El conocimiento del entorno natural, social y tecnológico mediante la lectura y el cálculo", "El mantenimiento del orden, la limpieza y la planificación de las tareas del hogar", "El desarrollo de un empleo formal con cumplimiento de obligaciones laborales"], ans: 0},
+                {q: "¿Qué habilidades comprende el 'Área de la vida en el hogar'?", opts: ["La preparación de comidas, el mantenimiento del orden, la limpieza, la planificación de compras y el cuidado de la ropa", "La utilización de recursos comunitarios de carácter recreativo y sanitario", "La aceptación de críticas y el conocimiento de los recursos laborales disponibles", "El entrenamiento intensivo en lengua de signos y sistemas alternativos de comunicación"], ans: 0},
+                {q: "¿Qué tipo de aprendizajes abarca el 'Área de las habilidades académicas funcionales'?", opts: ["Lectura, escritura, cálculo y conocimiento del entorno natural, social y tecnológico con aplicación directa en las AVD", "Técnicas avanzadas de modificación de conducta mediante refuerzo positivo intermitente", "Estrategias de control emocional orientadas exclusivamente a la reducción de la ansiedad", "Programas de intervención directa para la rehabilitación de trastornos mentales severos"], ans: 0},
+                {q: "¿Cuál es el propósito principal del 'Área de la utilización de los recursos comunitarios'?", opts: ["Gestionar de manera centralizada la historia clínica de los centros residenciales", "Lograr el buen uso y disfrute de los recursos de la comunidad (transportes, establecimientos, servicios médicos)", "Desempeñar tareas de asistencia personal contratada bajo marco de acuerdo previo", "Fomentar el aislamiento voluntario para prevenir situaciones de riesgo en la vía pública"], ans: 1},
+                {q: "¿Cómo se define conceptualmente una 'Habilidad'?", opts: ["La ejecución repetida de una conducta en el momento indicado del día", "La capacidad para realizar una tarea o actividad concreta", "Una conducta aprendida que se ejecuta de forma completamente automática", "El resultado numérico obtenido tras aplicar una escala de valoración funcional"], ans: 1},
+                {q: "¿Qué es una 'Rutina' en el contexto de la autonomía personal?", opts: ["La ejecución repetida de una habilidad en el momento indicado para facilitar el hábito", "Una limitación severa en el autocuidado provocada por conductas autoritarias", "Un programa institucional de terapia ocupacional de carácter temporal", "La valoración inicial de las capacidades retenidas y el potencial de mejora"], ans: 0},
+                {q: "¿Cuáles son algunos de los beneficios importantes que aportan las rutinas?", opts: ["Incremento de la dependencia pasiva y la sobreprotección familiar", "Orden, claridad, seguridad, orientación temporal y establecimiento de hábitos sociales", "Supresión total de la necesidad de aplicar técnicas de modificación de conducta", "Reducción drástica del tiempo dedicado al descanso y al sueño nocturno"], ans: 1},
+                {q: "¿Cómo se define el 'Hábito'?", opts: ["Una pauta de conducta rígida impuesta por el entorno institucional", "Una conducta aprendida que se ejecuta de forma automática y sin necesidad de apoyo externo", "Un objetivo de intervención enfocado exclusivamente en las actividades instrumentales", "El primer paso dentro de la fase de toma de conciencia de un programa"], ans: 1},
+                {q: "¿Cuál es la primera fase dentro de la secuencia de adquisición de habilidades y hábitos de autonomía personal?", opts: ["El aprendizaje basado en la selección de estrategias de apoyo", "La automatización mediante la ejecución repetitiva en rutinas", "La toma de conciencia para asumir la importancia de adquirir la habilidad", "La consolidación e integración plena del hábito en cualquier contexto"], ans: 2},
+                {q: "¿En qué consiste la fase de 'Automatización' dentro de la adquisición de autonomía?", opts: ["En la ejecución repetitiva y automatizada de la tarea en el marco de las rutinas diarias", "En la evaluación externa del grado de consecución de los objetivos planteados", "En el diseño del cronograma de actividades y la selección de recursos materiales", "En la detección precoz de situaciones de riesgo y prevención de caídas en el hogar"], ans: 0}
+            ],
+            B: [
+                {q: "¿Qué profesional tiene la responsabilidad principal en la planificación y desarrollo de los programas de entrenamiento en habilidades de autonomía personal?", opts: ["El educador social especializado en drogodependencias", "El profesional de terapia ocupacional", "El auxiliar de enfermería de planta hospitalaria", "El mediador familiar e intercultural"], ans: 1},
+                {q: "¿Cuál es el objetivo principal de la primera fase de un programa de entrenamiento, denominada valoración funcional?", opts: ["Determinar el estado funcional evaluando capacidades retenidas, potencial de mejora y áreas limitadas", "Ejecutar de forma directa las técnicas de moldeado y encadenamiento conductual", "Redactar el contrato laboral de asistencia personal domiciliaria", "Programar los dispositivos tecnológicos de tiflotecnología visual"], ans: 0},
+                {q: "¿Qué aspecto se debe evitar específicamente al realizar la valoración funcional inicial de la persona?", opts: ["Analizar el potencial de mejora que la persona conserva", "Enfocar la valoración únicamente desde las limitaciones o impedimentos", "Detectar las situaciones que ponen en riesgo su seguridad en el hogar", "Identificar las áreas instrumentales y avanzadas afectadas"], ans: 1},
+                {q: "¿Qué comprende la fase de selección de objetivos realistas en la programación?", opts: ["Establecer metas de intervención relacionadas con el grado de consecución que se espera de cada habilidad", "Comprar los materiales fungibles y pictogramas necesarios para el taller", "Realizar entrevistas individuales centradas en el bienestar emocional general", "Modificar el cronograma general de actividades de los centros institucionales"], ans: 0},
+                {q: "¿Qué elementos principales se incluyen en el diseño del programa de entrenamiento (tercera fase)?", opts: ["La metodología de técnicas empleadas, los recursos y apoyos, y la temporalización mediante cronograma", "La emisión del diagnóstico médico definitivo sobre el envejecimiento patológico", "La aplicación de pruebas estandarizadas de valoración de demencias seniles", "La evaluación exclusiva de la satisfacción general del usuario con el servicio"], ans: 0},
+                {q: "¿Cuál de los siguientes recursos se menciona explícitamente como apoyo útil en el diseño de actividades?", opts: ["Los simuladores de vuelo virtuales", "Los pictogramas y el llavero de comunicación", "Los equipos de rayos X portátiles", "Los fármacos neurolépticos de acción prolongada"], ans: 1},
+                {q: "¿Qué busca el seguimiento y la evaluación (cuarta fase del programa)?", opts: ["Valorar en qué medida se están alcanzando los objetivos propuestos", "Sustituir de manera permanente la labor de la familia en el domicilio", "Aumentar artificialmente la complejidad de las actividades avanzadas", "Sancionar el incumplimiento de las rutinas horarias establecidas"], ans: 0},
+                {q: "¿Qué herramienta se utiliza comúnmente dentro del seguimiento para registrar y evaluar las ABVD?", opts: ["Escalas de valoración de ABVD (como observar frecuencia de baño o vestido independiente)", "Contratos de alta dirección y seguros de responsabilidad civil", "Diagramas de flujo de redes informáticas institucionales", "Protocolos de aislamiento hospitalario por enfermedades contagiosas"], ans: 0},
+                {q: "¿Qué se evalúa habitualmente mediante las entrevistas con el usuario en la fase de seguimiento?", opts: ["El bienestar emocional, la satisfacción general, las relaciones sociales y la autopercepción", "La destreza en la reparación de electrodomésticos complejos", "El rendimiento económico en transacciones bancarias bursátiles", "La capacidad de liderazgo en asociaciones comunitarias de vecinos"], ans: 0},
+                {q: "¿Qué se analiza al revisar los registros de rutinas en la evaluación del programa?", opts: ["El cumplimiento de horarios en aspectos como levantarse a tiempo, las comidas o el tiempo de sueño", "La cantidad de recursos económicos invertidos en tiflotecnología", "El grado de cumplimiento de las normativas de tráfico urbano", "La velocidad de lectura de prospectos farmacéuticos"], ans: 0},
+                {q: "¿Qué utilidad tiene el registro de incidencias y el análisis de comportamiento en la evaluación?", opts: ["Detectar conductas disruptivas, situaciones difíciles y evaluar las estrategias usadas", "Despedir al personal auxiliar que no cumpla con el cronograma", "Eliminar por completo la necesidad de realizar entrevistas personales", "Justificar recortes presupuestarios en los centros residenciales"], ans: 0},
+                {q: "¿Qué aspectos de seguridad se vigilan especialmente en las situaciones de riesgo durante el seguimiento?", opts: ["La prevención de caídas, el manejo seguro del entorno y el uso correcto de ayudas técnicas", "El cumplimiento de los contratos de alquiler de vivienda tutelada", "La seguridad informática en la banca electrónica por internet", "La resistencia de los materiales de construcción en centros de día"], ans: 0},
+                {q: "¿Qué ventajas presenta la aplicación de programas en régimen de atención domiciliaria frente a los centros institucionales?", opts: ["Requiere menor cantidad de recursos materiales especializados", "Su eficacia es mayor al desarrollarse en el propio domicilio, donde el entorno es conocido y se implantan mejor las rutinas", "Elimina por completo la necesidad de contar con la participación de la familia", "Permite un control horario más rígido y centralizado por parte de la institución"], ans: 1},
+                {q: "¿Cómo suele estructurarse una sesión tipo de entrenamiento en autonomía personal?", opts: ["Repaso de sesión anterior, presentación de objetivos, ejecución del entrenamiento y resumen con pautas para casa", "Examen teórico escrito, corrección de notas y simulacro de evacuación de incendios", "Evaluación médica general, prescripción farmacológica y descanso domiciliario", "Reunión plenaria de la junta directiva y aprobación de presupuestos anuales"], ans: 0},
+                {q: "¿Cómo actúa el profesional al adoptar el rol de 'instructor' en las primeras etapas?", opts: ["Proporcionando apoyos físicos directos sin mediar comunicación verbal", "Exponiendo verbalmente todos los aspectos motivacionales y procedimentales, pudiendo modelar la conducta deseada", "Limitándose a observar desde la distancia para no interferir en el proceso", "Gestionando exclusivamente los trámites burocráticos con la administración"], ans: 1},
+                {q: "¿Qué rol asume el profesional en la segunda etapa del programa de entrenamiento?", opts: ["Rol de coadyuvante, proporcionando apoyos, ayudas e indicaciones necesarias para el aprendizaje", "Rol de inspector encargado de evaluar el rendimiento laboral del usuario", "Rol de cuidador principal en régimen interno de 24 horas", "Rol de diseñador gráfico de pictogramas y señalética"], ans: 0},
+                {q: "¿Cómo interviene el profesional en la tercera etapa o rol de observador/supervisor?", opts: ["Dirigiendo de forma autoritaria cada movimiento que realiza la persona", "Corrigiendo las posibles desviaciones y verificando que la persona es capaz de realizar la actividad con aproximación a la conducta adecuada", "Sustituyendo por completo al usuario en la ejecución de las tareas domésticas", "Realizando entrevistas clínicas de carácter psiquiátrico profundo"], ans: 1},
+                {q: "¿Qué tipo de entrevistas se establecen para completar el proceso una vez finalizado el programa principal?", opts: ["Entrevistas de seguimiento con la persona usuaria o su familia para verificar y reforzar la consolidación del hábito", "Entrevistas judiciales de mediación familiar por conflicto de intereses", "Entrevistas de selección de personal para puestos de asistente domiciliario", "Entrevistas de evaluación académica para la obtención del título profesional"], ans: 0},
+                {q: "¿Cuál es el objetivo principal de la técnica de intervención denominada 'Modelado'?", opts: ["Que el profesional actúe como modelo ejecutando la actividad de manera correcta para que el usuario la observe e imite", "Corregir de forma milimétrica las imprecisiones físicas mediante guías mecánicas", "Obligar al usuario a memorizar listas extensas de instrucciones verbales complejas", "Simular situaciones ficticias de estrés mediante juegos de rol avanzados"], ans: 0},
+                {q: "¿Qué se busca lograr mediante la técnica de 'Encadenamiento'?", opts: ["Descomponer una actividad compleja en tareas más sencillas para aprenderlas por partes y luego encadenarlas", "Reforzar económicamente cada uno de los logros obtenidos durante el mes", "Aislar al individuo de su entorno familiar para evitar interferencias conductuales", "Automatizar el diálogo interno de carácter autoinstructivo"], ans: 0}
+            ],
+            C: [
+                {q: "¿Qué característica principal presenta el proceso de envejecimiento en relación con la funcionalidad de la persona?", opts: ["Conlleva una pérdida funcional progresiva que afecta primero a las actividades instrumentales y luego a las básicas", "Produce una mejora espontánea en el manejo de las actividades de la vida diaria avanzadas", "Anula por completo la necesidad de mantener rutinas de autocuidado personal", "Incrementa de forma exponencial la capacidad de adaptación tecnológica digital"], ans: 0},
+                {q: "¿Qué medida general se debe potenciar ante el envejecimiento en las personas mayores?", opts: ["Fomentar el sedentarismo absoluto para evitar lesiones articulares", "Potenciar el ejercicio de habilidades físicas, cognitivas y sociales, asegurando espacios accesibles", "Relegar a la persona a un segundo plano sin participación en las decisiones del hogar", "Sustituir todas las tareas cotidianas por asistencia personal externa contratada"], ans: 1},
+                {q: "¿Qué circunstancia especial en personas mayores aconseja aplicar programas de entrenamiento específicos para mantener la funcionalidad?", opts: ["La mudanza a un centro residencial de grandes dependientes", "La pérdida de la pareja, que solía encargarse tradicionalmente de las tareas domésticas", "La obtención de un permiso de conducción para vehículos pesados", "La participación voluntaria en talleres de memoria lúdica comunitaria"], ans: 1},
+                {q: "¿Cómo se adaptan los programas de intervención en personas con discapacidad física?", opts: ["Se ajustan en función del grado de afectación funcional que presente el individuo", "Se estandarizan de forma idéntica para todos los usuarios sin importar su movilidad", "Se centran exclusivamente en el desarrollo de la lengua de signos escrita", "Se basan únicamente en la supresión de los productos de apoyo mecánicos"], ans: 0},
+                {q: "¿Qué tipos de recursos y apoyos se requieren habitualmente en personas con discapacidad física?", opts: ["Productos de apoyo (higiene, cocinar, vestir), adaptación del espacio, apoyo personal y asistencia personal", "Implantes cocleares de alta fidelidad y bucles magnéticos de inducción", "Programas informáticos de autoinstrucción cognitiva avanzada", "Cuadernos de fichas escolares de cálculo y lectura elemental"], ans: 0},
+                {q: "¿Qué comprende fundamentalmente la intervención en personas con discapacidad visual?", opts: ["El uso de productos de apoyo, tiflotecnología y adaptaciones del entorno para lograr una vida independiente en tareas básicas e instrumentales", "La enseñanza intensiva de técnicas de modulación de voz y lectura labial", "La instalación de alarmas lumínicas y timbres estroboscópicos en el domicilio", "El desarrollo de habilidades de musicoterapia y expresión corporal"], ans: 0},
+                {q: "¿Qué medidas y recursos se emplean en la intervención con personas con discapacidad auditiva?", opts: ["Intervención en el lenguaje (lengua de signos), prótesis (implantes cocleares), tecnología (bucles), adaptaciones (timbres luminosos) e intermediación telefónica (CIT)", "Bastones blancos ultrasónicos y lectores de pantalla en braille digital", "Sujeciones mecánicas nocturnas para prevenir deambulación errática", "Dietas de consistencia triturada adaptadas a problemas de deglución"], ans: 0},
+                {q: "¿Cuál es el objetivo prioritario en los programas dirigidos a personas con discapacidad intelectual?", opts: ["Adquirir hábitos de cuidado personal y actividades de la vida diaria (AVD)", "Gestionar complejos fondos de inversión bursátil en entidades bancarias", "Superar pruebas de acceso a la universidad de alta exigencia académica", "Desempeñar cargos directivos en grandes corporaciones industriales"], ans: 0},
+                {q: "¿Qué áreas se pueden entrenar si el grado de discapacidad intelectual es leve?", opts: ["Exclusivamente el control de esfínteres y la deglución asistida", "Habilidades instrumentales, sociales, de ocio y resolución de problemas básicos", "Ninguna, ya que no se benefician de los programas de autonomía", "Técnicas avanzadas de pilotaje de aviación comercial"], ans: 1},
+                {q: "¿Qué limitaciones suelen presentar habitualmente las personas con problemas de salud mental (trastornos mentales)?", opts: ["Limitaciones en el autocuidado, la gestión del dinero y la realización de trámites burocráticos", "Ceguera cortical total y pérdida bilateral de la capacidad auditiva", "Parálisis motora severa de las extremidades superiores e inferiores", "Incompatibilidad absoluta para el aprendizaje de cualquier tipo de rutina"], ans: 0},
+                {q: "¿A qué se dirigen principalmente los programas de entrenamiento en personas con trastornos mentales?", opts: ["A establecer rutinas, orientar, disminuir conductas disruptivas, fomentar la autoestima y contar con la motivación e implicación familiar", "A la institucionalización psiquiátrica de larga duración sin contacto con el exterior", "Al entrenamiento físico de alta intensidad para competiciones deportivas", "A la sustitución total de la voluntad del usuario por tutores legales"], ans: 0},
+                {q: "¿Qué técnica consiste en dar indicaciones verbales precisas sobre lo que se debe llevar a cabo, asegurando la comprensión mediante feedback?", opts: ["El moldeado de conductas", "Las instrucciones", "El role playing", "La autoinstrucción cognitiva"], ans: 1},
+                {q: "¿Qué técnica de intervención utiliza la simulación de situaciones reales para que el usuario ensaye conductas y gane seguridad?", opts: ["El encadenamiento de tareas", "El role playing", "El refuerzo positivo intermitente", "El registro de incidencias domiciliarias"], ans: 1},
+                {q: "¿En qué consiste la técnica de intervención denominada 'Moldeado'?", opts: ["En corregir las imprecisiones y errores del usuario al realizar la actividad para aproximar su ejecución a la correcta", "En modelar figuras de arcilla para mejorar la psicomotricidad fina en talleres de ocio", "En aislar al individuo tras una conducta disruptiva para extinguirla", "En planificar el cronograma anual de actividades del centro de día"], ans: 0},
+                {q: "¿Qué finalidad principal tienen las 'Tareas para casa' dentro de las estrategias de intervención?", opts: ["Sustituir el trabajo de los profesionales de terapia ocupacional durante los fines de semana", "Aplicar el contenido aprendido en situaciones reales, registrando dudas y dificultades surgidas", "Evaluar de forma punitiva el rendimiento escolar del usuario", "Reducir el presupuesto destinado a materiales fungibles en el centro"], ans: 1},
+                {q: "¿Qué función cumple el 'Refuerzo' en los programas de autonomía personal?", opts: ["Recompensar y reforzar los logros conseguidos y el trabajo realizado para mantener la motivación", "Sancionar los errores cometidos durante la ejecución de las actividades instrumentales", "Incrementar la dificultad de las tareas sin previo aviso al usuario", "Sustituir los apoyos técnicos por supervisión policial directa"], ans: 0},
+                {q: "¿Cómo se define la técnica cognitiva de la 'Autoinstrucción'?", opts: ["La repetición mecánica de consignas impuestas obligatoriamente por el terapeuta", "Enseñar a la persona a guiar su propia conducta y regular sus emociones a través del diálogo interno, aprendiendo a 'hablarse a sí misma' de manera ordenada", "Un sistema informático de respuesta automática para llamadas telefónicas de emergencia", "La evaluación que hace el propio usuario de su calidad de vida mediante encuestas"], ans: 1},
+                {q: "¿Cuál es el propósito del diálogo interno en la técnica de autoinstrucción?", opts: ["Planificar, ejecutar y evaluar una tarea o afrontar una situación difícil de forma autónoma", "Sustituir de manera definitiva el lenguaje oral en personas con sordera profunda", "Evitar cualquier tipo de interacción social con los miembros de la comunidad", "Memorizar leyes y normativas administrativas de asistencia social"], ans: 0},
+                {q: "¿Qué documento o instrumento refleja de forma estructurada las actuaciones planificadas que se desarrollarán con el programa en los centros residenciales?", opts: ["El plan de atención individualizada donde se integran todos los programas de autonomía personal", "El libro de actas de la inspección de trabajo y seguridad social", "El balance de cuentas anual de la entidad prestadora del servicio", "El parte médico de bajas laborales por contingencias comunes"], ans: 0},
+                {q: "¿Qué se pretende evitar al formular los objetivos de intervención en un programa de autonomía personal?", opts: ["Que sean demasiado ambiciosos o inalcanzables, lo que generaría frustración en la persona usuaria", "Que incluyan actividades de carácter instrumental o avanzado", "Que cuenten con la participación y motivación de la familia", "Que utilicen escalas de valoración funcional estandarizadas"], ans: 0}
+            ],
+            // MODELO D INÉDITO BASADO EN SUPUESTOS PRÁCTICOS (20 PREGUNTAS)
+            // Diseñado con longitudes de respuestas equilibradas y posiciones de respuestas correctas alternadas.
+            D: [
+                {
+                    q: "Supuesto 1: Juan, una persona en situación de dependencia, rechaza realizar su aseo matinal diario porque prefiere quedarse en la cama y discute con el auxiliar de ayuda a domicilio. ¿Cuál de las siguientes actuaciones profesionales iniciales se corresponde con la Fase 1 (Toma de conciencia)?",
+                    opts: [
+                        "Forzar físicamente al usuario a levantarse para cumplir el horario estipulado en el cronograma institucional.",
+                        "Dialogar con Juan para que asuma la importancia personal de mantener la higiene y entienda los beneficios de adquirir dicha rutina.",
+                        "Sustituir de forma definitiva la tarea de aseo por toallitas húmedas aplicadas íntegramente por el profesional.",
+                        "Aplicar un castigo retirando las actividades de ocio preferidas hasta que acepte obedecer las directrices."
+                    ],
+                    ans: 1
+                },
+                {
+                    q: "Supuesto 2: María presenta dificultades severas para organizar la preparación de sus comidas diarias en casa, olvidando apagar el fuego o planificar los ingredientes. Al diseñar la intervención en el Área de la vida en el hogar, ¿qué objetivo se ajusta mejor a los criterios de la unidad?",
+                    opts: [
+                        "Lograr que María adquiera autonomía en la cocina mediante una pauta estructurada de orden, limpieza y elaboración de platos sencillos.",
+                        "Trasladar a María de manera permanente a un centro residencial de máxima asistencia para evitar cualquier riesgo eléctrico.",
+                        "Delegar la elaboración exclusiva de los menús en sus vecinos del inmueble mediante un contrato de voluntariado.",
+                        "Eliminar por completo el uso de electrodomésticos en la vivienda para suprimir cualquier fuente de peligro potencial."
+                    ],
+                    ans: 0
+                },
+                {
+                    q: "Supuesto 3: Durante el entrenamiento de una persona mayor en el uso autónomo del transporte público (recurso comunitario), esta muestra gran ansiedad al subir al autobús. El terapeuta decide ensayar previamente la situación en el centro mediante simulación antes de realizar el trayecto real. ¿Qué técnica se está aplicando?",
+                    opts: [
+                        "La técnica de moldeado físico pasivo para corregir la postura corporal al sentarse en el asiento.",
+                        "La técnica de role playing, permitiendo ensayar la conducta y ganar seguridad en un entorno controlado.",
+                        "La técnica de autoinstrucción cognitiva basada exclusivamente en la lectura de normativas de tráfico.",
+                        "La técnica de encadenamiento secuencial inverso para memorizar los números de línea."
+                    ],
+                    ans: 1
+                },
+                {
+                    q: "Supuesto 4: Un usuario con discapacidad intelectual leve es capaz de vestirse solo, pero abrocha los botones de manera incorrecta, desalineando la camisa. Para rectificar esta imprecisión y guiar su ejecución hacia el resultado correcto, el profesional actúa corrigiendo los errores. ¿Cómo se denomina esta estrategia?",
+                    opts: [
+                        "Técnica de moldeado, enfocada en corregir imprecisiones y rectificar errores de ejecución.",
+                        "Técnica de refuerzo económico mediante incentivos salariales mensuales.",
+                        "Técnica de aislamiento conductual preventivo frente a estímulos visuales complejos.",
+                        "Técnica de instrucciones verbales sin apoyo demostrativo directo ni feedback."
+                    ],
+                    ans: 0
+                },
+                {
+                    q: "Supuesto 5: Carmen, usuaria de un centro de día, necesita aprender a realizar una compra compleja en el supermercado local (actividad instrumental). El equipo técnico descompone la tarea global en pasos más sencillos (hacer la lista, salir de casa, coger cesta, seleccionar productos, pagar). ¿Qué técnica de intervención metodológica se está utilizando?",
+                    opts: [
+                        "El encadenamiento, dividiendo la actividad compleja en partes más sencillas para facilitar el aprendizaje secuencial.",
+                        "El modelado estricto mediante la ejecución exclusiva por parte del terapeuta sin participación del usuario.",
+                        "La autoinstrucción mediante el diálogo interno automatizado y repetitivo.",
+                        "La sobreprotección familiar para impedir que gestione dinero en efectivo."
+                    ],
+                    ans: 0
+                },
+                {
+                    q: "Supuesto 6: En la fase de seguimiento de un programa de autonomía para el autocuidado, el profesional observa mediante una escala de ABVD que la frecuencia del baño autónomo ha disminuido notablemente. ¿Qué actuación procede realizar según los protocolos del programa?",
+                    opts: [
+                        "Ajustar los objetivos de intervención y analizar las posibles barreras o situaciones de riesgo detectadas en el entorno.",
+                        "Dar de baja definitiva al usuario del servicio por incumplimiento reiterado de las normas del centro.",
+                        "Sustituir el registro de observación por un sistema de vigilancia mediante cámaras en el baño.",
+                        "Incrementar la complejidad de las actividades pasando directamente al nivel de habilidades avanzadas."
+                    ],
+                    ans: 0
+                },
+                {
+                    q: "Supuesto 7: Un hombre de 78 años que vivía con su cónyuge (quien se encargaba tradicionalmente de las tareas domésticas y culinarias) sufre la pérdida de esta. Ante esta circunstancia especial, el centro de servicios sociales aconseja iniciar un programa específico. ¿Cuál es el propósito principal?",
+                    opts: [
+                        "Aplicar un programa de entrenamiento para mantener su funcionalidad y autonomía en las tareas cotidianas que antes no gestionaba.",
+                        "Tramitar su incapacitación judicial inmediata para asignarle un tutor legal externo.",
+                        "Contratar un servicio de asistencia interna 24 horas que suprima cualquier necesidad de autosuficiencia.",
+                        "Derivar al usuario a un centro de salud mental para tratar un cuadro depresivo agudo."
+                    ],
+                    ans: 0
+                },
+                {
+                    q: "Supuesto 8: Pedro presenta una discapacidad auditiva profunda y manifiesta graves barreras de comunicación al acudir a realizar gestiones administrativas y médicas en su centro de salud. ¿Qué conjunto de recursos y medidas técnicas se deben potenciar para su intervención?",
+                    opts: [
+                        "Uso de lengua de signos, implantes cocleares o prótesis, bucles magnéticos, timbres luminosos e intermediación telefónica (CIT).",
+                        "Instalación exclusiva de guías táctiles en el suelo y lectura de documentos en braille digital.",
+                        "Sujeciones mecánicas nocturnas para prevenir la desorientación espacial en espacios públicos.",
+                        "Reducción de la dieta a consistencia triturada para evitar problemas de deglución en la cafetería."
+                    ],
+                    ans: 0
+                },
+                {
+                    q: "Supuesto 9: Durante la ejecución de una tarea de cocina, el instructor le enseña a Luisa a 'hablarse a sí misma de manera ordenada' mediante consignas internas ('primero cojo el cazo, segundo pongo agua, tercero enciendo el fuego') para planificar y regular su conducta. ¿Qué estrategia cognitiva se está empleando?",
+                    opts: [
+                        "La autoinstrucción, enseñando a guiar la propia conducta mediante el diálogo interno estructurado.",
+                        "El role playing de situaciones de estrés laboral comunitario.",
+                        "El moldeado físico directo sin intervención del lenguaje oral.",
+                        "El refuerzo positivo intermitente mediante fichas canjeables."
+                    ],
+                    ans: 0
+                },
+                {
+                    q: "Supuesto 10: En un programa de entrenamiento domiciliario, el terapeuta ocupacional finaliza la sesión repasando lo realizado, fijando los objetivos del día y pautando una tarea para que el usuario la practique de forma autónoma hasta la siguiente visita. ¿Cómo se denominan estas pautas finales?",
+                    opts: [
+                        "Tareas para casa, orientadas a aplicar lo aprendido en situaciones reales y registrar posibles dificultades.",
+                        "Evaluaciones punitivas de rendimiento académico y sanción por errores.",
+                        "Contratos laborales de asistencia personal bajo marco de derecho administrativo.",
+                        "Pruebas estandarizadas de demencia senil avanzada."
+                    ],
+                    ans: 0
+                },
+                {
+                    q: "Supuesto 11: Una persona con diagnóstico de trastorno mental presenta dificultades acusadas en la gestión económica de su dinero y en la realización de trámites burocráticos elementales. ¿Hacia dónde deben ir dirigidos prioritariamente los objetivos del programa de entrenamiento?",
+                    opts: [
+                        "A establecer rutinas estables, orientar, disminuir conductas disruptivas, fomentar la autoestima y contar con la implicación familiar.",
+                        "A la internación psiquiátrica prolongada en unidades de agudos sin contacto con la comunidad.",
+                        "Al entrenamiento físico intensivo para competiciones de alta resistencia deportiva.",
+                        "A la supresión total de su capacidad de obrar mediante tutela judicial permanente."
+                    ],
+                    ans: 0
+                },
+                {
+                    q: "Supuesto 12: Al iniciar la intervención con una persona con discapacidad visual para lograr su independencia en el hogar, el equipo técnico valora la integración de productos de apoyo específicos y herramientas tecnológicas. ¿Cómo se denomina el área tecnológica aplicada a este colectivo?",
+                    opts: [
+                        "Tiflotecnología, combinada con adaptaciones del entorno para facilitar la vida autónoma básica e instrumental.",
+                        "Domótica avanzada de control aeroespacial para grandes dependientes motores.",
+                        "Ingeniería genética aplicada a la regeneración de tejidos retinianos.",
+                        "Sistemas alternativos de comunicación mediante pictogramas pictóricos estáticos."
+                    ],
+                    ans: 0
+                },
+                {
+                    q: "Supuesto 13: El equipo de profesionales de un centro residencial detecta que un residente mayor muestra conductas pasivas y dependencia inducida debido a que los auxiliares realizan todas las tareas por él para 'ahorrar tiempo'. Según los contenidos teóricos, ¿qué factor está menoscabando la autonomía del residente?",
+                    opts: [
+                        "Las conductas sobreprotectoras o autoritarias del entorno institucional.",
+                        "El exceso de actividades avanzadas y ocio nocturno en el centro.",
+                        "La falta absoluta de herramientas de tiflotecnología visual y auditiva.",
+                        "El uso de programas informáticos de autoinstrucción cognitiva."
+                    ],
+                    ans: 0
+                },
+                {
+                    q: "Supuesto 14: Durante la evaluación del programa de entrenamiento (Fase 4), el profesional revisa los registros de rutinas para comprobar el cumplimiento de horarios en aspectos clave. ¿Cuáles son los indicadores habituales analizados en dichos registros?",
+                    opts: [
+                        "Levantarse a tiempo, respetar los horarios de las comidas y mantener un tiempo de sueño adecuado.",
+                        "La velocidad de lectura de prospectos médicos y la agilidad en transacciones bursátiles.",
+                        "El cumplimiento de las ordenanzas municipales de tráfico y transporte interurbano.",
+                        "El rendimiento laboral en empresas de producción industrial externa."
+                    ],
+                    ans: 0
+                },
+                {
+                    q: "Supuesto 15: En la aplicación práctica de un programa de entrenamiento en autonomía, el profesional adopta inicialmente un rol activo de 'instructor', exponiendo verbalmente los procedimientos y modelando la conducta. Conforme el usuario progresa, ¿cómo evoluciona este rol profesional?",
+                    opts: [
+                        "Se vuelve flexible, pasando de instructor a cooperador (ayudas y apoyos) y finalmente a observador/supervisor.",
+                        "Se transforma en una autoridad rígida e inflexible que anula la participación del usuario.",
+                        "Se desvincula por completo del proceso dejando al usuario en total aislamiento.",
+                        "Pasa a desempeñar funciones estrictamente médicas de diagnóstico farmacológico."
+                    ],
+                    ans: 0
+                },
+                {
+                    q: "Supuesto 16: Un usuario ha conseguido integrar plenamente un hábito de higiene y autocuidado, ejecutándolo de forma automática y sin requerir ningún tipo de apoyo externo en cualquier contexto en el que se encuentre. ¿En qué fase de adquisición se sitúa?",
+                    opts: [
+                        "Fase de consolidación, caracterizada por la integración plena del hábito en cualquier entorno.",
+                        "Fase de toma de conciencia inicial de la necesidad de higiene.",
+                        "Fase de aprendizaje y selección de estrategias de apoyo mecánico.",
+                        "Fase de automatización preliminar sujeta a rutinas estrictas de centro."
+                    ],
+                    ans: 0
+                },
+                {
+                    q: "Supuesto 17: Al planificar un programa de entrenamiento en habilidades de autonomía personal para una persona con discapacidad física moderada, el terapeuta diseña el documento estructurando la metodología, los recursos necesarios y la temporalización. ¿Qué nombre recibe este instrumento de planificación temporal?",
+                    opts: [
+                        "Cronograma, que permite organizar temporalmente las actividades del programa.",
+                        "Baremos de cotización a la seguridad social y asistencia jurídica.",
+                        "Protocolo de aislamiento hospitalario por enfermedades infecciosas.",
+                        "Contrato de alta dirección y seguros de responsabilidad civil."
+                    ],
+                    ans: 0
+                },
+                {
+                    q: "Supuesto 18: Un usuario manifiesta satisfacción general con su vida, buenos niveles de autorregulación y relaciones sociales adecuadas durante una entrevista de seguimiento. ¿Qué dimensión principal de la persona se está evaluando en este punto?",
+                    opts: [
+                        "El bienestar emocional y la autopercepción de su calidad de vida y logros percibidos.",
+                        "La competencia estrictamente matemática en el cálculo financiero de intereses bancarios.",
+                        "La capacidad de desplazamiento autónomo en vehículos de tracción mecánica pesada.",
+                        "El grado de resistencia física ante pruebas de esfuerzo cardiovascular máximo."
+                    ],
+                    ans: 0
+                },
+                {
+                    q: "Supuesto 19: Al formular los objetivos de intervención para un programa de autonomía personal dirigido a una persona dependiente, los profesionales deben extremar la precaución para evitar un error muy común. ¿Qué se debe evitar específicamente al redactar dichos objetivos?",
+                    opts: [
+                        "Que sean objetivos demasiado ambiciosos o inalcanzables que generen frustración en la persona usuaria.",
+                        "Que incluyan metas relacionadas con actividades básicas del autocuidado diario.",
+                        "Que cuenten con la opinión, motivación e implicación activa de la familia.",
+                        "Que se basen en los datos obtenidos durante la valoración funcional inicial."
+                    ],
+                    ans: 0
+                },
+                {
+                    q: "Supuesto 20: ¿Qué documento integrador de carácter pluridisciplinar utilizado en los centros residenciales refleja de forma estructurada todas las actuaciones y programas de autonomía personal planificados para cada residente?",
+                    opts: [
+                        "El plan de atención individualizada (PAI), donde se integran de forma coordinada los distintos programas.",
+                        "El libro de contabilidad general y balance de cuentas anuales de la entidad.",
+                        "El registro de incidencias laborales y partes de baja de los trabajadores de plantilla.",
+                        "El expediente judicial de medidas cautelares de protección al menor o incapacitado."
+                    ],
+                    ans: 0
+                }
+            ]
+        };
+
+        let modeloActualKey = '';
+        let preguntasActuales = [];
+
+        function cargarModelo(modeloKey) {
+            modeloActualKey = modeloKey;
+            // Clonamos el array de preguntas del modelo seleccionado
+            let originalQuestions = examenesData[modeloKey];
+            
+            // PAUTA: Repetición de la prueba cambia el orden de las preguntas y de las respuestas
+            preguntasActuales = originalQuestions.map(p => {
+                // Creamos un array de objetos con las opciones y su índice original para rastrear cuál es la correcta
+                let optionsWithIndex = p.opts.map((optText, index) => ({ text: optText, originalIndex: index }));
+                
+                // Barajamos aleatoriamente las opciones de respuesta
+                optionsWithIndex = shuffleArray(optionsWithIndex);
+                
+                // Encontramos el nuevo índice donde quedó la respuesta correcta
+                let newCorrectIndex = optionsWithIndex.findIndex(item => item.originalIndex === p.ans);
+
+                return {
+                    q: p.q,
+                    opts: optionsWithIndex.map(item => item.text),
+                    ans: newCorrectIndex
+                };
+            });
+
+            // Barajamos también el orden de las preguntas
+            preguntasActuales = shuffleArray(preguntasActuales);
+
+            // Renderizar en pantalla
+            renderQuiz();
+        }
+
+        // Función auxiliar para barajar arrays (Algoritmo Fisher-Yates)
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        function renderQuiz() {
+            document.getElementById('modelSelection').classList.add('hidden');
+            document.getElementById('quizContainer').classList.remove('hidden');
+            document.getElementById('resultContainer').classList.add('hidden');
+            document.getElementById('subtitle').innerText = `Resolviendo Examen - Modelo ${modeloActualKey} (Preguntas y opciones barajadas aleatoriamente).`;
+
+            let formHTML = '';
+            preguntasActuales.forEach((p, qIndex) => {
+                formHTML += `<div class="question-box">
+                    <h3>Pregunta ${qIndex + 1}: ${p.q}</h3>
+                    <div class="options-list">`;
+                
+                p.opts.forEach((opt, oIndex) => {
+                    formHTML += `<label class="option-label">
+                        <input type="radio" name="q_${qIndex}" value="${oIndex}">
+                        <span>${String.fromCharCode(65 + oIndex)}) ${opt}</span>
+                    </label>`;
+                });
+
+                formHTML += `</div></div>`;
+            });
+
+            document.getElementById('testForm').innerHTML = formHTML;
+            document.getElementById('quizContainer').scrollTop = 0;
+        }
+
+        function corregirExamen() {
+            let correctas = 0;
+            let incorrectas = 0.5; // Supongamos valor acierto = 1 punto, error resta 1/3 (0.333...)
+            // O bien asignando valor numérico exacto:
+            // Cada acierto = +1.0 pt, cada fallo = -0.33 pt. No respondidas = 0 pts.
+            let puntosAcierto = 1.0;
+            let penalizacionFallo = 1 / 3; // 0.3333...
+
+            let totalAciertos = 0;
+            let totalErrores = 0;
+            let totalBlanco = 0;
+
+            preguntasActuales.forEach((p, qIndex) => {
+                let selected = document.querySelector(`input[name="q_${qIndex}"]:checked`);
+                if (!selected) {
+                    totalBlanco++;
+                } else {
+                    let val = parseInt(selected.value);
+                    if (val === p.ans) {
+                        totalAciertos++;
+                    } else {
+                        totalErrores++;
+                    }
+                }
+            });
+
+            // Cálculo de nota final con penalización
+            let notaFinal = (totalAciertos * puntosAcierto) - (totalErrores * penalizacionFallo);
+            if (notaFinal < 0) notaFinal = 0;
+            let notaSobre10 = (notaFinal / preguntasActuales.length) * 10;
+
+            // Mostrar resultados
+            document.getElementById('quizContainer').classList.add('hidden');
+            document.getElementById('resultContainer').classList.remove('hidden');
+            
+            document.getElementById('scoreTitle').innerText = `Resultado Examen - Modelo ${modeloActualKey}`;
+            document.getElementById('scoreDetails').innerHTML = `
+                ✅ <strong>Aciertos:</strong> ${totalAciertos}<br>
+                ❌ <strong>Errores:</strong> ${totalErrores} <span style="font-size:0.85em; opacity:0.8;">(Penalización aplicada: -1/3 por fallo)</span><br>
+                ⚪ <strong>Sin contestar:</strong> ${totalBlanco}<br><hr style="margin:10px 0; border:0; border-top:1px solid #ccc;">
+                🎯 <strong>Puntuación Final:</strong> ${notaFinal.toFixed(2)} / ${preguntasActuales.length} <br>
+                ⭐ <strong>Calificación (sobre 10):</strong> <span style="font-size:1.4em; color:${notaSobre10 >= 5 ? '#2e7d32' : '#c62828'}; font-weight:bold;">${notaSobre10.toFixed(2)} / 10</span>
+            `;
+            document.getElementById('subtitle').innerText = `Examen finalizado y corregido.`;
+        }
+
+        function reiniciarSelector() {
+            document.getElementById('resultContainer').classList.add('hidden');
+            document.getElementById('modelSelection').classList.remove('hidden');
+            document.getElementById('subtitle').innerText = `Selecciona el modelo de examen para comenzar la autoevaluación (Preguntas con penalización de 1/3 por fallo).`;
+        }
+    </script>
+</body>
+</html>
