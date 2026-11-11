@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consejos para realizar el diario - Características y necesidades</title>
+    <style>
+        :root {
+            --bg-board: #2b3a32;
+            --board-frame: #4a3525;
+            --text-chalk: #f4f4f0;
+            --postit-mint: #b9fbc0;
+            --postit-peach: #ffd6a5;
+            --text-dark: #2b2b2b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: #1a2420;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
+            background-size: 24px 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1100px;
+            background-color: var(--bg-board);
+            border: 14px solid var(--board-frame);
+            border-radius: 18px;
+            padding: 30px 25px;
+            box-shadow: inset 0 0 60px rgba(0,0,0,0.6), 0 15px 35px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        header h1 {
+            color: var(--text-chalk);
+            font-size: 2em;
+            border-bottom: 2px dashed rgba(255,255,255,0.25);
+            padding-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .content-scroll {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-height: 65vh;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .content-scroll::-webkit-scrollbar {
+            width: 10px;
+        }
+        .content-scroll::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.25);
+            border-radius: 6px;
+        }
+        .content-scroll::-webkit-scrollbar-thumb {
+            background: var(--board-frame);
+            border-radius: 6px;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        /* Tarjetas de sección */
+        .section-box {
+            padding: 22px 25px;
+            border-radius: 6px 6px 6px 16px;
+            color: var(--text-dark);
+            box-shadow: 4px 6px 15px rgba(0,0,0,0.35);
+        }
+
+        .box-tips {
+            background-color: var(--postit-mint);
+        }
+
+        .box-structure {
+            background-color: var(--postit-peach);
+        }
+
+        .section-box h2 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            font-weight: 700;
+            border-bottom: 2px solid rgba(0,0,0,0.15);
+            padding-bottom: 8px;
+        }
+
+        /* Listas limpias y estructuradas */
+        .tips-list, .structure-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tip-item, .struct-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+
+        .number-badge {
+            background-color: var(--board-frame);
+            color: var(--text-chalk);
+            min-width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.85em;
+            font-weight: bold;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .sub-list {
+            margin-top: 6px;
+            margin-left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .back-nav {
+            margin-top: 5px;
+        }
+
+        .back-btn {
+            color: var(--text-chalk);
+            text-decoration: none;
+            font-size: 0.95em;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.85;
+        }
+
+        .back-btn:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <main class="board-container">
+        <header>
+            <h1>Consejos y Pautas para Realizar el Diario</h1>
+        </header>
+
+        <div class="content-scroll">
+            <!-- APARTADO 1: CONSEJOS CLAVE -->
+            <section class="section-box box-tips">
+                <h2>💡 Recomendaciones Generales</h2>
+                <div class="tips-list">
+                    <div class="tip-item">
+                        <span class="number-badge">1</span>
+                        <div><strong>Diseña con personalidad:</strong> Busca una presentación original y cuida minuciosamente la estética visual.</div>
+                    </div>
+                    <div class="tip-item">
+                        <span class="number-badge">2</span>
+                        <div><strong>Sigue la estructura establecida:</strong> Mantén rigurosamente la estructura de 5 puntos en todas tus entregas semanales.</div>
+                    </div>
+                    <div class="tip-item">
+                        <span class="number-badge">3</span>
+                        <div><strong>Cuida la redacción:</strong> Revisa el texto con atención y evita por completo las faltas de ortografía.</div>
+                    </div>
+                    <div class="tip-item">
+                        <span class="number-badge">4</span>
+                        <div><strong>Optimiza las imágenes:</strong> Evita el uso de archivos o imágenes de alta definición excesiva para mantener el documento ágil.</div>
+                    </div>
+                    <div class="tip-item">
+                        <span class="number-badge">5</span>
+                        <div><strong>Formato de entrega:</strong> Usa todos los recursos necesarios para elaborarlo, pero la presentación final <em>sólo podrás hacerla en PDF</em>.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- APARTADO 2: ESTRUCTURA SEMANAL -->
+            <section class="section-box box-structure">
+                <h2>📋 Estructura de los Puntos Semanales</h2>
+                <div class="structure-list">
+                    <div class="struct-item">
+                        <span class="number-badge">1</span>
+                        <div><strong>Describir:</strong> Resume de forma clara el contenido de las clases día a día durante la semana.</div>
+                    </div>
+                    <div class="struct-item">
+                        <span class="number-badge">2</span>
+                        <div><strong>Analizar:</strong> Recoge los temas tratados, analízalos en profundidad, reflexiona sobre sus ventajas e inconvenientes, y aporta tu visión personal.</div>
+                    </div>
+                    <div class="struct-item">
+                        <span class="number-badge">3</span>
+                        <div>
+                            <strong>Investigar:</strong> Este punto incluye dos apartados fundamentales:
+                            <div class="sub-list">
+                                <p><strong>A. Palabra de la semana:</strong> Registro de tu estudio, definición personal del término, y vinculación creativa a un producto cultural (escultura, pintura, canción, poesía, cuento, graffiti...).</p>
+                                <p><strong>B. Investigación temática:</strong> Elige uno de los temas que más te hayan gustado de los vistos en la semana y amplíalo mediante investigación.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="struct-item">
+                        <span class="number-badge">4</span>
+                        <div><strong>Relacionar:</strong> Conecta lo aprendido durante la semana con temáticas vistas en otras asignaturas. Si no encuentras similitudes directas, vincúlalo con tu experiencia personal.</div>
+                    </div>
+                    <div class="struct-item">
+                        <span class="number-badge">5</span>
+                        <div><strong>Aplicar:</strong> Describe cómo aplicarías los conocimientos adquiridos en tus prácticas o en tu futura experiencia profesional, proponiendo ideas o adaptaciones prácticas.</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="back-nav">
+            <a href="caracteristicas-necesidades.html" class="back-btn">&larr; Volver a la asignatura</a>
+        </div>
+    </main>
+
+</body>
+</html>
