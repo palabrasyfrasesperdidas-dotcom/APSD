@@ -22,7 +22,6 @@
         }
 
         body {
-            /* Fondo con textura sutil estilo pizarra digital */
             background-color: #1a2420;
             background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
             background-size: 24px 24px;
@@ -65,7 +64,6 @@
             padding-bottom: 5px;
         }
 
-        /* Barra de desplazamiento elegante */
         .docs-list::-webkit-scrollbar {
             width: 10px;
         }
@@ -79,7 +77,6 @@
             border: 2px solid rgba(255,255,255,0.1);
         }
 
-        /* Tarjeta individual de cada día (Estilo Post-it detallado) */
         .doc-item {
             background-color: var(--postit-yellow);
             padding: 18px 20px;
@@ -132,6 +129,20 @@
             background-color: #5c432f;
         }
 
+        /* Estilo distintivo para días de huelga / sin clase */
+        .strike-tag {
+            background-color: #d9534f;
+            color: #ffffff;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.85em;
+            align-self: flex-start;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
         .back-nav {
             margin-top: 5px;
         }
@@ -169,13 +180,16 @@
                 </div>
                 <a href="10-noviembre.docx" class="download-btn" download>📥 Descargar Word</a>
             </div>
+
+            <!-- DÍA DE HUELGA -->
             <div class="doc-item">
                 <div class="doc-info">
                     <h3>Resumen del día 11 de noviembre</h3>
-                    <p>Documento de apuntes y resumen</p>
+                    <p>Huelga - No hubo clase</p>
                 </div>
-                <a href="11-noviembre.docx" class="download-btn" download>📥 Descargar Word</a>
+                <span class="strike-tag">🚫 Huelga</span>
             </div>
+
             <div class="doc-item">
                 <div class="doc-info">
                     <h3>Resumen del día 12 de noviembre</h3>
@@ -339,7 +353,6 @@
                     <h3>Resumen del día 18 de enero</h3>
                     <p>Documento de apuntes y resumen</p>
                 </div>
-                <a href="18-enero.docx" class="download-btn" download>📥 Descargar Scroll</a-->
                 <a href="18-enero.docx" class="download-btn" download>📥 Descargar Word</a>
             </div>
             <div class="doc-item">
