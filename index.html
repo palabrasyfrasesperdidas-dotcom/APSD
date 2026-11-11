@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APSD - Espacio Educativo</title>
+    <style>
+        /* Variables de color y tonos pastel */
+        :root {
+            --bg-board: #2b3a32; /* Fondo estilo pizarra digital */
+            --board-frame: #4a3525;
+            --text-chalk: #f4f4f0;
+            --postit-yellow: #fff3a8;
+            --postit-pink: #ffc6ff;
+            --postit-blue: #a0c4ff;
+            --postit-green: #caf0f8;
+            --postit-orange: #ffd6a5;
+            --postit-purple: #e7c6ff;
+            --postit-mint: #b9fbc0;
+            --postit-peach: #ffbc42;
+            --text-dark: #2b2b2b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: #1e1e1e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        /* --- MODAL DE CONTRASEÑA --- */
+        #auth-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .auth-card {
+            background: #ffffff;
+            padding: 30px 25px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 380px;
+            width: 90%;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+
+        .auth-card h2 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .auth-card p {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .auth-card input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1em;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            outline: none;
+            text-align: center;
+        }
+
+        .auth-card input:focus {
+            border-color: #2b3a32;
+        }
+
+        .auth-card button {
+            width: 100%;
+            padding: 12px;
+            background-color: #2b3a32;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .auth-card button:hover {
+            background-color: #3d5247;
+        }
+
+        .error-msg {
+            color: #d9534f;
+            font-size: 0.85em;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* --- PIZARRA DIGITAL MAIN --- */
+        .board-container {
+            width: 100%;
+            max-width: 1100px;
+            background-color: var(--bg-board);
+            border: 12px solid var(--board-frame);
+            border-radius: 16px;
+            padding: 30px 20px;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.5);
+            display: none; /* Se muestra tras ingresar la contraseña */
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* Encabezado */
+        header {
+            text-align: center;
+            border-bottom: 2px dashed rgba(255,255,255,0.2);
+            padding-bottom: 20px;
+        }
+
+        header h1 {
+            color: var(--text-chalk);
+            font-size: 2.8em;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .notice-banner {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            display: inline-block;
+            border-left: 4px solid var(--postit-yellow);
+            max-width: 800px;
+        }
+
+        /* Grid de Asignaturas (Post-its) */
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            padding: 10px 0;
+        }
+
+        /* Estilo Post-it */
+        .postit {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 25px 15px;
+            min-height: 140px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 1.1em;
+            border-radius: 2px 2px 2px 15px;
+            box-shadow: 3px 5px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+        }
+
+        .postit:hover {
+            transform: scale(1.04) rotate(0deg) !important;
+            box-shadow: 5px 8px 18px rgba(0, 0, 0, 0.4);
+            z-index: 10;
+        }
+
+        /* Rotaciones sutiles tipo post-it real */
+        .postit:nth-child(odd) { transform: rotate(-1.5deg); }
+        .postit:nth-child(even) { transform: rotate(1.5deg); }
+        .postit:nth-child(3n) { transform: rotate(-2.5deg); }
+
+        /* Colores Pastel */
+        .c-yellow { background-color: var(--postit-yellow); }
+        .c-pink   { background-color: var(--postit-pink); }
+        .c-blue   { background-color: var(--postit-blue); }
+        .c-green  { background-color: var(--postit-green); }
+        .c-orange { background-color: var(--postit-orange); }
+        .c-purple { background-color: var(--postit-purple); }
+        .c-mint   { background-color: var(--postit-mint); }
+        .c-peach  { background-color: var(--postit-peach); }
+
+        /* Adaptación MÓVIL / WAP */
+        @media (max-width: 600px) {
+            .board-container {
+                border-width: 6px;
+                padding: 15px 10px;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            .notice-banner {
+                font-size: 0.8em;
+                padding: 8px 10px;
+            }
+
+            .subjects-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 12px;
+            }
+
+            .postit {
+                min-height: 110px;
+                font-size: 0.95em;
+                padding: 15px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MODAL DE AUTENTICACIÓN -->
+    <div id="auth-modal">
+        <div class="auth-card">
+            <h2>Acceso al Curso APSD</h2>
+            <p>Introduce la contraseña para ver las asignaturas</p>
+            <input type="password" id="password-input" placeholder="Contraseña..." autofocus>
+            <button onclick="validatePassword()">Entrar</button>
+            <div id="error-msg" class="error-msg">Contraseña incorrecta. Inténtalo de nuevo.</div>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL: PIZARRA DIGITAL -->
+    <main class="board-container" id="board-content">
+        <header>
+            <h1>APSD</h1>
+            <div class="notice-banner">
+                📌 <strong>Recordatorio:</strong> Todo el contenido es de apoyo, y no sustituye a los materiales didácticos.
+            </div>
+        </header>
+
+        <section class="subjects-grid">
+            <a href="asignaturas/apoyo-psicosocial.html" class="postit c-yellow">
+                Apoyo y atención psicosocial
+            </a>
+            <a href="asignaturas/digitalizacion.html" class="postit c-mint">
+                Digitalización
+            </a>
+            <a href="asignaturas/itinerario-profesional.html" class="postit c-pink">
+                Itinerario profesional
+            </a>
+            <a href="asignaturas/atencion-sanitaria.html" class="postit c-blue">
+                Atención sanitaria
+            </a>
+            <a href="asignaturas/caracteristicas-necesidades.html" class="postit c-orange">
+                Características y necesidades de personas dependientes
+            </a>
+            <a href="asignaturas/ingles.html" class="postit c-green">
+                Inglés
+            </a>
+            <a href="asignaturas/primeros-auxilios.html" class="postit c-purple">
+                Primeros Auxilios
+            </a>
+            <a href="asignaturas/destrezas-sociales.html" class="postit c-peach">
+                Destrezas sociales
+            </a>
+        </section>
+    </main>
+
+    <script>
+        function validatePassword() {
+            const input = document.getElementById('password-input').value;
+            const errorMsg = document.getElementById('error-msg');
+            const modal = document.getElementById('auth-modal');
+            const board = document.getElementById('board-content');
+
+            if (input === 'APSD2026') {
+                modal.style.display = 'none';
+                board.style.display = 'flex';
+                sessionStorage.setItem('apsd_authenticated', 'true');
+            } else {
+                errorMsg.style.display = 'block';
+            }
+        }
+
+        // Permite presionar la tecla Enter en el input de contraseña
+        document.getElementById('password-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                validatePassword();
+            }
+        });
+
+        // Mantiene la sesión iniciada mientras no se cierre la pestaña del navegador
+        window.onload = function() {
+            if (sessionStorage.getItem('apsd_authenticated') === 'true') {
+                document.getElementById('auth-modal').style.display = 'none';
+                document.getElementById('board-content').style.display = 'flex';
+            }
+        };
+    </script>
+</body>
+</html>
