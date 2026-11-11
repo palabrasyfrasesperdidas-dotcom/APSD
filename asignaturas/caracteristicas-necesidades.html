@@ -13,6 +13,7 @@
             --postit-yellow: #fff3a8;
             --postit-mint: #b9fbc0;
             --postit-peach: #ffd6a5;
+            --postit-blue: #a0c4ff;
             --text-dark: #2b2b2b;
         }
 
@@ -89,10 +90,10 @@
             color: var(--postit-yellow);
         }
 
-        /* --- APARTADOS / SECCIONES --- */
+        /* --- APARTADOS / SECCIONES (Cuadrícula de 4) --- */
         .sections-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 20px;
             padding: 10px 0;
         }
@@ -102,7 +103,7 @@
             flex-direction: column;
             justify-content: space-between;
             padding: 25px 20px;
-            min-height: 160px;
+            min-height: 170px;
             text-decoration: none;
             color: var(--text-dark);
             border-radius: 4px 4px 4px 15px;
@@ -117,18 +118,19 @@
         }
 
         .section-card h3 {
-            font-size: 1.3em;
+            font-size: 1.25em;
             margin-bottom: 10px;
             font-weight: 700;
         }
 
         .section-card p {
-            font-size: 0.95em;
+            font-size: 0.9em;
             opacity: 0.9;
         }
 
         /* Colores específicos para los apartados */
         .c-yellow { background-color: var(--postit-yellow); }
+        .c-blue   { background-color: var(--postit-blue); }
         .c-mint   { background-color: var(--postit-mint); }
         .c-peach  { background-color: var(--postit-peach); }
 
@@ -181,7 +183,7 @@
             }
 
             .section-card {
-                min-height: 130px;
+                min-height: 140px;
                 padding: 20px 15px;
             }
         }
@@ -196,7 +198,6 @@
                 <h1>Características y necesidades<br>de personas dependientes</h1>
             </div>
             <div class="header-image">
-                <!-- Puedes cambiar la URL de esta imagen por la que prefieras o subirla a tu repo -->
                 <img src="https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=300&auto=format&fit=crop&q=80" alt="Icono de la Asignatura">
             </div>
         </header>
@@ -207,9 +208,9 @@
             <span>⏰ <strong>Fecha de entrega:</strong> día 26 de enero.</span>
         </section>
 
-        <!-- APARTADOS PRINCIPALES -->
+        <!-- APARTADOS PRINCIPALES (4 OPCIONES) -->
         <section class="sections-grid">
-            <!-- 1. Resumen por días (Enlace a subsite/carpeta de documentos Word) -->
+            <!-- 1. Resumen por días -->
             <a href="resumen-dias-caracteristicas.html" class="section-card c-yellow">
                 <div>
                     <h3>Resumen por días</h3>
@@ -218,7 +219,16 @@
                 <span style="font-size: 0.85em; font-weight: bold; margin-top: 15px;">Ver documentos &rarr;</span>
             </a>
 
-            <!-- 2. Consejos para realizar el diario -->
+            <!-- 2. Palabra de la semana (NUEVO) -->
+            <a href="palabra-semana.html" class="section-card c-blue">
+                <div>
+                    <h3>Palabra de la semana</h3>
+                    <p>Listado organizado por semanas con los términos clave y definiciones destacadas.</p>
+                </div>
+                <span style="font-size: 0.85em; font-weight: bold; margin-top: 15px;">Ver términos &rarr;</span>
+            </a>
+
+            <!-- 3. Consejos para realizar el diario -->
             <a href="consejos-diario.html" class="section-card c-mint">
                 <div>
                     <h3>Consejos para realizar el diario</h3>
@@ -227,7 +237,7 @@
                 <span style="font-size: 0.85em; font-weight: bold; margin-top: 15px;">Consultar guías &rarr;</span>
             </a>
 
-            <!-- 3. Pon tu granito de arena (Formulario de aportaciones) -->
+            <!-- 4. Pon tu granito de arena -->
             <a href="aportaciones.html" class="section-card c-peach">
                 <div>
                     <h3>Pon tu granito de arena</h3>
