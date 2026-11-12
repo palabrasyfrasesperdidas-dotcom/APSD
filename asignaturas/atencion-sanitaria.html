@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atención Sanitaria - APSD</title>
+    <style>
+        :root {
+            --bg-board: #2b3a32;
+            --board-frame: #4a3525;
+            --text-chalk: #f4f4f0;
+            --postit-yellow: #fff3a8;
+            --postit-blue: #a0c4ff;
+            --postit-peach: #ffd6a5;
+            --postit-mint: #b9fbc0;
+            --text-dark: #2b2b2b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: #1e1e1e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1150px;
+            background-color: var(--bg-board);
+            border: 12px solid var(--board-frame);
+            border-radius: 16px;
+            padding: 30px 25px;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ENCABEZADO SUPERIOR */
+        .subject-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px dashed rgba(255,255,255,0.2);
+            padding-bottom: 20px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .header-title h1 {
+            color: var(--text-chalk);
+            font-size: 2.2em;
+            line-height: 1.2;
+            font-weight: 700;
+        }
+
+        .header-image img {
+            width: 110px;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 3px solid rgba(255,255,255,0.3);
+            background: #fff;
+        }
+
+        /* BLOQUE DE FECHAS Y EXÁMENES */
+        .dates-banner {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-chalk);
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 1.05em;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            border-left: 4px solid var(--postit-yellow);
+        }
+
+        .dates-banner span strong {
+            color: var(--postit-yellow);
+        }
+
+        /* CUADRÍCULA DE SECCIONES (6 POST-ITS) */
+        .sections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 15px;
+            max-height: 52vh;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .sections-grid::-webkit-scrollbar {
+            width: 8px;
+        }
+        .sections-grid::-webkit-scrollbar-thumb {
+            background: var(--board-frame);
+            border-radius: 4px;
+        }
+
+        .section-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            min-height: 150px;
+            text-decoration: none;
+            color: var(--text-dark);
+            border-radius: 4px 4px 4px 15px;
+            box-shadow: 3px 5px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+        }
+
+        .section-card:hover {
+            transform: scale(1.02);
+            box-shadow: 5px 8px 18px rgba(0, 0, 0, 0.4);
+        }
+
+        .section-card h3 {
+            font-size: 1.15em;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .section-card p {
+            font-size: 0.88em;
+            opacity: 0.9;
+        }
+
+        /* Colores de los post-its distribuidos */
+        .c-yellow { background-color: var(--postit-yellow); }
+        .c-blue   { background-color: var(--postit-blue); }
+        .c-peach  { background-color: var(--postit-peach); }
+        .c-mint   { background-color: var(--postit-mint); }
+
+        /* VENTANA MODAL "PRÓXIMAMENTE" */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            background-color: var(--bg-board);
+            border: 8px solid var(--board-frame);
+            border-radius: 14px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            color: var(--text-chalk);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .modal-box h2 {
+            font-size: 1.5em;
+            color: var(--postit-yellow);
+        }
+
+        .modal-box p {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        .modal-btn {
+            background-color: var(--board-frame);
+            color: var(--text-chalk);
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            align-self: center;
+            transition: opacity 0.2s;
+        }
+
+        .modal-btn:hover {
+            opacity: 0.85;
+        }
+
+        /* NAVEGACIÓN INFERIOR */
+        .back-nav {
+            text-align: left;
+            margin-top: 5px;
+        }
+
+        .back-btn {
+            color: var(--text-chalk);
+            text-decoration: none;
+            font-size: 0.95em;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .back-btn:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        /* ADAPTACIÓN MÓVIL */
+        @media (max-width: 600px) {
+            .board-container {
+                border-width: 6px;
+                padding: 15px 12px;
+            }
+            .subject-header {
+                flex-direction: column-reverse;
+                text-align: center;
+            }
+            .header-title h1 {
+                font-size: 1.6em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <main class="board-container">
+        <!-- ENCABEZADO CON TÍTULO E IMAGEN -->
+        <header class="subject-header">
+            <div class="header-title">
+                <h1>Atención Sanitaria</h1>
+            </div>
+            <div class="header-image">
+                <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=300&auto=format&fit=crop&q=80" alt="Icono Atención Sanitaria">
+            </div>
+        </header>
+
+        <!-- AVISOS DE EXÁMENES -->
+        <section class="dates-banner">
+            <span>📝 <strong>Examen teórico:</strong> 19 de noviembre.</span>
+            <span>🛠️ <strong>Examen práctico:</strong> 23 de noviembre.</span>
+        </section>
+
+        <!-- APARTADOS PRINCIPALES (6 OPCIONES) -->
+        <section class="sections-grid">
+            <!-- 1. Sistema nervioso, conceptos básicos y test -->
+            <a href="https://palabrasyfrasesperdidas-dotcom.github.io/El-viaje-/" target="_blank" class="section-card c-yellow">
+                <div>
+                    <h3>1. Sistema nervioso, conceptos básicos y test</h3>
+                    <p>Accede a los conceptos fundamentales del sistema nervioso y herramientas de autoevaluación.</p>
+                </div>
+                <span style="font-size: 0.85em; font-weight: bold; margin-top: 12px;">Acceder a la web &rarr;</span>
+            </a>
+
+            <!-- 2. Esquema del sistema nervioso y test -->
+            <a href="https://palabrasyfrasesperdidas-dotcom.github.io/esquema-sistema-nervioso/" target="_blank" class="section-card c-blue">
+                <div>
+                    <h3>2. Esquema del sistema nervioso y test</h3>
+                    <p>Consulta los esquemas visuales y pon a prueba tus conocimientos sobre la estructura nerviosa.</p>
+                </div>
+                <span style="font-size: 0.85em; font-weight: bold; margin-top: 12px;">Ver esquema y test &rarr;</span>
+            </a>
+
+            <!-- 3. Alimentación (Próximamente) -->
+            <div onclick="mostrarProximamente('Alimentación')" class="section-card c-peach">
+                <div>
+                    <h3>3. Alimentación</h3>
+                    <p>Contenidos teóricos y pautas sobre alimentación en el ámbito sociosanitario.</p>
+                </div>
+                <span style="font-size: 0.85em; font-weight: bold; margin-top: 12px;">Consultar PDF &rarr;</span>
+            </div>
+
+            <!-- 4. Manipulación de alimentos (Próximamente) -->
+            <div onclick="mostrarProximamente('Manipulación de alimentos')" class="section-card c-mint">
+                <div>
+                    <h3>4. Manipulación de alimentos</h3>
+                    <p>Normas de higiene, seguridad alimentaria y buenas prácticas profesionales.</p>
+                </div>
+                <span style="font-size: 0.85em; font-weight: bold; margin-top: 12px;">Consultar PDF &rarr;</span>
+            </div>
+
+            <!-- 5. Procedimientos prácticos (Próximamente) -->
+            <div onclick="mostrarProximamente('Procedimientos prácticos')" class="section-card c-yellow">
+                <div>
+                    <h3>5. Procedimientos prácticos</h3>
+                    <p>Guías operativas y protocolos de actuación paso a paso para la práctica clínica.</p>
+                </div>
+                <span style="font-size: 0.85em; font-weight: bold; margin-top: 12px;">Consultar PDF &rarr;</span>
+            </div>
+
+            <!-- 6. Pon a prueba tus conocimientos (Próximamente) -->
+            <div onclick="mostrarProximamente('Pon a prueba tus conocimientos')" class="section-card c-blue">
+                <div>
+                    <h3>6. Pon a prueba tus conocimientos</h3>
+                    <p>Pruebas tipo test interactivas para evaluar el progreso de la materia.</p>
+                </div>
+                <span style="font-size: 0.85em; font-weight: bold; margin-top: 12px;">Realizar test &rarr;</span>
+            </div>
+        </section>
+
+        <!-- NAVEGACIÓN INFERIOR -->
+        <div class="back-nav">
+            <a href="../index.html" class="back-btn">&larr; Volver a la pizarra principal</a>
+        </div>
+    </main>
+
+    <!-- VENTANA EMERGENTE (MODAL) -->
+    <div id="modalProximamente" class="modal-overlay">
+        <div class="modal-box">
+            <h2>⏳ Próximamente</h2>
+            <p id="modalTexto">El contenido de este apartado estará disponible en breve.</p>
+            <button type="button" class="modal-btn" onclick="cerrarProximamente()">Cerrar</button>
+        </div>
+    </div>
+
+    <script>
+        function mostrarProximamente(seccion) {
+            document.getElementById('modalTexto').innerText = `El contenido en PDF de "${seccion}" estará disponible próximamente.`;
+            document.getElementById('modalProximamente').classList.add('active');
+        }
+
+        function cerrarProximamente() {
+            document.getElementById('modalProximamente').classList.remove('active');
+        }
+    </script>
+
+</body>
+</html>
