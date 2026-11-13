@@ -1,399 +1,257 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resumen por días - Características y necesidades</title>
-    <style>
-        :root {
-            --bg-board: #2b3a32;
-            --board-frame: #4a3525;
-            --text-chalk: #f4f4f0;
-            --postit-yellow: #fff3a8;
-            --postit-mint: #b9fbc0;
-            --text-dark: #2b2b2b;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Características y necesidades de personas dependientes - APSD</title>
+    <style>
+        :root {
+            --bg-board: #2b3a32;
+            --board-frame: #4a3525;
+            --text-chalk: #f4f4f0;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --postit-yellow: #fff3a8;
+            --postit-mint: #b9fbc0;
+            --postit-peach: #ffd6a5;
+            --postit-blue: #a0c4ff;
+            --text-dark: #2b2b2b;
+        }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
 
-        body {
-            background-color: #1a2420;
-            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
-            background-size: 24px 24px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
+        body {
+            background-color: #1e1e1e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
 
-        .board-container {
-            width: 100%;
-            max-width: 1100px;
-            background-color: var(--bg-board);
-            border: 14px solid var(--board-frame);
-            border-radius: 18px;
-            padding: 35px 30px;
-            box-shadow: inset 0 0 60px rgba(0,0,0,0.6), 0 15px 35px rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
+        .board-container {
+            width: 100%;
+            max-width: 1100px;
+            background-color: var(--bg-board);
+            border: 12px solid var(--board-frame);
+            border-radius: 16px;
+            padding: 30px 25px;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
 
-        header h1 {
-            color: var(--text-chalk);
-            font-size: 2.1em;
-            border-bottom: 2px dashed rgba(255,255,255,0.25);
-            padding-bottom: 15px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
+        /* --- ENCABEZADO SUPERIOR --- */
+        .subject-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px dashed rgba(255,255,255,0.2);
+            padding-bottom: 20px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
 
-        .docs-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 15px;
-            max-height: 62vh;
-            overflow-y: auto;
-            padding-right: 8px;
-            padding-bottom: 5px;
-        }
+        .header-title h1 {
+            color: var(--text-chalk);
+            font-size: 2.2em;
+            line-height: 1.2;
+            font-weight: 700;
+        }
 
-        .docs-list::-webkit-scrollbar {
-            width: 10px;
-        }
-        .docs-list::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.25);
-            border-radius: 6px;
-        }
-        .docs-list::-webkit-scrollbar-thumb {
-            background: var(--board-frame);
-            border-radius: 6px;
-            border: 2px solid rgba(255,255,255,0.1);
-        }
+        .header-image img {
+            width: 110px;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 3px solid rgba(255,255,255,0.3);
+            background: #fff;
+        }
 
-        .doc-item {
-            background-color: var(--postit-yellow);
-            padding: 18px 20px;
-            border-radius: 6px 6px 6px 16px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            color: var(--text-dark);
-            box-shadow: 4px 6px 15px rgba(0,0,0,0.35);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            gap: 15px;
-        }
+        /* --- BLOQUE DE FECHAS --- */
+        .dates-banner {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-chalk);
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 1.05em;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            border-left: 4px solid var(--postit-yellow);
+        }
 
-        .doc-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 6px 9px 20px rgba(0,0,0,0.45);
-        }
+        .dates-banner span strong {
+            color: var(--postit-yellow);
+        }
 
-        .doc-info h3 {
-            font-size: 1.15em;
-            font-weight: 700;
-            color: #222;
-        }
+        /* --- APARTADOS / SECCIONES (Cuadrícula de 4) --- */
+        .sections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            padding: 10px 0;
+        }
 
-        .doc-info p {
-            font-size: 0.88em;
-            opacity: 0.8;
-            margin-top: 4px;
-        }
+        .section-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 25px 20px;
+            min-height: 170px;
+            text-decoration: none;
+            color: var(--text-dark);
+            border-radius: 4px 4px 4px 15px;
+            box-shadow: 3px 5px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+        }
 
-        .download-btn {
-            background-color: var(--board-frame);
-            color: var(--text-chalk);
-            padding: 8px 14px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.85em;
-            text-align: center;
-            align-self: flex-start;
-            transition: opacity 0.2s, background-color 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
+        .section-card:hover {
+            transform: scale(1.03);
+            box-shadow: 5px 8px 18px rgba(0, 0, 0, 0.4);
+        }
 
-        .download-btn:hover {
-            opacity: 0.9;
-            background-color: #5c432f;
-        }
+        .section-card h3 {
+            font-size: 1.25em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
 
-        .strike-tag {
-            background-color: #d9534f;
-            color: #ffffff;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 0.85em;
-            align-self: flex-start;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
+        .section-card p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
 
-        .back-nav {
-            margin-top: 5px;
-        }
+        /* Colores específicos para los apartados */
+        .c-yellow { background-color: var(--postit-yellow); }
+        .c-blue   { background-color: var(--postit-blue); }
+        .c-mint   { background-color: var(--postit-mint); }
+        .c-peach  { background-color: var(--postit-peach); }
 
-        .back-btn {
-            color: var(--text-chalk);
-            text-decoration: none;
-            font-size: 0.95em;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            opacity: 0.85;
-            transition: opacity 0.2s;
-        }
+        /* Botón de Volver al Índice */
+        .back-nav {
+            text-align: left;
+            margin-top: 5px;
+        }
 
-        .back-btn:hover {
-            opacity: 1;
-            text-decoration: underline;
-        }
-    </style>
+        .back-btn {
+            color: var(--text-chalk);
+            text-decoration: none;
+            font-size: 0.95em;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .back-btn:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        /* Adaptación MÓVIL / WAP */
+        @media (max-width: 600px) {
+            .board-container {
+                border-width: 6px;
+                padding: 15px 12px;
+            }
+
+            .subject-header {
+                flex-direction: column-reverse;
+                text-align: center;
+            }
+
+            .header-title h1 {
+                font-size: 1.6em;
+            }
+
+            .header-image img {
+                width: 90px;
+                height: 90px;
+            }
+
+            .dates-banner {
+                font-size: 0.95em;
+                padding: 12px 15px;
+            }
+
+            .section-card {
+                min-height: 140px;
+                padding: 20px 15px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-    <main class="board-container">
-        <header>
-            <h1>Resumen por días - Documentos de Clase</h1>
-        </header>
+    <main class="board-container">
+        <!-- ENCABEZADO CON TÍTULO E IMAGEN -->
+        <header class="subject-header">
+            <div class="header-title">
+                <h1>Características y necesidades<br>de personas dependientes</h1>
+            </div>
+            <div class="header-image">
+                <img src="https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=300&auto=format&fit=crop&q=80" alt="Icono de la Asignatura">
+            </div>
+        </header>
 
-        <div class="docs-list">
-            <!-- NOVIEMBRE 2026 (Martes, Jueves, Viernes) -->
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 10 de noviembre (Martes)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="10-noviembre.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
+        <!-- FECHAS CLAVE DEL DIARIO -->
+        <section class="dates-banner">
+            <span>📅 <strong>Fecha de diario 2:</strong> del día 10 de noviembre al día 22 de enero.</span>
+            <span>⏰ <strong>Fecha de entrega:</strong> día 26 de enero.</span>
+        </section>
 
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 11 de noviembre (Miércoles - Excepcional/Huelga)</h3>
-                    <p>Huelga - No hubo clase</p>
-                </div>
-                <span class="strike-tag">🚫 Huelga</span>
-            </div>
+        <!-- APARTADOS PRINCIPALES (4 OPCIONES) -->
+        <section class="sections-grid">
+            <!-- 1. Resumen por días -->
+            <a href="resumen-dias-caracteristicas.html" class="section-card c-yellow">
+                <div>
+                    <h3>Resumen por días</h3>
+                    <p>Accede para consultar y descargar los documentos Word con los resúmenes de cada clase.</p>
+                </div>
+                <span style="font-size: 0.85em; font-weight: bold; margin-top: 15px;">Ver documentos &rarr;</span>
+            </a>
 
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 12 de noviembre (Jueves)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="12-noviembre.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
+            <!-- 2. Palabra de la semana (NUEVO) -->
+            <a href="palabra-semana.html" class="section-card c-blue">
+                <div>
+                    <h3>Palabra de la semana</h3>
+                    <p>Listado organizado por semanas con los términos clave y definiciones destacadas.</p>
+                </div>
+                <span style="font-size: 0.85em; font-weight: bold; margin-top: 15px;">Ver términos &rarr;</span>
+            </a>
 
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 13 de noviembre (Viernes)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="13-noviembre.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
+            <!-- 3. Consejos para realizar el diario -->
+            <a href="consejos-diario.html" class="section-card c-mint">
+                <div>
+                    <h3>Consejos para realizar el diario</h3>
+                    <p>Pautas, recomendaciones y estructura recomendada para redactar tu diario con éxito.</p>
+                </div>
+                <span style="font-size: 0.85em; font-weight: bold; margin-top: 15px;">Consultar guías &rarr;</span>
+            </a>
 
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 17 de noviembre (Martes)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="17-noviembre.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
+            <!-- 4. Pon tu granito de arena -->
+            <a href="aportaciones.html" class="section-card c-peach">
+                <div>
+                    <h3>Pon tu granito de arena</h3>
+                    <p>Espacio seguro para enviar tus documentos y materiales complementarios.</p>
+                </div>
+                <span style="font-size: 0.85em; font-weight: bold; margin-top: 15px;">Subir material &rarr;</span>
+            </a>
+        </section>
 
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 19 de noviembre (Jueves)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="19-noviembre.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
-
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 20 de noviembre (Viernes)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="20-noviembre.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
-
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 24 de noviembre (Martes)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="24-noviembre.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
-
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 26 de noviembre (Jueves)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="26-noviembre.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
-
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 27 de noviembre (Viernes)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="27-noviembre.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
-
-            <!-- DICIEMBRE 2026 -->
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 1 de diciembre (Martes)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="1-diciembre.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
-
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 3 de diciembre (Jueves)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="3-diciembre.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
-
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 4 de diciembre (Viernes)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="4-diciembre.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
-
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 10 de diciembre (Jueves)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="10-diciembre.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
-
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 11 de diciembre (Viernes)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="11-diciembre.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
-
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 15 de diciembre (Martes)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="15-diciembre.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
-
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 17 de diciembre (Jueves)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="17-diciembre.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
-
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 18 de diciembre (Viernes)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="18-diciembre.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
-
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 22 de diciembre (Martes)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="22-diciembre.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
-
-            <!-- ENERO 2027 -->
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 7 de enero (Jueves)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="7-enero.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
-
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 8 de enero (Viernes)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="8-enero.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
-
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 12 de enero (Martes)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="12-enero.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
-
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 14 de enero (Jueves)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="14-enero.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
-
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 15 de enero (Viernes)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="15-enero.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
-
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 19 de enero (Martes)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="19-enero.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
-
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 21 de enero (Jueves)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="21-enero.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
-
-            <div class="doc-item">
-                <div class="doc-info">
-                    <h3>Resumen del día 22 de enero (Viernes)</h3>
-                    <p>Documento de apuntes y resumen</p>
-                </div>
-                <a href="22-enero.docx" class="download-btn" download>📥 Descargar Word</a>
-            </div>
-        </div>
-
-        <div class="back-nav">
-            <a href="caracteristicas-necesidades.html" class="back-btn">&larr; Volver a la asignatura</a>
-        </div>
-    </main>
+        <!-- NAVEGACIÓN INFERIOR -->
+        <div class="back-nav">
+            <a href="../index.html" class="back-btn">&larr; Volver a la pizarra principal</a>
+        </div>
+    </main>
 
 </body>
 </html>
