@@ -14,6 +14,7 @@
             --postit-peach: #ffd6a5;
             --postit-mint: #b9fbc0;
             --postit-purple: #e2d9f3;
+            --postit-pink: #ffc6ff;
             --text-dark: #2b2b2b;
         }
 
@@ -64,22 +65,22 @@
         /* Selector de Modelos (Pantalla Inicial) */
         .model-selector {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
             margin: 20px 0;
         }
 
         .model-card {
             background-color: var(--postit-yellow);
             color: var(--text-dark);
-            padding: 18px;
+            padding: 15px;
             border-radius: 6px 6px 6px 16px;
             text-align: center;
             cursor: pointer;
             box-shadow: 3px 5px 12px rgba(0,0,0,0.3);
             transition: transform 0.2s;
             font-weight: bold;
-            font-size: 1.05em;
+            font-size: 1em;
         }
 
         .model-card:hover {
@@ -90,6 +91,7 @@
         .model-card.c { background-color: var(--postit-peach); }
         .model-card.d { background-color: var(--postit-mint); }
         .model-card.e { background-color: var(--postit-purple); }
+        .model-card.f { background-color: var(--postit-pink); }
 
         /* Contenedor del Test */
         .quiz-body {
@@ -205,7 +207,8 @@
             <div class="model-card b" onclick="cargarModelo('B')">📝 Modelo B<br><small style="font-weight:normal;opacity:0.8;">20 Preguntas</small></div>
             <div class="model-card c" onclick="cargarModelo('C')">📝 Modelo C<br><small style="font-weight:normal;opacity:0.8;">20 Preguntas</small></div>
             <div class="model-card d" onclick="cargarModelo('D')">📝 Modelo D<br><small style="font-weight:normal;opacity:0.8;">20 Supuestos</small></div>
-            <div class="model-card e" onclick="cargarModelo('E')">📝 Modelo E<br><small style="font-weight:normal;opacity:0.8;">Colectivos Específicos</small></div>
+            <div class="model-card e" onclick="cargarModelo('E')">📝 Modelo E<br><small style="font-weight:normal;opacity:0.8;">Colectivos</small></div>
+            <div class="model-card f" onclick="cargarModelo('F')">📝 Modelo F<br><small style="font-weight:normal;opacity:0.8;">Test Práctico</small></div>
         </div>
 
         <!-- PANTALLA 2: DESARROLLO DEL TEST -->
@@ -227,7 +230,7 @@
     </main>
 
     <script>
-        // BASE DE DATOS DE LOS 5 MODELOS DE EXAMEN
+        // BASE DE DATOS DE LOS 6 MODELOS DE EXAMEN
         const examenesData = {
             A: [
                 {q: "¿Cómo se define el concepto general de autonomía personal según los contenidos de la unidad?", opts: ["La capacidad exclusiva para tomar decisiones financieras sin depender de terceros.", "La capacidad de mantener el control sobre la propia existencia.", "La obligación de realizar todas las actividades cotidianas bajo supervisión estricta.", "El dominio absoluto de las técnicas avanzadas de relajación mental."], ans: 1},
@@ -270,7 +273,7 @@
                 {q: "¿Qué rol asume el profesional en la segunda etapa del programa de entrenamiento?", opts: ["Rol de coadyuvante, proporcionando apoyos, ayudas e indicaciones necesarias para el aprendizaje", "Rol de inspector encargado de evaluar el rendimiento laboral del usuario", "Rol de cuidador principal en régimen interno de 24 horas", "Rol de diseñador gráfico de pictogramas y señalética"], ans: 0},
                 {q: "¿Cómo interviene el profesional en la tercera etapa o rol de observador/supervisor?", opts: ["Dirigiendo de forma autoritaria cada movimiento que realiza la persona", "Corrigiendo las posibles desviaciones y verificando que la persona es capaz de realizar la actividad con aproximación a la conducta adecuada", "Sustituindo por completo al usuario en la ejecución de las tareas domésticas", "Realizando entrevistas clínicas de carácter psiquiátrico profundo"], ans: 1},
                 {q: "¿Qué tipo de entrevistas se establecen para completar el proceso una vez finalizado el programa principal?", opts: ["Entrevistas de seguimiento con la persona usuaria o su familia para verificar y reforzar la consolidación del hábito", "Entrevistas judiciales de mediación familiar por conflicto de intereses", "Entrevistas de selección de personal para puestos de asistente domiciliario", "Entrevistas de evaluación académica para la obtención del título profesional"], ans: 0},
-                {q: "¿Cuál is el objetivo principal de la técnica de intervención denominada 'Modelado'?", opts: ["Que el profesional actúe como modelo ejecutando la actividad de manera correcta para que el usuario la observe e imite", "Corregir de forma milimétrica las imprecisiones físicas mediante guías mecánicas", "Obligar al usuario a memorizar listas extensas de instrucciones verbales complejas", "Simular situaciones ficticias de estrés mediante juegos de rol avanzados"], ans: 0},
+                {q: "¿Cuál es el objetivo principal de la técnica de intervención denominada 'Modelado'?", opts: ["Que el profesional actúe como modelo ejecutando la actividad de manera correcta para que el usuario la observe e imite", "Corregir de forma milimétrica las imprecisiones físicas mediante guías mecánicas", "Obligar al usuario a memorizar listas extensas de instrucciones verbales complejas", "Simular situaciones ficticias de estrés mediante juegos de rol avanzados"], ans: 0},
                 {q: "¿Qué se busca lograr mediante la técnica de 'Encadenamiento'?", opts: ["Descomponer una actividad compleja en tareas más sencillas para aprenderlas por partes y luego encadenarlas", "Reforzar económicamente cada uno de los logros obtenidos durante el mes", "Aislar al individuo de su entorno familiar para evitar interferencias conductuales", "Automatizar el diálogo interno de carácter autoinstructivo"], ans: 0}
             ],
             C: [
@@ -298,7 +301,7 @@
             D: [
                 {q: "Supuesto 1: Juan, una persona en situación de dependencia, rechaza realizar su aseo matinal diario porque prefiere quedarse en la cama y discute con el auxiliar de ayuda a domicilio. ¿Cuál de las siguientes actuaciones profesionales iniciales se corresponde con la Fase 1 (Toma de conciencia)?", opts: ["Forzar físicamente al usuario a levantarse para cumplir el horario estipulado en el cronograma institucional.", "Dialogar con Juan para que asuma la importancia personal de mantener la higiene y entienda los beneficios de adquirir dicha rutina.", "Sustituir de forma definitiva la tarea de aseo por toallitas húmedas aplicadas íntegramente por el profesional.", "Aplicar un castigo retirando las actividades de ocio preferidas hasta que acepte obedecer las directrices."], ans: 1},
                 {q: "Supuesto 2: María presenta dificultades severas para organizar la preparación de sus comidas diarias en casa, olvidando apagar el fuego o planificar los ingredientes. Al diseñar la intervención en el Área de la vida en el hogar, ¿qué objetivo se ajusta mejor a los criterios de la unidad?", opts: ["Lograr que María adquiera autonomía en la cocina mediante una pauta estructurada de orden, limpieza y elaboración de platos sencillos.", "Trasladar a María de manera permanente a un centro residencial de máxima asistencia para evitar cualquier riesgo eléctrico.", "Delegar la elaboración exclusiva de los menús en sus vecinos del inmueble mediante un contrato de voluntariado.", "Eliminar por completo el uso de electrodomésticos en la vivienda para suprimir cualquier fuente de peligro potencial."], ans: 0},
-                {q: "Supuesto 3: Durante el entrenamiento de una persona mayor en el uso autónomo del transporte público (recurso comunitario), esta muestra gran ansiedad al subir al autobús. El terapeuta decide ensayar previamente la situación en el centro mediante simulación antes de realizar el trayecto real. ¿Qué técnica se está aplicando?", opts: ["La técnica de moldeado físico pasivo para corregir la postura corporal al sentarse en el asiento.", "La técnica de role playing, permitiendo ensayar la conducta y ganar seguridad en un entorno controlado.", "La técnica de autoinstrucción cognitiva basada exclusivamente en la lectura de normativas de tráfico.", "La técnica de encadenamiento secuencial inverso para memorizar los números de línea."], ans: 1},
+                {q: "Supuesto 3: Durante el entrenamiento de una persona mayor en el uso autónomo del transporte público (recurso comunitario), esta muestra gran ansiedad al subir al autobús. El terapeuta decides ensayar previamente la situación en el centro mediante simulación antes de realizar el trayecto real. ¿Qué técnica se está aplicando?", opts: ["La técnica de moldeado físico pasivo para corregir la postura corporal al sentarse en el asiento.", "La técnica de role playing, permitiendo ensayar la conducta y ganar seguridad en un entorno controlado.", "La técnica de autoinstrucción cognitiva basada exclusivamente en la lectura de normativas de tráfico.", "La técnica de encadenamiento secuencial inverso para memorizar los números de línea."], ans: 1},
                 {q: "Supuesto 4: Un usuario con discapacidad intelectual leve es capaz de vestirse solo, pero abrocha los botones de manera incorrecta, desalineando la camisa. Para rectificar esta imprecisión y guiar su ejecución hacia el resultado correcto, el profesional actúa corrigiendo los errores. ¿Cómo se denomina esta estrategia?", opts: ["Técnica de moldeado, enfocada en corregir imprecisiones y rectificar errores de ejecución.", "Técnica de refuerzo económico mediante incentivos salariales mensuales.", "Técnica de aislamiento conductual preventivo frente a estímulos visuales complejos.", "Técnica de instrucciones verbales sin apoyo demostrativo directo ni feedback."], ans: 0},
                 {q: "Supuesto 5: Carmen, usuaria de un centro de día, necesita aprender a realizar una compra compleja en el supermercado local (actividad instrumental). El equipo técnico descompone la tarea global en pasos más sencillos (hacer la lista, salir de casa, coger cesta, seleccionar productos, pagar). ¿Qué técnica de intervención metodológica se está utilizando?", opts: ["El encadenamiento, dividiendo la actividad compleja en partes más sencillas para facilitar el aprendizaje secuencial.", "El modelado estricto mediante la ejecución exclusiva por parte del terapeuta sin participación del usuario.", "La autoinstrucción mediante el diálogo interno automatizado y repetitivo.", "La sobreprotección familiar para impedir que gestione dinero en efectivo."], ans: 0},
                 {q: "Supuesto 6: En la fase de seguimiento de un programa de autonomía para el autocuidado, el profesional observa mediante una escala de ABVD que la frecuencia del baño autónomo ha disminuido notablemente. ¿Qué actuación procede realizar según los protocolos del programa?", opts: ["Ajustar los objetivos de intervención y analizar las posibles barreras o situaciones de riesgo detectadas en el entorno.", "Dar de baja definitiva al usuario del servicio por incumplimiento reiterado de las normas del centro.", "Sustituir el registro de observación por un sistema de vigilancia mediante cámaras en el baño.", "Incrementar la complejidad de las actividades pasando directamente al nivel de habilidades avanzadas."], ans: 0},
@@ -317,208 +320,50 @@
                 {q: "Supuesto 19: Al formular los objetivos de intervención para un programa de autonomía personal dirigido a una persona dependiente, los profesionales deben extremar la precaución para evitar un error muy común. ¿Qué se debe evitar específicamente al redactar dichos objetivos?", opts: ["Que sean objetivos demasiado ambiciosos o inalcanzables que generen frustración en la persona usuaria.", "Que incluyan metas relacionadas con actividades básicas del autocuidado diario.", "Que cuenten con la opinión, motivación e implicación activa de la familia.", "Que se basen en los datos obtenidos durante la valoración funcional inicial."], ans: 0},
                 {q: "¿Qué documento integrador de carácter pluridisciplinar utilizado en los centros residenciales refleja de forma estructurada todas las actuaciones y programas de autonomía personal planificados para cada residente?", opts: ["El plan de atención individualizada (PAI), donde se integran de forma coordinada los distintos programas.", "El libro de contabilidad general y balance de cuentas anuales de la entidad.", "El registro de incidencias laborales y partes de baja de los trabajadores de plantilla.", "El expediente judicial de medidas cautelares de protección al menor o incapacitado."], ans: 0}
             ],
-            // MODELO E: COLECTIVOS ESPECÍFICOS (20 PREGUNTAS)
             E: [
-                {
-                    q: "Una persona mayor que acaba de perder a su cónyuge, quien tradicionalmente se encargaba de las tareas instrumentales del hogar, presenta riesgo de pérdida funcional. Según el temario, ¿qué actuación inicial se recomienda aplicar?",
-                    opts: [
-                        "Traslado inmediato a un centro residencial geriátrico para evitar riesgos de aislamiento.",
-                        "Programas de entrenamiento específicos orientados a mantener su funcionalidad.",
-                        "Sustitución total de sus decisiones por parte de los asistentes sociales del municipio.",
-                        "Supresión definitiva de las actividades instrumentales y limitación a las básicas."
-                    ],
-                    ans: 1
-                },
-                {
-                    q: "Durante un programa de entrenamiento en el domicilio de una persona mayor con envejecimiento progresivo que afecta a sus AVD, el TAPSD observa que prioriza el abandono de las tareas instrumentales frente a las básicas. ¿Qué área de habilidades debe potenciar fundamentalmente la intervención?",
-                    opts: [
-                        "Exclusivamente el área del autocuidado higiénico nocturno.",
-                        "Habilidades de carácter físico, cognitivo y social asegurando entornos accesibles.",
-                        "Técnicas avanzadas de pilotaje informático y transacciones bursátiles.",
-                        "Protocolos estrictos de aislamiento preventivo domiciliario."
-                    ],
-                    ans: 1
-                },
-                {
-                    q: "Al adaptar un programa de entrenamiento en autonomía para una persona con discapacidad física severa, ¿qué factor técnico condiciona principalmente el diseño de las actividades?",
-                    opts: [
-                        "El grado de afectación funcional que presente el individuo.",
-                        "La obligatoriedad de aprender obligatoriamente la lengua de signos táctil.",
-                        "La supresión absoluta de cualquier producto de apoyo mecánico en el hogar.",
-                        "La renuncia voluntaria a la asistencia personal contratada bajo acuerdo."
-                    ],
-                    ans: 0
-                },
-                {
-                    q: "¿Qué combinación de recursos y apoyos es indispensable contemplar al diseñar la intervención en el entorno de una persona con discapacidad física?",
-                    opts: [
-                        "Implantes cocleares de alta fidelidad y bucles magnéticos de inducción.",
-                        "Productos de apoyo para higiene, cocina y vestido, adaptación del espacio, apoyo personal y asistencia personal.",
-                        "Guías de lectura en braille digital y alarmas estroboscópicas luminosas.",
-                        "Fármacos neurolépticos y sujeciones mecánicas para evitar deambulación."
-                    ],
-                    ans: 1
-                },
-                {
-                    q: "En la intervención con una persona con discapacidad visual grave para lograr su vida independiente en tareas básicas e instrumentales, ¿qué conjunto de medios tecnológicos y de apoyo se debe integrar?",
-                    opts: [
-                        "Tiflotecnología, productos de apoyo específicos y adaptaciones del entorno.",
-                        "Timbres luminosos de aviso y teléfonos fijos con amplificación de voz.",
-                        "Intérpretes presenciales de lengua de signos española las 24 horas.",
-                        "Programas de autoinstrucción cognitiva basados en pictogramas murales."
-                    ],
-                    ans: 0
-                },
-                {
-                    q: "Si un TAPSD interviene con una persona con discapacidad auditiva para romper barreras comunicativas en su entorno, ¿cuál de los siguientes recursos tecnológicos y de adaptación NO corresponde a este colectivo?",
-                    opts: [
-                        "Implantes cocleares y prótesis auditivas.",
-                        "Dispositivos como teléfonos con amplificación y bucles magnéticos.",
-                        "Timbres luminosos e intermediación telefónica (CIT).",
-                        "Bastones blancos ultrasónicos y lectores de pantalla de braille."
-                    ],
-                    ans: 3
-                },
-                {
-                    q: "Al planificar el objetivo prioritario de un programa de entrenamiento en autonomía dirigido a personas con discapacidad intelectual, ¿cuál debe ser la meta fundamental en el inicio?",
-                    opts: [
-                        "Adquirir hábitos de cuidado personal y Actividades de la Vida Diaria (AVD).",
-                        "Gestionar complejos fondos de inversión bursátil de manera autónoma.",
-                        "Superar pruebas teóricas de acceso a la educación universitaria superior.",
-                        "Desempeñar funciones directivas en grandes corporaciones mercantiles."
-                    ],
-                    ans: 0
-                },
-                {
-                    q: "En el caso de trabajar con un usuario diagnosticado con discapacidad intelectual de nivel leve, ¿qué tipo de contenidos específicos se pueden entrenar de forma complementaria?",
-                    opts: [
-                        "Exclusivamente la deglución asistida y el control estricto de esfínteres.",
-                        "Habilidades instrumentales, sociales, de ocio y resolución de problemas básicos.",
-                        "Técnicas avanzadas de cirugías menores y primeros auxilios de urgencia.",
-                        "Programas de aislamiento preventivo para evitar estímulos comunitarios."
-                    ],
-                    ans: 1
-                },
-                {
-                    q: "Una persona con un trastorno mental severo presenta limitaciones notables en el autocuidado, la gestión del dinero y la realización de trámites burocráticos. ¿Hacia qué pilares fundamentales debe orientarse el programa de entrenamiento?",
-                    opts: [
-                        "Establecer rutinas, orientar, disminuir conductas disruptivas y fomentar la autoestima, contando con la motivación del usuario y la implicación familiar.",
-                        "Institucionalización psiquiátrica de carácter cerrado y privación de contacto exterior.",
-                        "Supresión definitiva de la autonomía económica y delegación absoluta en tutores legales externos.",
-                        "Entrenamiento físico de alta intensidad orientado a competiciones deportivas de élite."
-                    ],
-                    ans: 0
-                },
-                {
-                    q: "Durante la aplicación de una técnica de modificación de conducta en un taller de autonomía para personas con trastornos mentales, el profesional da indicaciones verbales precisas sobre una tarea asegurando la comprensión mediante feedback. ¿Cómo se denomina esta técnica?",
-                    opts: [
-                        "Modelado conductual directo.",
-                        "Instrucciones.",
-                        "Role playing de simulación.",
-                        "Autoinstrucción cognitiva interna."
-                    ],
-                    ans: 1
-                },
-                {
-                    q: "Al entrenar a un grupo de jóvenes con discapacidad intelectual en habilidades domésticas, el TAPSD actúa como modelo ejecutando correctamente la tarea de poner la mesa de manera inmediata. ¿Qué ventaja busca esta técnica llamada modelado?",
-                    opts: [
-                        "Sustituir de forma permanente la voluntad del usuario en el hogar.",
-                        "Facilitar que el usuario observe e imite los procesos de mayor dificultad.",
-                        "Evaluar punitivamente las imprecisiones físicas cometidas.",
-                        "Obligar al usuario a memorizar manuales escritos complejos."
-                    ],
-                    ans: 1
-                },
-                {
-                    q: "Cuando se descompone una tarea compleja de cocina (como elaborar un menú) en pasos más sencillos para que una persona con discapacidad intelectual los aprenda secuencialmente por partes, ¿qué técnica se está aplicando?",
-                    opts: [
-                        "Encadenamiento.",
-                        "Refuerzo positivo intermitente.",
-                        "Autoinstrucción verbalizada.",
-                        "Tareas para casa de carácter pasivo."
-                    ],
-                    ans: 0
-                },
-                {
-                    q: "Para ensayar situaciones cotidianas de compras en un supermercado con un usuario con ansiedad social leve, se simula el entorno real en el centro permitiéndole ganar seguridad de forma controlada. ¿Qué técnica metodológica se utiliza?",
-                    opts: [
-                        "Moldeado de imprecisiones.",
-                        "Role playing.",
-                        "Instrucciones verbales cerradas.",
-                        "Registro de incidencias de riesgo."
-                    ],
-                    ans: 1
-                },
-                {
-                    q: "Si un TAPSD corrige de manera progresiva las imprecisiones de una persona mayor al utilizar cubiertos adaptados para aproximar su ejecución a la forma correcta, ¿qué técnica de intervención está empleando?",
-                    opts: [
-                        "Moldeado.",
-                        "Encadenamiento de rutinas.",
-                        "Toma de conciencia inicial.",
-                        "Asistencia personal contratada."
-                    ],
-                    ans: 0
-                },
-                {
-                    q: "Un usuario con discapacidad física leve recibe pautas para aplicar en su domicilio lo aprendido durante la sesión, debiendo registrar por escrito las dudas y dificultades que le surjan. ¿Cómo se denomina esta herramienta de intervención?",
-                    opts: [
-                        "Tareas para casa.",
-                        "Escala de valoración de AIVD.",
-                        "Protocolo de acogida residencial.",
-                        "Plan de atención individualizada (PAI)."
-                    ],
-                    ans: 0
-                },
-                {
-                    q: "Al reforzar verbalmente y premiar los pequeños logros conseguidos por un usuario con trastorno mental tras completar una rutina de aseo, ¿qué función cumple dicha técnica en el programa?",
-                    opts: [
-                        "Sancionar los errores cometidos durante la ejecución instrumental.",
-                        "Mantener la motivación de la persona usuaria y fomentar su continuidad.",
-                        "Incrementar la sobreprotección familiar en el domicilio.",
-                        "Eliminar la necesidad de realizar entrevistas de seguimiento posterior."
-                    ],
-                    ans: 1
-                },
-                {
-                    q: "Un usuario con dificultades de autorregulación emocional aprende a 'hablarse a sí mismo' de forma ordenada mediante consignas internas para planificar, ejecutar y evaluar una tarea difícil. ¿Qué técnica cognitiva se está entrenando?",
-                    opts: [
-                        "Autoinstrucción.",
-                        "Modelado pasivo externo.",
-                        "Encadenamiento motor secuencial.",
-                        "Feedback analítico de rutinas."
-                    ],
-                    ans: 0
-                },
-                {
-                    q: "En la fase de seguimiento y evaluación de un programa de autonomía aplicado a una persona mayor en su domicilio, ¿qué aspecto evalúa específicamente la herramienta de 'análisis de registros de rutinas'?",
-                    opts: [
-                        "El cumplimiento de horarios en aspectos como levantarse a tiempo, las horas de las comidas o el tiempo de sueño.",
-                        "La rentabilidad económica de las cuentas bancarias del usuario.",
-                        "El grado de satisfacción con la oferta de ocio nocturno comunitario.",
-                        "La velocidad de lectura de prospectos farmacéuticos impresos."
-                    ],
-                    ans: 0
-                },
-                {
-                    q: "Durante el registro de incidencias en la fase de evaluación de un programa para personas con trastornos mentales, ¿qué elementos de control operativo se analizan fundamentalmente?",
-                    opts: [
-                        "Conductas disruptivas, situaciones difíciles y estrategias usadas.",
-                        "El balance contable anual de la asociación gestora del servicio.",
-                        "Las normativas urbanísticas de accesibilidad en la vía pública.",
-                        "La calidad de los materiales fungibles empleados en los talleres."
-                    ],
-                    ans: 0
-                },
-                {
-                    q: "Al revisar las situaciones de riesgo dentro de la fase de seguimiento de un programa de autonomía dirigido a personas con discapacidad física o sensorial, ¿qué medidas preventivas se priorizan en el entorno?",
-                    opts: [
-                        "Prevención de caídas, manejo seguro del entorno y uso correcto de ayudas técnicas.",
-                        "Supresión total de salidas al exterior para evitar la fatiga crónica.",
-                        "Internamiento hospitalario preventivo durante los fines de semana.",
-                        "Eliminación de cualquier apoyo técnico para forzar la autosuficiencia motora."
-                    ],
-                    ans: 0
-                }
+                {q: "Una persona mayor que acaba de perder a su cónyuge, quien tradicionalmente se encargaba de las tareas instrumentales del hogar, presenta riesgo de pérdida funcional. Según el temario, ¿qué actuación inicial se recomienda aplicar?", opts: ["Traslado inmediato a un centro residencial geriátrico para evitar riesgos de aislamiento.", "Programas de entrenamiento específicos orientados a mantener su funcionalidad.", "Sustitución total de sus decisiones por parte de los asistentes sociales del municipio.", "Supresión definitiva de las actividades instrumentales y limitación a las básicas."], ans: 1},
+                {q: "Durante un programa de entrenamiento en el domicilio de una persona mayor con envejecimiento progresivo que afecta a sus AVD, el TAPSD observa que prioriza el abandono de las tareas instrumentales frente a las básicas. ¿Qué área de habilidades debe potenciar fundamentalmente la intervención?", opts: ["Exclusivamente el área del autocuidado higiénico nocturno.", "Habilidades de carácter físico, cognitivo y social asegurando entornos accesibles.", "Técnicas avanzadas de pilotaje informático y transacciones bursátiles.", "Protocolos estrictos de aislamiento preventivo domiciliario."], ans: 1},
+                {q: "Al adaptar un programa de entrenamiento en autonomía para una persona con discapacidad física severa, ¿qué factor técnico condiciona principalmente el diseño de las actividades?", opts: ["El grado de afectación funcional que presente el individuo.", "La obligatoriedad de aprender obligatoriamente la lengua de signos táctil.", "La supresión absoluta de cualquier producto de apoyo mecánico en el hogar.", "La renuncia voluntaria a la asistencia personal contratada bajo acuerdo."], ans: 0},
+                {q: "¿Qué combinación de recursos y apoyos es indispensable contemplar al diseñar la intervención en el entorno de una persona con discapacidad física?", opts: ["Implantes cocleares de alta fidelidad y bucles magnéticos de inducción.", "Productos de apoyo para higiene, cocina y vestido, adaptación del espacio, apoyo personal y asistencia personal.", "Guías de lectura en braille digital y alarmas estroboscópicas luminosas.", "Fármacos neurolépticos y sujeciones mecánicas para evitar deambulación."], ans: 1},
+                {q: "En la intervención con una persona con discapacidad visual grave para lograr su vida independiente en tareas básicas e instrumentales, ¿qué conjunto de medios tecnológicos y de apoyo se debe integrar?", opts: ["Tiflotecnología, productos de apoyo específicos y adaptaciones del entorno.", "Timbres luminosos de aviso y teléfonos fijos con amplificación de voz.", "Intérpretes presenciales de lengua de signos española las 24 horas.", "Programas de autoinstrucción cognitiva basados en pictogramas murales."], ans: 0},
+                {q: "Si un TAPSD interviene con una persona con discapacidad auditiva para romper barreras comunicativas en su entorno, ¿cuál de los siguientes recursos tecnológicos y de adaptación NO corresponde a este colectivo?", opts: ["Implantes cocleares y prótesis auditivas.", "Dispositivos como teléfonos con amplificación y bucles magnéticos.", "Timbres luminosos e intermediación telefónica (CIT).", "Bastones blancos ultrasónicos y lectores de pantalla de braille."], ans: 3},
+                {q: "Al planificar el objetivo prioritario de un programa de entrenamiento en autonomía dirigido a personas con discapacidad intelectual, ¿cuál debe ser la meta fundamental en el inicio?", opts: ["Adquirir hábitos de cuidado personal y Actividades de la Vida Diaria (AVD).", "Gestionar complejos fondos de inversión bursátil de manera autónoma.", "Superar pruebas teóricas de acceso a la educación universitaria superior.", "Desempeñar funciones directivas en grandes corporaciones mercantiles."], ans: 0},
+                {q: "En el caso de trabajar con un usuario diagnosticado con discapacidad intelectual de nivel leve, ¿qué tipo de contenidos específicos se pueden entrenar de forma complementaria?", opts: ["Exclusivamente la deglución asistida y el control estricto de esfínteres.", "Habilidades instrumentales, sociales, de ocio y resolución de problemas básicos.", "Técnicas avanzadas de cirugías menores y primeros auxilios de urgencia.", "Programas de aislamiento preventivo para evitar estímulos comunitarios."], ans: 1},
+                {q: "Una persona con un trastorno mental severo presenta limitaciones notables en el autocuidado, la gestión del dinero y la realización de trámites burocráticos. ¿Hacia qué pilares fundamentales debe orientarse el programa de entrenamiento?", opts: ["Establecer rutinas, orientar, disminuir conductas disruptivas y fomentar la autoestima, contando con la motivación del usuario y la implicación familiar.", "Institucionalización psiquiátrica de carácter cerrado y privación de contacto exterior.", "Supresión definitiva de la autonomía económica y delegación absoluta en tutores legales externos.", "Entrenamiento físico de alta intensidad orientado a competiciones deportivas de élite."], ans: 0},
+                {q: "Durante la aplicación de una técnica de modificación de conducta en un taller de autonomía para personas con trastornos mentales, el profesional da indicaciones verbales precisas sobre una tarea asegurando la comprensión mediante feedback. ¿Cómo se denomina esta técnica?", opts: ["Modelado conductual directo.", "Instrucciones.", "Role playing de simulación.", "Autoinstrucción cognitiva interna."], ans: 1},
+                {q: "Al entrenar a un grupo de jóvenes con discapacidad intelectual en habilidades domésticas, el TAPSD actúa como modelo ejecutando correctamente la tarea de poner la mesa de manera inmediata. ¿Qué ventaja busca esta técnica llamada modelado?", opts: ["Sustituir de forma permanente la voluntad del usuario en el hogar.", "Facilitar que el usuario observe e imite los procesos de mayor dificultad.", "Evaluar punitivamente las imprecisiones físicas cometidas.", "Obligar al usuario a memorizar manuales escritos complejos."], ans: 1},
+                {q: "Cuando se descompone una tarea compleja de cocina (como elaborar un menú) en pasos más sencillos para que una persona con discapacidad intelectual los aprenda secuencialmente por partes, ¿qué técnica se está aplicando?", opts: ["Encadenamiento.", "Refuerzo positivo intermitente.", "Autoinstrucción verbalizada.", "Tareas para casa de carácter pasivo."], ans: 0},
+                {q: "Para ensayar situaciones cotidianas de compras en un supermercado con un usuario con ansiedad social leve, se simula el entorno real en el centro permitiéndole ganar seguridad de forma controlada. ¿Qué técnica metodológica se utiliza?", opts: ["Moldeado de imprecisiones.", "Role playing.", "Instrucciones verbales cerradas.", "Registro de incidencias de riesgo."], ans: 1},
+                {q: "Si un TAPSD corrige de manera progresiva las imprecisiones de una persona mayor al utilizar cubiertos adaptados para aproximar su ejecución a la forma correcta, ¿qué técnica de intervención está empleando?", opts: ["Moldeado.", "Encadenamiento de rutinas.", "Toma de conciencia inicial.", "Asistencia personal contratada."], ans: 0},
+                {q: "Un usuario con discapacidad física leve recibe pautas para aplicar en su domicilio lo aprendido durante la sesión, debiendo registrar por escrito las dudas y dificultades que le surjan. ¿Cómo se denomina esta herramienta de intervención?", opts: ["Tareas para casa.", "Escala de valoración de AIVD.", "Protocolo de acogida residencial.", "Plan de atención individualizada (PAI)."], ans: 0},
+                {q: "Al reforzar verbalmente y premiar los pequeños logros conseguidos por un usuario con trastorno mental tras completar una rutina de aseo, ¿qué función cumple dicha técnica en el programa?", opts: ["Sancionar los errores cometidos durante la ejecución instrumental.", "Mantener la motivación de la persona usuaria y fomentar su continuidad.", "Incrementar la sobreprotección familiar en el domicilio.", "Eliminar la necesidad de realizar entrevistas de seguimiento posterior."], ans: 1},
+                {q: "Un usuario con dificultades de autorregulación emocional aprende a 'hablarse a sí mismo' de forma ordenada mediante consignas internas para planificar, ejecutar y evaluar una tarea difícil. ¿Qué técnica cognitiva se está entrenando?", opts: ["Autoinstrucción.", "Modelado pasivo externo.", "Encadenamiento motor secuencial.", "Feedback analítico de rutinas."], ans: 0},
+                {q: "En la fase de seguimiento y evaluación de un programa de autonomía aplicado a una persona mayor en su domicilio, ¿qué aspecto evalúa específicamente la herramienta de 'análisis de registros de rutinas'?", opts: ["El cumplimiento de horarios en aspectos como levantarse a tiempo, las horas de las comidas o el tiempo de sueño.", "La rentabilidad económica de las cuentas bancarias del usuario.", "El grado de satisfacción con la oferta de ocio nocturno comunitario.", "La velocidad de lectura de prospectos farmacéuticos impresos."], ans: 0},
+                {q: "Durante el registro de incidencias en la fase de evaluación de un programa para personas con trastornos mentales, ¿qué elementos de control operativo se analizan fundamentalmente?", opts: ["Conductas disruptivas, situaciones difíciles y estrategias usadas.", "El balance contable anual de la asociación gestora del servicio.", "Las normativas urbanísticas de accesibilidad en la vía pública.", "La calidad de los materiales fungibles empleados en los talleres."], ans: 0},
+                {q: "Al revisar las situaciones de riesgo dentro de la fase de seguimiento de un programa de autonomía dirigido a personas con discapacidad física o sensorial, ¿qué medidas preventivas se priorizan en el entorno?", opts: ["Prevención de caídas, manejo seguro del entorno y uso correcto de ayudas técnicas.", "Supresión total de salidas al exterior para evitar la fatiga crónica.", "Internamiento hospitalario preventivo durante los fines de semana.", "Eliminación de cualquier apoyo técnico para forzar la autosuficiencia motora."], ans: 0}
+            ],
+            // MODELO F: TEST PRÁCTICO CONCEPTOS CLAVE (20 PREGUNTAS)
+            F: [
+                {q: "Un usuario con discapacidad intelectual leve es capaz de preparar su desayuno todos los días sin ayuda gracias a que ejecuta de forma automática toda la secuencia aprendida sin precisar apoyo externo. ¿Cómo se define conceptualmente esta conducta adquirida?", opts: ["Una rutina temporal de carácter institucional.", "Un hábito consolidado de autonomía personal.", "Una habilidad genérica pendiente de automatizar.", "Un proceso de autodeterminación directiva."], ans: 1},
+                {q: "Durante una intervención domiciliaria, una persona mayor realiza de forma repetida la secuencia de aseo personal todas las mañanas a las 08:00 h. Esta práctica repetida en el momento indicado facilita la adquisición del hábito. ¿A qué concepto corresponde esta ejecución pautada?", opts: ["Una rutina diaria estructurada.", "Una destreza de autodeterminación pura.", "Una habilidad motora de tipo avanzado.", "Un acto de dependencia sobreprotegida."], ans: 0},
+                {q: "Un joven con discapacidad física leve decide por sí mismo qué ropa comprar y qué itinerario de transporte público utilizar para ir al centro ocupacional, asumiendo las consecuencias de sus decisiones. ¿Qué dimensión fundamental de la autonomía personal está ejerciendo principalmente?", opts: ["La independencia motora pasiva.", "La autodeterminación personal.", "La rutina institucional obligatoria.", "El hábito de autocuidado higiénico."], ans: 1},
+                {q: "Una persona con un trastorno mental severo consigue realizar todas sus actividades cotidianas básicas en su domicilio sin la presencia ni la ayuda física del auxiliar de ayuda a domicilio. ¿Qué concepto define con mayor precisión esta situación?", opts: ["La independencia funcional.", "La automatización de rutinas complejas.", "El nivel de autodeterminación burocrática.", "La capacidad de adquirir nuevas habilidades."], ans: 0},
+                {q: "En el programa de entrenamiento para una persona con discapacidad visual, el TAPSD trabaja para que el usuario adquiera la capacidad de realizar una tarea concreta de orientación espacial. ¿Cómo se denomina técnicamente a esa capacidad operativa?", opts: ["Un hábito de conducta automática.", "Una rutina de carácter temporal.", "Una habilidad específica.", "Una pauta de autodeterminación."], ans: 2},
+                {q: "Una persona mayor institucionalizada pierde progresivamente la capacidad de tomar sus propias decisiones sobre sus horarios y menús debido a normas rígidas impuestas por el centro. Según el temario, ¿qué principio de su autonomía se está menoscabando directamente?", opts: ["Su nivel de independencia motora básica.", "Su capacidad de autodeterminación.", "Su destreza en el manejo de rutinas.", "Su habilidad en el área del autocuidado."], ans: 1},
+                {q: "Un usuario con discapacidad intelectual realiza la compra en el supermercado de manera completamente autónoma sin que nadie le preste apoyo físico ni verbal. ¿Qué concepto refleja este logro práctico?", opts: ["La independencia en actividades instrumentales.", "La consolidación de una rutina matutina.", "El desarrollo exclusivo de la autodeterminación.", "La fase inicial de toma de conciencia."], ans: 0},
+                {q: "Para lograr que una persona con un trastorno mental grave mantenga el orden en su hogar, el profesional establece una ejecución repetida y pautada de la limpieza cada tarde tras almorzar. ¿Qué herramienta metodológica se está aplicando para facilitar el hábito?", opts: ["Una habilidad de autonomía instrumental.", "Una rutina de estructuración temporal.", "Un proceso de absoluta independencia.", "Una medida de autodeterminación externa."], ans: 1},
+                {q: "Una persona con discapacidad física moderada necesita que le alcancen los utensilios de cocina, pero es capaz de realizar la receta por sí misma. ¿Qué matiz conceptual diferencia su situación respecto al concepto estricto de independencia?", opts: ["Carece por completo de cualquier habilidad doméstica.", "No es independiente en esa tarea concreta al requerir ayuda externa.", "Posee un hábito consolidado de tipo avanzado.", "Ejerce una total autodeterminación sobre el entorno."], ans: 1},
+                {q: "Durante la fase de consolidación de un programa de autonomía para una persona sorda, el hábito adquirido se integra de manera plena. ¿Qué significa esto en la práctica cotidiana?", opts: ["Que la persona ejecuta la conducta de forma automática en cualquier contexto donde se requiera.", "Que la persona depende exclusivamente de un intérprete de lengua de signos.", "Que la rutina deja de ser útil para el control temporal del usuario.", "Que se anula la necesidad de aplicar técnicas de modificación de conducta."], ans: 0},
+                {q: "Un usuario con discapacidad intelectual leve es capaz de elegir el menú semanal y decidir cómo gastar su dinero de bolsillo, aunque a veces cometa errores de los que aprende. ¿Qué concepto se fomenta de manera directa con esta actuación?", opts: ["La independencia higiénica básica.", "La autodeterminación personal.", "La rutina institucional obligatoria.", "El hábito de ejecución motora."], ans: 1},
+                {q: "Al entrenar a un grupo de personas mayores en la toma de medicación, el terapeuta busca que la acción se convierta en una conducta aprendida que se ejecute de forma automática y sin apoyo externo. ¿Qué concepto describe esta meta?", opts: ["Una rutina de supervisión clínica.", "Un hábito de autonomía personal.", "Una habilidad en fase de aprendizaje.", "Un proceso de dependencia pasiva."], ans: 1},
+                {q: "Un TAPSD observa que un usuario con discapacidad física severa es incapaz de vestirse sin asistencia técnica, pero le anima a decidir qué camisa ponerse cada día. ¿Cómo se combinan aquí los conceptos de autonomía?", opts: ["Hay ausencia total de autonomía e independencia.", "Hay baja independencia física pero se fomenta la autodeterminación.", "Se ha completado con éxito la fase de automatización.", "Se trata de un hábito consolidado de autocuidado."], ans: 1},
+                {q: "¿Qué diferencia fundamental existe entre 'habilidad' y 'hábito' en el contexto de la intervención con personas en situación de dependencia?", opts: ["La habilidad es la capacidad para realizar una tarea, mientras que el hábito es la conducta aprendida que se ejecuta de forma automática.", "La habilidad requiere siempre asistencia personal y el hábito se realiza en instituciones.", "El hábito es una fase teórica previa y la habilidad es el resultado final del aislamiento.", "No existe diferencia técnica, ya que ambos términos son sinónimos en terapia ocupacional."], ans: 0},
+                {q: "Una persona con un trastorno mental leve es incapaz de organizar sus tareas diarias de forma espontánea, por lo que el equipo diseña una secuencia fija de horarios para levantarse, asearse y desayunar. ¿Qué se está utilizando para estructurar su día?", opts: ["Un proceso avanzado de autodeterminación.", "Una rutina orientada a facilitar el hábito.", "Una habilidad de autocuidado innata.", "Una medida de sobreprotección familiar."], ans: 1},
+                {q: "¿Qué indicador práctico demuestra que un usuario con discapacidad intelectual ha superado la fase de 'aprendizaje' y ha entrado en la 'automatización' de una habilidad de cocina?", opts: ["Que comprende la importancia teórica de cocinar para su supervivencia.", "Que realiza la tarea de forma repetitiva y integrada en sus rutinas cotidianas.", "Que es capaz de decidir autónomamente el menú sin contar con nadie.", "Que ya no necesita ningún tipo de espacio físico adaptado en su hogar."], ans: 1},
+                {q: "Un centro residencial planifica las actividades de ocio de los residentes mayores sin consultarles, argumentando que así se evitan conflictos. ¿Qué principio básico de la autonomía personal se está vulnerando claramente?", opts: ["La independencia en el desplazamiento físico.", "La autodeterminación y la capacidad de elección.", "La rutina de sueño y descanso nocturno.", "El hábito higiénico del autocuidado."], ans: 1},
+                {q: "Cuando se afirma que una persona en situación de dependencia posee 'independencia' para realizar las actividades de la vida diaria, ¿a qué nos referimos exactamente en la práctica?", opts: ["A que es capaz de realizarlas sin la ayuda física ni material de otra persona.", "A que toma todas las decisiones financieras de su unidad familiar.", "A que cumple estrictamente con las rutinas impuestas por el centro de día.", "A que ha desarrollado habilidades académicas de cálculo avanzado."], ans: 0},
+                {q: "¿Cuál de los siguientes ejemplos ilustra de forma correcta la puesta en práctica de una 'habilidad' en el ámbito de las actividades instrumentales de la vida diaria (AVDI)?", opts: ["Mantener el control de esfínteres durante las 24 horas del día.", "Saber utilizar de forma correcta un cajero automático o manejar dinero.", "Ejecutar el reflejo de deglución de alimentos triturados sin atragantarse.", "Descansar plácidamente durante las horas establecidas de sueño nocturno."], ans: 1},
+                {q: "Si un TAPSD asume todas las tareas domésticas de una persona con discapacidad leve por el miedo a que se equivoque o sufra un pequeño percance, ¿qué consecuencia directa provoca en los conceptos clave del usuario?", opts: ["Fomenta de manera excelente la consolidación de sus hábitos saludables.", "Mejora notablemente su nivel de autodeterminación personal.", "Menoscaba y destruye su independencia y sus habilidades de autonomía.", "Acelera el paso de la fase de aprendizaje a la automatización."], ans: 2}
             ]
         };
 
