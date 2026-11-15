@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Nervioso - Atención Sanitaria</title>
+    <style>
+        :root {
+            --bg-board: #2b3a32;
+            --board-frame: #4a3525;
+            --text-chalk: #f4f4f0;
+            --postit-yellow: #fff3a8;
+            --postit-blue: #a0c4ff;
+            --text-dark: #2b2b2b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: #1e1e1e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1000px;
+            background-color: var(--bg-board);
+            border: 12px solid var(--board-frame);
+            border-radius: 16px;
+            padding: 30px 25px;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        header h1 {
+            color: var(--text-chalk);
+            font-size: 2.1em;
+            border-bottom: 2px dashed rgba(255,255,255,0.2);
+            padding-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .sections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 15px 0;
+        }
+
+        .section-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 30px 25px;
+            min-height: 200px;
+            text-decoration: none;
+            color: var(--text-dark);
+            border-radius: 6px 6px 6px 18px;
+            box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .section-card:hover {
+            transform: scale(1.03);
+            box-shadow: 6px 9px 20px rgba(0, 0, 0, 0.45);
+        }
+
+        .section-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .section-card p {
+            font-size: 0.95em;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        .c-yellow { background-color: var(--postit-yellow); }
+        .c-blue   { background-color: var(--postit-blue); }
+
+        .back-nav {
+            margin-top: 10px;
+        }
+
+        .back-btn {
+            color: var(--text-chalk);
+            text-decoration: none;
+            font-size: 0.95em;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .back-btn:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <main class="board-container">
+        <header>
+            <h1>Información de apoyo - Sistema Nervioso</h1>
+        </header>
+
+        <section class="sections-grid">
+            <!-- Opción 1: Conceptos generales (Adjunto 2) -->
+            <a href="https://palabrasyfrasesperdidas-dotcom.github.io/El-viaje-/" target="_blank" class="section-card c-yellow">
+                <div>
+                    <h3>1. Conceptos generales del sistema nervioso</h3>
+                    <p>Accede al repositorio interactivo para repasar y profundizar en los conceptos fundamentales.</p>
+                </div>
+                <span style="font-size: 0.9em; font-weight: bold; margin-top: 15px;">Acceder al recurso &rarr;</span>
+            </a>
+
+            <!-- Opción 2: Esquema y evaluación (Adjunto 3) -->
+            <a href="https://palabrasyfrasesperdidas-dotcom.github.io/esquema-sistema-nervioso/" target="_blank" class="section-card c-blue">
+                <div>
+                    <h3>2. Esquema del sistema nervioso y evaluación</h3>
+                    <p>Consulta los esquemas visuales estructurados y pon a prueba tus conocimientos con la autoevaluación.</p>
+                </div>
+                <span style="font-size: 0.9em; font-weight: bold; margin-top: 15px;">Ver esquema y test &rarr;</span>
+            </a>
+        </section>
+
+        <div class="back-nav">
+            <a href="atencion-sanitaria.html" class="back-btn">&larr; Volver a Atención Sanitaria</a>
+        </div>
+    </main>
+
+</body>
+</html>
