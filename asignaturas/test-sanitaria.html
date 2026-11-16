@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pon a prueba tus conocimientos - Atención Sanitaria</title>
+    <style>
+        :root {
+            --bg-board: #2b3a32;
+            --board-frame: #4a3525;
+            --text-chalk: #f4f4f0;
+            --postit-yellow: #fff3a8;
+            --postit-blue: #a0c4ff;
+            --postit-peach: #ffd6a5;
+            --postit-mint: #b9fbc0;
+            --postit-purple: #e2d9f3;
+            --postit-pink: #ffc6ff;
+            --text-dark: #2b2b2b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: #1e1e1e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1000px;
+            background-color: var(--bg-board);
+            border: 12px solid var(--board-frame);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.5);
+            color: var(--text-chalk);
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header h1 {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+            border-bottom: 2px dashed rgba(255,255,255,0.2);
+            padding-bottom: 10px;
+        }
+
+        header p {
+            font-size: 0.95em;
+            opacity: 0.85;
+            margin-top: 5px;
+            margin-bottom: 20px;
+        }
+
+        /* Selector de Modelos */
+        .model-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .model-card {
+            background-color: var(--postit-yellow);
+            color: var(--text-dark);
+            padding: 16px;
+            border-radius: 6px 6px 6px 16px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 3px 5px 12px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+            font-weight: bold;
+            font-size: 1em;
+        }
+
+        .model-card:hover {
+            transform: scale(1.03);
+        }
+
+        .model-card.b { background-color: var(--postit-blue); }
+        .model-card.c { background-color: var(--postit-peach); }
+        .model-card.d { background-color: var(--postit-mint); }
+        .model-card.e { background-color: var(--postit-purple); }
+        .model-card.f { background-color: var(--postit-pink); }
+
+        /* Contenedor del Test */
+        .quiz-body {
+            overflow-y: auto;
+            flex-grow: 1;
+            padding-right: 10px;
+            margin-bottom: 15px;
+        }
+
+        .quiz-body::-webkit-scrollbar {
+            width: 8px;
+        }
+        .quiz-body::-webkit-scrollbar-thumb {
+            background: var(--board-frame);
+            border-radius: 4px;
+        }
+
+        .question-box {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--text-dark);
+            padding: 18px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 2px 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .question-box h3 {
+            font-size: 1em;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.92em;
+            cursor: pointer;
+            padding: 7px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .option-label:hover {
+            background: rgba(0,0,0,0.06);
+        }
+
+        .btn-action {
+            background-color: var(--board-frame);
+            color: var(--text-chalk);
+            border: none;
+            padding: 12px 24px;
+            font-size: 1em;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            align-self: flex-start;
+            transition: opacity 0.2s;
+        }
+
+        .btn-action:hover {
+            opacity: 0.85;
+        }
+
+        /* Resultados */
+        .result-box {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--text-dark);
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.15em;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .back-nav {
+            margin-top: 15px;
+        }
+
+        .back-btn {
+            color: var(--text-chalk);
+            text-decoration: none;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        .back-btn:hover { opacity: 1; text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <main class="board-container">
+        <header>
+            <h1>Pon a prueba tus conocimientos</h1>
+            <p id="subtitle">Selecciona el modelo de examen para comenzar la autoevaluación (Cada fallo resta 0,25 puntos).</p>
+        </header>
+
+        <!-- PANTALLA 1: SELECCIÓN DE MODELO -->
+        <div id="modelSelection" class="model-selector">
+            <div class="model-card" onclick="cargarModelo('A')">📝 Modelo A<br><small style="font-weight:normal;opacity:0.8;">Tema 1: Fundamentos</small></div>
+            <div class="model-card b" onclick="cargarModelo('B')">📝 Modelo B<br><small style="font-weight:normal;opacity:0.8;">Tema 2: Sist. Nervioso</small></div>
+            <div class="model-card c" onclick="cargarModelo('C')">📝 Modelo C<br><small style="font-weight:normal;opacity:0.8;">Tema 3: Nutrición</small></div>
+            <div class="model-card d" onclick="cargarModelo('D')">📝 Modelo D<br><small style="font-weight:normal;opacity:0.8;">Tema 4: Alimentos</small></div>
+            <div class="model-card e" onclick="cargarModelo('E')">📝 Modelo E<br><small style="font-weight:normal;opacity:0.8;">Mixto: Global I</small></div>
+            <div class="model-card f" onclick="cargarModelo('F')">📝 Modelo F<br><small style="font-weight:normal;opacity:0.8;">Mixto: Global II</small></div>
+        </div>
+
+        <!-- PANTALLA 2: DESARROLLO DEL TEST -->
+        <div id="quizContainer" class="quiz-body hidden">
+            <form id="testForm"></form>
+            <button type="button" class="btn-action" onclick="corregirExamen()">📊 Finalizar y Corregir</button>
+        </div>
+
+        <!-- PANTALLA 3: RESULTADOS -->
+        <div id="resultContainer" class="result-box hidden">
+            <h2 id="scoreTitle"></h2>
+            <p id="scoreDetails"></p>
+            <button type="button" class="btn-action" style="align-self: center;" onclick="reiniciarSelector()">🔄 Elegir otro modelo</button>
+        </div>
+
+        <div class="back-nav">
+            <a href="atencion-sanitaria.html" class="back-btn">&larr; Volver a Atención Sanitaria</a>
+        </div>
+    </main>
+
+    <script>
+        const examenesData = {
+            // MODELO A: TEMA 1 - LA PERSONA, SALUD, PAE Y AMBIENTE (20 PREGUNTAS ÚNICAS)
+            A: [
+                {q: "¿Cuáles son las cuatro esferas fundamentales que definen a la persona como un ser multidimensional?", opts: ["Biológica, psíquica, social y económica.", "Física, clínica, sanitaria y educativa.", "Corporal, emocional, laboral y jurídica.", "Orgánica, familiar, cultural y médica."], ans: 0},
+                {q: "¿Qué diferencia fundamental distingue el ámbito de actuación del TAPSD respecto al del TCAE?", opts: ["El TAPSD realiza labores quirúrgicas en el entorno hospitalario.", "El TAPSD desempeña un trabajo de carácter social y asistencial.", "El TCAE gestiona exclusivamente las ayudas domésticas y económicas.", "El TCAE solo interviene en centros de ocio y pisos tutelados."], ans: 1},
+                {q: "Dentro de los niveles de actuación en salud, ¿qué conjunto de acciones se define como 'Protección'?", opts: ["Medidas destinadas a curar patologías crónicas ya diagnosticadas.", "Estrategias para fomentar hábitos saludables en personas sanas.", "Actuaciones para minimizar riesgos ambientales, físicos o biológicos.", "Programas de rehabilitación motora tras intervenciones quirúrgicas."], ans: 2},
+                {q: "Según el modelo de 14 necesidades básicas de Virginia Henderson, ¿qué necesidad ocupa el primer lugar de prioridad?", opts: ["Comer y beber de forma equilibrada.", "Moverse y mantener una buena postura.", "Mantener la temperatura corporal estable.", "Respirar normalmente para el metabolismo."], ans: 3},
+                {q: "¿En cuánto tiempo se produce daño cerebral irreparable si el organismo carece de oxígeno?", opts: ["En tan solo 4 o 5 minutos.", "Pasados 15 o 20 minutos.", "Después de 30 minutos exactos.", "A partir de la primera hora."], ans: 0},
+                {q: "En usuarios encamados sin movilidad, ¿con qué frecuencia deben realizarse los cambios posturales durante la noche?", opts: ["Cada hora sin interrupción.", "Cada 4 horas para permitir el descanso.", "Cada 2 horas al igual que de día.", "Únicamente una vez antes del alba."], ans: 1},
+                {q: "¿Qué término describe aquellas lesiones ocasionadas al usuario por una mala praxis o descuido del propio profesional?", opts: ["Lesiones congénitas.", "Alteraciones metabólicas.", "Lesiones iatrogénicas.", "Traumatismos espontáneos."], ans: 2},
+                {q: "¿Cuál de las siguientes actividades pertenece al grupo de Actividades de la Vida Diaria Básicas (AVDB)?", opts: ["Preparar los alimentos y cocinar.", "Manejar la medicación pautada.", "Gestionar el dinero y las compras.", "Controlar esfínteres y vestirse."], ans: 3},
+                {q: "¿Cuál de estas tareas se clasifica como una Actividad de la Vida Diaria Instrumental (AVDI)?", opts: ["Utilizar medios de transporte público.", "Bañarse o ducharse de forma autónoma.", "Participar en asociaciones culturales.", "Desempeñar un puesto de trabajo formal."], ans: 0},
+                {q: "¿Qué característica define principalmente a las Actividades de la Vida Diaria Avanzadas (AVDA)?", opts: ["Son imprescindibles para la supervivencia biológica inmediata.", "Determinan la calidad de vida y la participación en la comunidad.", "Son las primeras destrezas que se adquieren durante la infancia.", "Se limitan exclusivamente al aseo y la alimentación elemental."], ans: 1},
+                {q: "¿Quién describió en 1955 el Proceso de Atención de Enfermería (PAE) como método científico de trabajo?", opts: ["Virginia Henderson.", "Florence Nightingale.", "Lidia Hall.", "Dorothea Orem."], ans: 2},
+                {q: "¿Cuál es la secuencia correcta y ordenada de las 5 etapas del Proceso de Atención de Enfermería (PAE)?", opts: ["Diagnóstico, valoración, ejecución, planificación y evaluación.", "Planificación, diagnóstico, valoración, evaluación y ejecución.", "Valoración, planificación, diagnóstico, ejecución y evaluación.", "Valoración, diagnóstico, planificación, ejecución y evaluación."], ans: 3},
+                {q: "¿Por qué se afirma que el Proceso de Atención de Enfermería (PAE) tiene un 'carácter dinámico'?", opts: ["Porque los cuidados cambian conforme evoluciona la situación del usuario.", "Porque debe redactarse de nuevo cada mañana antes del desayuno.", "Porque únicamente se aplica en urgencias hospitalarias agudas.", "Porque prohíbe modificar los objetivos marcados al inicio del plan."], ans: 0},
+                {q: "Respecto a las condiciones ambientales de la vivienda, ¿qué medida es imprescindible aplicar en los suelos?", opts: ["Colocar alfombras gruesas en todos los pasillos.", "Garantizar superficies antideslizantes y sin alfombras.", "Encerar el pavimento diariamente para mantener el brillo.", "Disponer cables eléctricos sueltos junto a los muebles."], ans: 1},
+                {q: "¿Qué sistema de calefacción está expresamente prohibido en el entorno asistencial por riesgo de intoxicación por monóxido de carbono?", opts: ["Los radiadores eléctricos de bajo consumo.", "Los sistemas de aire acondicionado centralizado.", "El uso de braseros en las habitaciones.", "Las bombas de calor con termostato digital."], ans: 2},
+                {q: "¿Cómo debe realizarse la ventilación diaria en la habitación de un usuario dependiente?", opts: ["Manteniendo las ventanas abiertas toda la noche en invierno.", "Evitando abrir las ventanas para no perder calor ambiental.", "Dirigiendo el flujo de aire directamente sobre la cama.", "Renovando el aire en poco tiempo sin corrientes directas."], ans: 3},
+                {q: "¿Qué anchura mínima recomendada deben tener las puertas para facilitar el tránsito con sillas de ruedas?", opts: ["Entre 80 y 90 centímetros.", "Entre 50 y 60 centímetros.", "Exactamente 65 centímetros.", "Menos de 70 centímetros."], ans: 0},
+                {q: "¿Qué dispositivo ambiental se recomienda utilizar para mantener un grado óptimo de humedad en la estancia?", opts: ["Deshumidificadores industriales.", "Humidificadores ambientales.", "Estufas de gas butano portátiles.", "Ventiladores de techo constantes."], ans: 1},
+                {q: "¿Cuál es la finalidad principal de la 'Promoción de la salud'?", opts: ["Atenuar las secuelas de una enfermedad crónica terminal.", "Aislar al paciente ante brotes infecciosos comunitarios.", "Potenciar hábitos saludables y el control sobre la propia salud.", "Realizar pruebas diagnósticas invasivas en centros médicos."], ans: 2},
+                {q: "¿Qué aspecto evalúa la quinta etapa del PAE denominada 'Evaluación'?", opts: ["La recogida inicial de datos clínicos y antecedentes familiares.", "La ejecución material de las técnicas de higiene y movilización.", "La identificación exclusiva de los diagnósticos médicos previos.", "El grado de consecución de los objetivos para mantener o ajustar el plan."], ans: 3}
+            ],
+
+            // MODELO B: TEMA 2 - EL SISTEMA NERVIOSO (20 PREGUNTAS ÚNICAS)
+            B: [
+                {q: "¿Qué estructuras anatómicas componen el Sistema Nervioso Central (SNC)?", opts: ["El encéfalo y la médula espinal.", "Los pares craneales y nervios raquídeos.", "El sistema simpático y parasimpático.", "Los ganglios basales y plexos braquiales."], ans: 0},
+                {q: "¿Por cuántos pares de nervios craneales y espinales está formado el Sistema Nervioso Periférico Somático?", opts: ["31 pares craneales y 12 pares espinales.", "12 pares craneales y 31 pares espinales.", "10 pares craneales y 24 pares espinales.", "14 pares craneales y 33 pares espinales."], ans: 1},
+                {q: "¿Qué característica celular explica que la mayoría de los tumores del sistema nervioso se originen en la neuroglía?", opts: ["Son las únicas células capaces de transmitir impulsos eléctricos.", "Carecen por completo de núcleo celular en la etapa adulta.", "Conservan su capacidad de división celular durante toda la madurez.", "Producen directamente las hormonas de la glándula hipófisis."], ans: 2},
+                {q: "¿Qué parte de la neurona conduce el impulso nervioso lejos del cuerpo celular y constituye la sustancia blanca?", opts: ["Las dendritas ramificadas.", "El cuerpo celular o soma.", "El espacio sináptico terminal.", "El axón neuronal."], ans: 3},
+                {q: "¿Qué función cumple la vaina de mielina que recubre ciertos axones neuronales?", opts: ["Aumentar la velocidad de transmisión del impulso nervioso.", "Segregar líquido cefalorraquídeo hacia las meninges.", "Frenar la comunicación química en la hendidura sináptica.", "Almacenar reservas de glucógeno para el tejido muscular."], ans: 0},
+                {q: "¿Cuál es el orden correcto de las tres meninges desde el exterior (hueso) hacia el interior (tejido nervioso)?", opts: ["Piamadre, aracnoides y duramadre.", "Duramadre, aracnoides y piamadre.", "Aracnoides, duramadre y piamadre.", "Duramadre, piamadre y aracnoides."], ans: 1},
+                {q: "¿En qué espacio meníngeo circula la mayor parte del Líquido Cefalorraquídeo (LCR)?", opts: ["En el espacio virtual epidural.", "En el espacio subdural superficial.", "En el espacio subaracnoideo.", "En el interior del cuerpo calloso."], ans: 2},
+                {q: "¿Qué estructura conecta entre sí los dos hemisferios cerebrales (derecho e izquierdo)?", opts: ["El bulbo raquídeo.", "El foramen magno.", "La glándula pineal.", "El cuerpo calloso."], ans: 3},
+                {q: "¿Qué son los ganglios basales situados en el telencéfalo?", opts: ["Islas de sustancia gris situadas en el interior del cerebro.", "Prolongaciones de sustancia blanca que forman la médula.", "Membranas avasculares con forma de tela de araña.", "Terminaciones nerviosas sensitivas de la piel."], ans: 0},
+                {q: "¿Qué estructura del diencéfalo contiene la glándula pineal encargada de segregar melatonina?", opts: ["El tálamo óptico.", "El epitálamo.", "El mesencéfalo.", "La protuberancia."], ans: 1},
+                {q: "¿Qué tres estructuras componen el tronco encefálico, relacionado con los reflejos involuntarios?", opts: ["Telencéfalo, diencéfalo y cerebelo.", "Tálamo, hipotálamo e hipófisis.", "Mesencéfalo, protuberancia y bulbo raquídeo.", "Duramadre, aracnoides y piamadre."], ans: 2},
+                {q: "¿Qué particularidad presenta el cerebelo respecto al control motor del cuerpo?", opts: ["Controla exclusivamente los movimientos voluntarios conscientes.", "Cada hemisferio cerebeloso controla el lado opuesto del cuerpo.", "Se sitúa por encima de los lóbulos frontales del cerebro.", "Cada hemisferio cerebeloso controla el mismo lado (ipsilateral)."], ans: 3},
+                {q: "¿A qué nivel vertebral finaliza la médula espinal dando origen a la cola de caballo (cauda equina)?", opts: ["Entre la primera y segunda vértebra lumbar (L1-L2).", "A la altura de la séptima vértebra cervical (C7).", "En la articulación entre el sacro y el cóccix (S5).", "A nivel de la sexta vértebra torácica (T6)."], ans: 0},
+                {q: "¿Cuántos pares de nervios cervicales existen en la médula espinal a pesar de haber solo 7 vértebras cervicales?", opts: ["7 pares de nervios cervicales.", "8 pares de nervios cervicales.", "6 pares de nervios cervicales.", "9 pares de nervios cervicales."], ans: 1},
+                {q: "¿Qué función desempeñan las vías nerviosas aferentes o sensitivas?", opts: ["Llevan órdenes motoras desde el encéfalo hacia los músculos.", "Regulan exclusivamente la secreción de bilis en el hígado.", "Conducen información desde los receptores periféricos hasta el SNC.", "Inervan el músculo cardíaco durante el sueño profundo."], ans: 2},
+                {q: "¿Cuál de los siguientes efectos fisiológicos es provocado por el Sistema Nervioso Simpático?", opts: ["Contracción de la pupila y estímulo de la salivación.", "Reducción de la frecuencia del latido cardíaco.", "Estimulación intensa de la actividad digestiva.", "Dilatación de la pupila y aceleración del pulso cardíaco."], ans: 3},
+                {q: "¿Qué respuesta ejerce el Sistema Nervioso Parasimpático sobre los bronquios y la vejiga?", opts: ["Contrae los bronquios y contrae la vejiga.", "Relaja los bronquios y relaja la vejiga.", "Dilata los bronquios e inhibe la digestión.", "Acelera el pulso y libera adrenalina renal."], ans: 0},
+                {q: "¿Qué prueba diagnóstica de imagen está indicada principalmente en emergencias y traumatismos craneoencefálicos?", opts: ["La ecografía transfontanelar.", "La Tomografía Computarizada (TC).", "El electroencefalograma basal.", "La resonancia magnética funcional."], ans: 1},
+                {q: "¿Para qué tipo de estudio clínico del sistema nervioso está especialmente indicada la Resonancia Magnética (RM)?", opts: ["Detección rápida de fracturas óseas en urgencias.", "Exploración rutinaria en menores de 18 meses.", "Evaluar tejidos blandos, tumores y enfermedades desmielinizantes.", "Medición directa de la presión del líquido cefalorraquídeo."], ans: 2},
+                {q: "¿En qué grupo de pacientes puede emplearse la ecografía como prueba diagnóstica del sistema nervioso?", opts: ["En adultos con sospecha de calcificaciones óseas.", "En ancianos con traumatismo craneal severo.", "En pacientes portadores de marcapasos cardíacos.", "En pacientes menores de 18 meses."], ans: 3}
+            ],
+
+            // MODELO C: TEMA 3 - ALIMENTACIÓN, NUTRICIÓN Y CUIDADOS (20 PREGUNTAS ÚNICAS)
+            C: [
+                {q: "¿Qué rasgo esencial diferencia la 'alimentación' de la 'nutrición'?", opts: ["La alimentación es voluntaria y consciente; la nutrición es involuntaria.", "La alimentación es un proceso celular; la nutrición es un acto social.", "La nutrición puede educarse directamente; la alimentación es automática.", "Ambos conceptos son idénticos y carecen de diferencias fisiológicas."], ans: 0},
+                {q: "Según la Rueda de los Alimentos, ¿a qué grupo pertenecen las hortalizas y verduras y cuál es su función?", opts: ["Grupo II con función eminentemente energética.", "Grupo V con función reguladora.", "Grupo III con función plástica y estructural.", "Grupo I con función de reserva lipídica."], ans: 1},
+                {q: "¿Qué nutrientes significativos aportan los alimentos plásticos del Grupo IV (carnes, huevos, pescados, legumbres)?", opts: ["Hidratos de carbono complejos.", "Ácidos grasos poliinsaturados.", "Proteínas.", "Vitaminas exclusivamente hidrosolubles."], ans: 2},
+                {q: "¿Cuál de los siguientes glúcidos se clasifica dentro del grupo de los disacáridos?", opts: ["La celulosa vegetal.", "El glucógeno hepático.", "El almidón de patata.", "La lactosa."], ans: 3},
+                {q: "¿Qué grupo de vitaminas requiere de los lípidos para su transporte y absorción al ser insolubles en agua?", opts: ["Las vitaminas A, D, E y K.", "Las vitaminas B1, B2 y B12.", "La vitamina C y el ácido fólico.", "El complejo vitamínico B completo."], ans: 0},
+                {q: "¿Cuál es la equivalencia energética exacta de 1 kilocaloría (kcal) expresada en kilojulios (kJ)?", opts: ["1 kcal equivale a 1.000 kJ.", "1 kcal equivale a 4,18 kJ.", "1 kcal equivale a 9,00 kJ.", "1 kcal equivale a 2,50 kJ."], ans: 1},
+                {q: "¿Cómo se denomina la fase del metabolismo que degrada moléculas complejas liberando energía en forma de ATP y calor?", opts: ["Anabolismo celular.", "Metabolismo basal.", "Catabolismo.", "Balance hídrico."], ans: 2},
+                {q: "¿Qué siglas componen la fórmula del Gasto Energético Total (GET) diario de una persona?", opts: ["GET = ATP + CO2 + H2O.", "GET = IMC + GB + kcal.", "GET = PAE + AVD + ADE.", "GET = GB + GAF + ADE."], ans: 3},
+                {q: "Según el Rombo de la Alimentación del Ministerio de Sanidad, ¿cuántas raciones diarias se recomiendan de cereales, derivados y legumbres?", opts: ["De 6 a 10 raciones al día.", "De 2 a 3 raciones al día.", "De 1 a 2 raciones al día.", "De 12 a 15 raciones al día."], ans: 0},
+                {q: "¿Qué cambio corporal ocurre a partir de los 20-30 años en la edad adulta respecto a la composición del organismo?", opts: ["Aumenta la masa muscular y disminuye la grasa visceral.", "Disminuye lentamente la masa magra y aumenta la masa grasa.", "Se incrementa de forma acelerada el gasto energético basal.", "Desaparece por completo el tejido adiposo subcutáneo."], ans: 1},
+                {q: "¿Cuál de los siguientes parámetros forma parte de los 'datos antropométricos' en la valoración nutricional?", opts: ["El análisis bioquímico de glucosa en orina.", "El registro de alergias e intolerancias previas.", "La medición de pliegues cutáneos con plicómetro.", "El nivel de ingresos económicos mensuales."], ans: 2},
+                {q: "¿Qué sonda nasoentérica destaca por ser radioopaca, flexible, de pequeño calibre y contar con lastre distal y fiador metálico?", opts: ["La sonda rectal de látex.", "La sonda de Foley vesical.", "La sonda Levin de una luz.", "La sonda Nutrisoft."], ans: 3},
+                {q: "¿Qué puntos anatómicos se miden en la regla NOX para calcular la longitud a introducir de una sonda nasogástrica?", opts: ["Nariz, oreja y apéndice xifoides.", "Nuca, ojo y extremo clavicular.", "Nariz, ombligo y espina ilíaca.", "Nasal, occipital y xifoides."], ans: 0},
+                {q: "¿Qué volumen de solución salina se introduce lentamente con jeringa para irrigar y comprobar la permeabilidad de una SNG?", opts: ["5 ml de solución glucosada.", "30 ml de solución salina.", "100 ml de agua destilada.", "250 ml de suero fisiológico."], ans: 1},
+                {q: "¿Cuál de los tres métodos de administración enteral es el mejor tolerado y está indicado en sondas nasoentéricas y GEP?", opts: ["La jeringa de alimentación en emboladas.", "El sistema de goteo por gravedad simple.", "La bomba de infusión (Nutribomba).", "La administración oral con vaso adaptado."], ans: 2},
+                {q: "¿Por qué se encuentra actualmente en desuso el método de administración enteral mediante jeringa de alimentación?", opts: ["Porque requiere conexión eléctrica trifásica.", "Porque solo sirve para nutrición parenteral.", "Porque tarda más de 12 horas por cada toma.", "Por presentar mayor riesgo de intolerancia y diarrea."], ans: 3},
+                {q: "¿Cuál de las siguientes complicaciones de la alimentación enteral se clasifica como respiratoria?", opts: ["La broncoaspiración por vómitos o regurgitación.", "El desplazamiento o acodamiento de la sonda.", "La aparición de cólicos abdominales y diarrea.", "El desequilibrio hidroelectrolítico en sangre."], ans: 0},
+                {q: "¿Qué dispositivo venoso central tunelizado de doble luz se emplea en la alimentación parenteral permanente?", opts: ["La sonda de gastrostomía endoscópica.", "El catéter de Hickman/Broviac.", "La cánula nasal de oxigenoterapia.", "El irrigador rectal de gravedad."], ans: 1},
+                {q: "¿En qué posición anatómica debe colocarse al usuario para realizar un sondaje rectal o administrar un enema?", opts: ["En decúbito supino con piernas cruzadas.", "En posición de Fowler alta a 90 grados.", "En decúbito lateral izquierdo o posición de Sims.", "En decúbito prono con almohada abdominal."], ans: 2},
+                {q: "¿A qué altura por encima del nivel del recto debe situarse el irrigador al administrar un enema de limpieza?", opts: ["A unos 10 centímetros de altura.", "A unos 90 centímetros de altura.", "Al mismo nivel horizontal del colchón.", "A una altura aproximada de 40 centímetros."], ans: 3}
+            ],
+
+            // MODELO D: TEMA 4 - MANIPULACIÓN DE ALIMENTOS (20 PREGUNTAS ÚNICAS)
+            D: [
+                {q: "¿Cómo se denomina al animal u organismo (como moscas, cucarachas o roedores) que transporta gérmenes de un lugar a otro?", opts: ["Vector.", "Inspector.", "Consumidor.", "Alérgeno."], ans: 0},
+                {q: "¿Qué diferencia fundamental existe entre una 'infección' y una 'intoxicación' alimentaria?", opts: ["La infección es causada por químicos y la intoxicación por virus.", "La infección la causan microorganismos y la intoxicación sustancias tóxicas.", "La intoxicación solo ocurre en verano y la infección en invierno.", "No existe diferencia alguna entre ambos cuadros clínicos."], ans: 1},
+                {q: "¿Cuál es la temperatura óptima de crecimiento en la que los gérmenes se multiplican con mayor rapidez?", opts: ["Por debajo de los -18 °C.", "Entre 0 °C y 4 °C.", "Entre +36 °C y +37 °C.", "Por encima de los 75 °C."], ans: 2},
+                {q: "¿Qué efecto produce el frío de refrigeración (menos de 5 °C) o congelación (menos de -18 °C) sobre los gérmenes?", opts: ["Los destruye de forma definitiva e irreversible.", "Acelera su reproducción celular cada diez minutos.", "Transforma las bacterias en vitaminas hidrosolubles.", "Los mantiene en estado latente o dormidos sin matarlos."], ans: 3},
+                {q: "¿A partir de qué temperatura de cocinado se consigue la destrucción de los gérmenes en los alimentos?", opts: ["Por encima de 65 °C.", "A partir de los 37 °C.", "Exactamente a los 25 °C.", "Por debajo de los 5 °C."], ans: 0},
+                {q: "¿Qué función cumple el electrodoméstico denominado 'abatidor' en una cocina profesional?", opts: ["Mantener la comida caliente hasta su servicio en mesa.", "Enfriar la comida muy rápido por debajo de 4 °C en 1-2 horas.", "Esterilizar los cuchillos mediante radiación ultravioleta.", "Triturar alimentos sólidos para dietas de disfagia."], ans: 1},
+                {q: "Según la regla de las 2-4 horas, ¿qué debe hacerse con un alimento cocinado que lleva más de 4 horas a temperatura ambiente?", opts: ["Calentarlo rápidamente a 65 °C antes de servirlo.", "Guardarlo inmediatamente en el congelador a -18 °C.", "Desecharlo y no consumirlo bajo ningún concepto.", "Consumirlo de inmediato acompañado de abundante agua."], ans: 2},
+                {q: "Si un alimento elaborado lleva menos de 2 horas a temperatura ambiente, ¿cuál de estas opciones NO es segura?", opts: ["Consumirlo de inmediato.", "Enfriarlo en nevera o congelador.", "Calentarlo a más de 65 °C.", "Dejarlo 3 horas más sobre la encimera."], ans: 3},
+                {q: "¿Qué actuación higiénica correcta debe realizar un manipulador si necesita estornudar o toser durante el trabajo?", opts: ["Hacerlo cubriéndose con el pliegue del codo.", "Hacerlo directamente sobre la palma de la mano.", "Girar ligeramente la cabeza hacia la encimera.", "Utilizar un paño de cocina y seguir cortando."], ans: 0},
+                {q: "¿Qué diferencia técnica existe entre las operaciones de 'limpieza' y 'desinfección'?", opts: ["La limpieza mata virus y la desinfección quita el polvo.", "La limpieza elimina suciedad y grasa; la desinfección destruye gérmenes.", "La desinfección usa solo agua fría y la limpieza productos tóxicos.", "Ambas operaciones se realizan simultáneamente con lejía pura."], ans: 1},
+                {q: "¿Cómo deben gestionarse los cubos de basura dentro de la zona de cocina?", opts: ["Abiertos junto a la tabla de corte para mayor comodidad.", "Sin bolsa interior para facilitar su lavado con manguera.", "Alejados de la elaboración, cerrados con tapa y pedal.", "Sacando el cubo entero a la vía pública al final del turno."], ans: 2},
+                {q: "¿Dónde debe depositarse el aceite de cocina usado para evitar la contaminación del agua y del suelo?", opts: ["Por el desagüe del fregadero con agua hirviendo.", "En el contenedor amarillo de envases ligeros.", "En el contenedor marrón de materia orgánica.", "En un contenedor especial o punto limpio."], ans: 3},
+                {q: "Para evitar la contaminación cruzada, ¿qué color de tabla y cuchillo se asigna a los pescados y mariscos?", opts: ["Color azul.", "Color verde.", "Color rojo.", "Color amarillo."], ans: 0},
+                {q: "¿A qué grupo de alimentos corresponde el color marrón en el código de tablas de corte y cuchillos?", opts: ["Verduras y frutas frescas.", "Alimentos cocinados y fiambres.", "Carnes rojas crudas.", "Pan, quesos y pastas."], ans: 1},
+                {q: "¿Qué significa la fecha de 'consumo preferente' impresa en la etiqueta de un alimento?", opts: ["Fecha límite tras la cual el alimento es altamente tóxico.", "Día exacto en que el envase pierde su cierre hermético.", "Fecha hasta la que conserva su calidad óptima si está intacto.", "Código numérico para rastrear el lote de fabricación."], ans: 2},
+                {q: "¿Qué utilidad tiene el código de 'Lote' en el etiquetado de los productos alimenticios?", opts: ["Indicar el porcentaje de grasas saturadas del producto.", "Señalar la temperatura máxima de conservación en frío.", "Advertir sobre la presencia de trazas de frutos secos.", "Agrupar alimentos fabricados juntos para rastrear alertas."], ans: 3},
+                {q: "¿Qué indica el pictograma químico de una llama sobre un fondo blanco con borde rojo en un producto de limpieza?", opts: ["Producto inflamable que puede arder fácilmente.", "Producto corrosivo que quema la piel y la ropa.", "Producto tóxico mortal por ingestión accidental.", "Producto peligroso para el medio acuático."], ans: 0},
+                {q: "¿Qué medida de protección es imprescindible al manipular un producto etiquetado con el símbolo 'Corrosivo'?", opts: ["Ventilar únicamente sin necesidad de protección.", "Usar guantes y evitar el contacto y salpicaduras.", "Mezclarlo con agua caliente para potenciar su efecto.", "Almacenarlo junto a los alimentos secos en la despensa."], ans: 1},
+                {q: "¿Cuál de los siguientes alimentos forma parte de la lista de los 14 alérgenos de declaración obligatoria?", opts: ["El arroz blanco vaporizado.", "La carne de pollo fresca.", "Los altramuces y el apio.", "Las patatas y las zanahorias."], ans: 2},
+                {q: "Si un usuario o cliente pregunta por los alérgenos de un plato, ¿cómo debe actuar el manipulador de alimentos?", opts: ["Responder de memoria según los ingredientes que recuerde.", "Asegurarle que el plato es seguro si no lleva sal.", "Consultar la receta en internet delante del usuario.", "No responder directamente y avisar siempre al responsable."], ans: 3}
+            ],
+
+            // MODELO E: EXAMEN GLOBAL MIXTO I (20 PREGUNTAS ÚNICAS)
+            E: [
+                {q: "¿Qué necesidad de Virginia Henderson se relaciona directamente con la administración de enemas y la colocación de cuña y botella?", opts: ["La necesidad de eliminar residuos y desechos.", "La necesidad de mantener la piel limpia y protegida.", "La necesidad de moverse y mantener buena postura.", "La necesidad de mantener la temperatura corporal."], ans: 0},
+                {q: "¿En qué fase del Proceso de Atención de Enfermería (PAE) se establecen los objetivos y se diseñan las intervenciones?", opts: ["En la fase de valoración.", "En la fase de planificación.", "En la fase de ejecución.", "En la fase de diagnóstico."], ans: 1},
+                {q: "¿Cuál de estas medidas sobre iluminación y mobiliario garantiza la seguridad ambiental en el domicilio?", opts: ["Colocar los interruptores lejos de la cama para fomentar el paseo.", "Utilizar camas muy bajas y blandas sin apoyabrazos en sillas.", "Situar interruptores accesibles y electrodomésticos sencillos.", "Mantener las estancias en penumbra para evitar deslumbramientos."], ans: 2},
+                {q: "¿Qué estructura ósea permite la unión entre el encéfalo y la médula espinal?", opts: ["El cuerpo calloso cerebral.", "La glándula hipófisis.", "El apéndice xifoides.", "El foramen magno del occipital."], ans: 3},
+                {q: "¿Qué lóbulos cerebrales dividen cada hemisferio de la corteza cerebral?", opts: ["Frontal, parietal, temporal y occipital.", "Cervical, dorsal, lumbar y sacro.", "Simpático, parasimpático, somático y autónomo.", "Mesencéfalo, puente, bulbo y cerebelo."], ans: 0},
+                {q: "¿Qué rama del Sistema Nervioso Autónomo prepara al organismo para situaciones de lucha o huida?", opts: ["El sistema nervioso somático.", "El sistema nervioso simpático.", "El sistema nervioso parasimpático.", "El plexo nervioso cervical."], ans: 1},
+                {q: "¿Qué función cumple el plexo braquial dentro del Sistema Nervioso Periférico?", opts: ["Inervar el suelo de la cavidad pélvica y vísceras.", "Inervar exclusivamente la musculatura del cuello.", "Inervar la parte inferior del hombro y todo el brazo.", "Inervar la cara anterior del muslo y la pierna."], ans: 2},
+                {q: "¿Cuál de los siguientes nutrientes pertenece al grupo de los polisacáridos?", opts: ["La sacarosa de caña.", "La maltosa de cebada.", "La glucosa sanguínea.", "El glucógeno."], ans: 3},
+                {q: "¿Qué esteroide de origen animal es precursor de las hormonas esteroideas, la vitamina D y los ácidos biliares?", opts: ["El colesterol.", "El fibrinógeno.", "La albúmina.", "La celulosa."], ans: 0},
+                {q: "¿Cómo se define el 'Metabolismo Basal (GB)' en el equilibrio energético del organismo?", opts: ["Energía gastada durante el ejercicio físico intenso.", "Mínima energía para mantener la vida en ayuno y reposo.", "Energía utilizada únicamente en la digestión de grasas.", "Diferencia calórica entre la cena y el desayuno diario."], ans: 1},
+                {q: "¿Qué ocurre con la masa grasa y la masa magra durante la etapa de la vejez extrema?", opts: ["Aumenta la masa muscular y disminuye la grasa.", "Se mantienen estables sin ningún cambio fisiológico.", "Disminuyen en paralelo tanto la masa grasa como la magra.", "Aumenta exclusivamente la grasa visceral abdominal."], ans: 2},
+                {q: "¿Qué sonda nasogástrica flexible de una luz dispone de orificio central y laterales y conexión de colores según calibre?", opts: ["La sonda Nutrisoft.", "El catéter de Hickman.", "La sonda rectal semirrígida.", "La sonda Levin."], ans: 3},
+                {q: "¿Qué técnica de implantación quirúrgica directa en el estómago utiliza un anillo de fijación para nutrición enteral?", opts: ["La gastrostomía endoscópica percutánea (GEP).", "El sondaje nasoentérico duodenal.", "La hiperalimentación endovenosa subclavia.", "El sondaje rectal evacuador."], ans: 0},
+                {q: "¿Qué ayuda técnica para la ingesta está especialmente indicada para personas encamadas o con temblores al beber?", opts: ["Platos planos de porcelana fina.", "Vasos adaptados con boquilla y dos asas.", "Cubiertos metálicos de mango estrecho.", "Pajitas rígidas de vidrio templado."], ans: 1},
+                {q: "¿Qué finalidad tienen los enemas de retención frente a los enemas evacuadores?", opts: ["Provocar la evacuación inmediata en menos de dos minutos.", "Limpiar el colon antes de una intervención quirúrgica.", "Permanecer en el intestino un tiempo para acción médica.", "Extraer gases acumulados tras una comida copiosa."], ans: 2},
+                {q: "¿Qué color de tabla y cuchillo se utiliza en cocina para manipular carnes rojas crudas?", opts: ["Color verde.", "Color blanco.", "Color amarillo.", "Color rojo."], ans: 3},
+                {q: "¿En qué contenedor de reciclaje deben depositarse sartenes viejas, pañales o colillas (fracción resto)?", opts: ["Contenedor naranja.", "Contenedor azul.", "Contenedor verde.", "Contenedor marrón."], ans: 0},
+                {q: "¿Qué tipo de productos alimenticios llevan obligatoriamente fecha de 'caducidad' en lugar de consumo preferente?", opts: ["Las legumbres secas y pastas alimenticias.", "Productos muy perecederos como carne o pescado fresco.", "Las conservas esterilizadas en lata metálica.", "El aceite de oliva virgen y la sal marina."], ans: 1},
+                {q: "¿Qué significa el código 'E-X' en la simbología de los 14 alérgenos alimentarios obligatorios?", opts: ["Contiene gluten de trigo.", "Presencia de altramuces.", "Dióxido de azufre y sulfitos.", "Trazas de granos de sésamo."], ans: 2},
+                {q: "¿Qué precaución exige el pictograma químico de 'Peligro por aspiración' en productos de limpieza?", opts: ["Guardar el envase junto al horno caliente.", "Manipular el producto con las manos húmedas.", "Agitar vigorosamente antes de pulverizar.", "Evitar respirar sus vapores y usar mascarilla."], ans: 3}
+            ],
+
+            // MODELO F: EXAMEN GLOBAL MIXTO II (20 PREGUNTAS ÚNICAS)
+            F: [
+                {q: "¿Cuál es la competencia general fundamental del Técnico en Atención a Personas en Situación de Dependencia (TAPSD)?", opts: ["Mantener y mejorar la calidad de vida en ámbito domiciliario e institucional.", "Prescribir tratamientos farmacológicos y dietas hospitalarias complejas.", "Realizar diagnósticos neurológicos mediante pruebas de neuroimagen.", "Sustituir las funciones médicas en unidades de cuidados intensivos."], ans: 0},
+                {q: "¿Qué pilares debe combinar el TAPSD para lograr una relación profesional eficaz y humanizada?", opts: ["Autoridad rígida y distanciamiento emocional.", "Eficiencia técnica y actitud con valores personales.", "Rapidez de ejecución y ausencia de comunicación.", "Subjetividad clínica y improvisación asistencial."], ans: 1},
+                {q: "¿Cuál es la principal causa de intoxicación mortal por la que se prohíben los braseros en las viviendas?", opts: ["Emisión excesiva de vapor de agua.", "Liberación de gases de nitrógeno líquido.", "Intoxicación por monóxido de carbono.", "Producción de radiación ultravioleta."], ans: 2},
+                {q: "¿Qué función cumple el Líquido Cefalorraquídeo (LCR) además de transportar nutrientes y eliminar desechos?", opts: ["Generar impulsos motores en los músculos esqueléticos.", "Segregar melatonina durante las horas nocturnas.", "Conectar directamente el tálamo con la hipófisis.", "Proteger al SNC actuando como amortiguador."], ans: 3},
+                {q: "¿Qué estructuras del encéfalo forman parte del sistema límbico relacionado con las emociones?", opts: ["Las estructuras del diencéfalo.", "Los nervios raquídeos sacros.", "Las astas anteriores de la médula.", "Los ganglios del sistema simpático."], ans: 0},
+                {q: "¿A través de qué orificios abandonan la columna vertebral las raíces nerviosas para formar los nervios espinales?", opts: ["A través del agujero magno occipital.", "A través de los forámenes intervertebrales.", "A través de la cisura interhemisférica.", "A través del conducto auditivo interno."], ans: 1},
+                {q: "¿Qué diferencia a los nervios espinales o raquídeos respecto a su composición funcional?", opts: ["Son exclusivamente sensitivos aferentes.", "Son únicamente motores voluntarios.", "Son todos nervios mixtos (raíz sensitiva y motora).", "Carecen de conexión con la médula espinal."], ans: 2},
+                {q: "¿Qué tipo de ácidos grasos predominan en los lípidos simples de origen vegetal y aceites de semillas?", opts: ["Ácidos grasos exclusivamente saturados.", "Ácidos nucleicos de cadena doble.", "Aminoácidos esenciales ramificados.", "Ácidos grasos insaturados y poliinsaturados."], ans: 3},
+                {q: "¿Qué proteína compleja se encarga del transporte de oxígeno en la sangre?", opts: ["La hemoglobina.", "El fibrinógeno.", "La albúmina.", "La queratina."], ans: 0},
+                {q: "¿Cuál es el segundo requerimiento vital más importante para el organismo después del oxígeno según Virginia Henderson?", opts: ["El consumo diario de proteínas animales.", "El agua como disolvente básico.", "La ingesta de hidratos de carbono.", "El aporte de vitaminas liposolubles."], ans: 1},
+                {q: "¿Qué indica un 'balance energético equilibrado' mantenido durante 24 horas en condiciones normales?", opts: ["Pérdida rápida de masa muscular.", "Incremento de grasa visceral.", "Peso estable y buen estado de salud.", "Déficit grave de micronutrientes."], ans: 2},
+                {q: "¿Cuántas raciones diarias de frutas recomienda el Rombo de la Alimentación del Ministerio de Sanidad?", opts: ["De 6 a 10 raciones al día.", "De 1 a 2 raciones al día.", "De 5 a 7 raciones al día.", "De 2 a 4 raciones al día."], ans: 3},
+                {q: "¿Qué tipo de datos se recogen al observar físicamente el aspecto general y específico del usuario en la valoración nutricional?", opts: ["Datos clínicos.", "Datos bioquímicos.", "Datos de la dieta.", "Datos sociales."], ans: 0},
+                {q: "¿Qué sistema de alarma incorpora una bomba de infusión enteral (Nutribomba) para garantizar la seguridad?", opts: ["Aviso exclusivo de temperatura ambiental.", "Alarmas de acodamiento, burbujas, batería y fin.", "Detector de alergias alimentarias en sangre.", "Control remoto por satélite hospitalario."], ans: 1},
+                {q: "¿Qué complicación mecánica puede presentarse durante la administración de alimentación enteral por sonda?", opts: ["Broncoaspiración pulmonar aguda.", "Deshidratación hipernatrémica.", "Obstrucción o acodamiento de la sonda.", "Náuseas y cólicos abdominales."], ans: 2},
+                {q: "¿Para qué sirven los bordes elevados en los platos adaptados como ayuda técnica para la ingesta?", opts: ["Para mantener la comida caliente más tiempo.", "Para medir exactamente los mililitros líquidos.", "Para evitar el crecimiento de bacterias.", "Para evitar que la comida salga al empujarla."], ans: 3},
+                {q: "¿Qué longitud aproximada tiene una sonda rectal utilizada para eliminar gases o administrar enemas?", opts: ["Unos 30 centímetros.", "Entre 90 y 120 centímetros.", "Más de 200 centímetros.", "Exactamente 5 centímetros."], ans: 0},
+                {q: "¿En qué consiste la 'Zona de Peligro' térmica en seguridad alimentaria?", opts: ["Temperaturas inferiores a -18 °C.", "Rango entre 5 °C y 65 °C.", "Temperaturas superiores a 80 °C.", "Rango entre 0 °C y 4 °C."], ans: 1},
+                {q: "¿Cuál de estas conductas está estrictamente prohibida para un manipulador durante la preparación de alimentos?", opts: ["Llevar las uñas cortas y limpias.", "Subirse las mangas hasta el codo.", "Probar la comida con los dedos o cubiertos de cocina.", "Lavarse las manos tras manipular alimentos crudos."], ans: 2},
+                {q: "¿Qué color de tabla de corte debe emplearse para manipular pan, quesos y pastas?", opts: ["Color verde.", "Color azul.", "Color marrón.", "Color blanco."], ans: 3}
+            ]
+        };
+
+        let modeloActualKey = '';
+        let preguntasActuales = [];
+
+        function cargarModelo(modeloKey) {
+            modeloActualKey = modeloKey;
+            let originalQuestions = examenesData[modeloKey];
+            
+            preguntasActuales = originalQuestions.map(p => {
+                let optionsWithIndex = p.opts.map((optText, index) => ({ text: optText, originalIndex: index }));
+                optionsWithIndex = shuffleArray(optionsWithIndex);
+                let newCorrectIndex = optionsWithIndex.findIndex(item => item.originalIndex === p.ans);
+
+                return {
+                    q: p.q,
+                    opts: optionsWithIndex.map(item => item.text),
+                    ans: newCorrectIndex
+                };
+            });
+
+            preguntasActuales = shuffleArray(preguntasActuales);
+            renderQuiz();
+        }
+
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        function renderQuiz() {
+            document.getElementById('modelSelection').classList.add('hidden');
+            document.getElementById('quizContainer').classList.remove('hidden');
+            document.getElementById('resultContainer').classList.add('hidden');
+            document.getElementById('subtitle').innerText = `Resolviendo Examen - Modelo ${modeloActualKey} (Cada fallo resta 0,25 puntos).`;
+
+            let formHTML = '';
+            preguntasActuales.forEach((p, qIndex) => {
+                formHTML += `<div class="question-box">
+                    <h3>Pregunta ${qIndex + 1}: ${p.q}</h3>
+                    <div class="options-list">`;
+                
+                p.opts.forEach((opt, oIndex) => {
+                    formHTML += `<label class="option-label">
+                        <input type="radio" name="q_${qIndex}" value="${oIndex}">
+                        <span>${String.fromCharCode(65 + oIndex)}) ${opt}</span>
+                    </label>`;
+                });
+
+                formHTML += `</div></div>`;
+            });
+
+            document.getElementById('testForm').innerHTML = formHTML;
+            document.getElementById('quizContainer').scrollTop = 0;
+        }
+
+        function corregirExamen() {
+            let puntosAcierto = 1.0;
+            let penalizacionFallo = 0.25;
+
+            let totalAciertos = 0;
+            let totalErrores = 0;
+            let totalBlanco = 0;
+
+            preguntasActuales.forEach((p, qIndex) => {
+                let selected = document.querySelector(`input[name="q_${qIndex}"]:checked`);
+                if (!selected) {
+                    totalBlanco++;
+                } else {
+                    let val = parseInt(selected.value);
+                    if (val === p.ans) {
+                        totalAciertos++;
+                    } else {
+                        totalErrores++;
+                    }
+                }
+            });
+
+            let notaFinal = (totalAciertos * puntosAcierto) - (totalErrores * penalizacionFallo);
+            if (notaFinal < 0) notaFinal = 0;
+            let notaSobre10 = (notaFinal / preguntasActuales.length) * 10;
+
+            document.getElementById('quizContainer').classList.add('hidden');
+            document.getElementById('resultContainer').classList.remove('hidden');
+            
+            document.getElementById('scoreTitle').innerText = `Resultado Examen - Modelo ${modeloActualKey}`;
+            document.getElementById('scoreDetails').innerHTML = `
+                ✅ <strong>Aciertos:</strong> ${totalAciertos}<br>
+                ❌ <strong>Errores:</strong> ${totalErrores} <span style="font-size:0.85em; opacity:0.8;">(Penalización aplicada: -0,25 por fallo)</span><br>
+                ⚪ <strong>Sin contestar:</strong> ${totalBlanco}<br><hr style="margin:10px 0; border:0; border-top:1px solid #ccc;">
+                🎯 <strong>Puntuación Final:</strong> ${notaFinal.toFixed(2)} / ${preguntasActuales.length} <br>
+                ⭐ <strong>Calificación (sobre 10):</strong> <span style="font-size:1.4em; color:${notaSobre10 >= 5 ? '#2e7d32' : '#c62828'}; font-weight:bold;">${notaSobre10.toFixed(2)} / 10</span>
+            `;
+            document.getElementById('subtitle').innerText = `Examen finalizado y corregido.`;
+        }
+
+        function reiniciarSelector() {
+            document.getElementById('resultContainer').classList.add('hidden');
+            document.getElementById('modelSelection').classList.remove('hidden');
+            document.getElementById('subtitle').innerText = `Selecciona el modelo de examen para comenzar la autoevaluación (Cada fallo resta 0,25 puntos).`;
+        }
+    </script>
+</body>
+</html>
