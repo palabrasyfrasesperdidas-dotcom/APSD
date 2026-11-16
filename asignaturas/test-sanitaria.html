@@ -101,10 +101,12 @@
             margin-bottom: 15px;
         }
 
-        .quiz-body::-webkit-scrollbar {
+        .quiz-body::-webkit-scrollbar,
+        .result-box::-webkit-scrollbar {
             width: 8px;
         }
-        .quiz-body::-webkit-scrollbar-thumb {
+        .quiz-body::-webkit-scrollbar-thumb,
+        .result-box::-webkit-scrollbar-thumb {
             background: var(--board-frame);
             border-radius: 4px;
         }
@@ -162,17 +164,69 @@
             opacity: 0.85;
         }
 
-        /* Resultados */
+        /* Resultados y Revisión de Fallos */
         .result-box {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.96);
             color: var(--text-dark);
             padding: 25px;
             border-radius: 8px;
             text-align: center;
-            font-size: 1.15em;
+            font-size: 1.05em;
             display: flex;
             flex-direction: column;
             gap: 15px;
+            overflow-y: auto;
+            max-height: 68vh;
+        }
+
+        .review-section {
+            text-align: left;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .review-section h3 {
+            font-size: 1.1em;
+            color: var(--board-frame);
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 6px;
+        }
+
+        .failed-card {
+            background-color: #fff8f8;
+            border-left: 5px solid #c62828;
+            padding: 14px 16px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            font-size: 0.92em;
+            line-height: 1.45;
+        }
+
+        .failed-card.blank-card {
+            background-color: #fffdf5;
+            border-left-color: #ef6c00;
+        }
+
+        .failed-q-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1f1f1f;
+        }
+
+        .user-ans {
+            color: #c62828;
+            margin-bottom: 4px;
+        }
+
+        .user-ans.blank-text {
+            color: #ef6c00;
+        }
+
+        .correct-ans {
+            color: #2e7d32;
+            font-weight: 600;
         }
 
         .hidden {
@@ -220,7 +274,8 @@
         <div id="resultContainer" class="result-box hidden">
             <h2 id="scoreTitle"></h2>
             <p id="scoreDetails"></p>
-            <button type="button" class="btn-action" style="align-self: center;" onclick="reiniciarSelector()">🔄 Elegir otro modelo</button>
+            <div id="failedReview" class="review-section hidden"></div>
+            <button type="button" class="btn-action" style="align-self: center; margin-top: 10px;" onclick="reiniciarSelector()">🔄 Elegir otro modelo</button>
         </div>
 
         <div class="back-nav">
@@ -441,17 +496,33 @@
             let totalAciertos = 0;
             let totalErrores = 0;
             let totalBlanco = 0;
+            let fallosListaHTML = '';
 
             preguntasActuales.forEach((p, qIndex) => {
                 let selected = document.querySelector(`input[name="q_${qIndex}"]:checked`);
+                let textoCorrecta = `${String.fromCharCode(65 + p.ans)}) ${p.opts[p.ans]}`;
+
                 if (!selected) {
                     totalBlanco++;
+                    fallosListaHTML += `
+                        <div class="failed-card blank-card">
+                            <div class="failed-q-title">Pregunta ${qIndex + 1}: ${p.q}</div>
+                            <div class="user-ans blank-text">⚪ Respuesta marcada: Sin contestar</div>
+                            <div class="correct-ans">✅ Respuesta correcta: ${textoCorrecta}</div>
+                        </div>`;
                 } else {
                     let val = parseInt(selected.value);
                     if (val === p.ans) {
                         totalAciertos++;
                     } else {
                         totalErrores++;
+                        let textoMarcada = `${String.fromCharCode(65 + val)}) ${p.opts[val]}`;
+                        fallosListaHTML += `
+                            <div class="failed-card">
+                                <div class="failed-q-title">Pregunta ${qIndex + 1}: ${p.q}</div>
+                                <div class="user-ans">❌ Tu respuesta: ${textoMarcada}</div>
+                                <div class="correct-ans">✅ Respuesta correcta: ${textoCorrecta}</div>
+                            </div>`;
                     }
                 }
             });
@@ -471,11 +542,23 @@
                 🎯 <strong>Puntuación Final:</strong> ${notaFinal.toFixed(2)} / ${preguntasActuales.length} <br>
                 ⭐ <strong>Calificación (sobre 10):</strong> <span style="font-size:1.4em; color:${notaSobre10 >= 5 ? '#2e7d32' : '#c62828'}; font-weight:bold;">${notaSobre10.toFixed(2)} / 10</span>
             `;
+
+            const reviewContainer = document.getElementById('failedReview');
+            if (totalErrores > 0 || totalBlanco > 0) {
+                reviewContainer.innerHTML = `<h3>📋 Revisión de preguntas falladas o sin contestar</h3>` + fallosListaHTML;
+                reviewContainer.classList.remove('hidden');
+            } else {
+                reviewContainer.innerHTML = '';
+                reviewContainer.classList.add('hidden');
+            }
+
+            document.getElementById('resultContainer').scrollTop = 0;
             document.getElementById('subtitle').innerText = `Examen finalizado y corregido.`;
         }
 
         function reiniciarSelector() {
             document.getElementById('resultContainer').classList.add('hidden');
+            document.getElementById('failedReview').classList.add('hidden');
             document.getElementById('modelSelection').classList.remove('hidden');
             document.getElementById('subtitle').innerText = `Selecciona el modelo de examen para comenzar la autoevaluación (Cada fallo resta 0,25 puntos).`;
         }
