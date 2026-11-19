@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destrezas sociales - APSD</title>
+    <style>
+        :root {
+            --bg-board: #2b3a32;
+            --board-frame: #4a3525;
+            --text-chalk: #f4f4f0;
+            --postit-yellow: #fff3a8;
+            --postit-blue: #a0c4ff;
+            --postit-mint: #b9fbc0;
+            --postit-peach: #ffd6a5;
+            --text-dark: #2b2b2b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: #1e1e1e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1100px;
+            background-color: var(--bg-board);
+            border: 12px solid var(--board-frame);
+            border-radius: 16px;
+            padding: 30px 25px;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* ENCABEZADO SUPERIOR */
+        .subject-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px dashed rgba(255,255,255,0.2);
+            padding-bottom: 20px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .header-title h1 {
+            color: var(--text-chalk);
+            font-size: 2.2em;
+            line-height: 1.2;
+            font-weight: 700;
+        }
+
+        .header-image img {
+            width: 110px;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 3px solid rgba(255,255,255,0.3);
+            background: #fff;
+        }
+
+        /* BLOQUE DE AVISO */
+        .dates-banner {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-chalk);
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 1.05em;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            border-left: 4px solid var(--postit-yellow);
+        }
+
+        .dates-banner span strong {
+            color: var(--postit-yellow);
+        }
+
+        /* CUADRÍCULA DE SECCIONES (3 POST-ITS) */
+        .sections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            padding: 10px 0;
+        }
+
+        .section-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 25px 20px;
+            min-height: 170px;
+            text-decoration: none;
+            color: var(--text-dark);
+            border-radius: 4px 4px 4px 15px;
+            box-shadow: 3px 5px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .section-card:hover {
+            transform: scale(1.03);
+            box-shadow: 5px 8px 18px rgba(0, 0, 0, 0.4);
+        }
+
+        .section-card h3 {
+            font-size: 1.25em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .section-card p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        /* Colores de los post-its */
+        .c-yellow { background-color: var(--postit-yellow); }
+        .c-blue   { background-color: var(--postit-blue); }
+        .c-mint   { background-color: var(--postit-mint); }
+
+        /* NAVEGACIÓN INFERIOR */
+        .back-nav {
+            text-align: left;
+            margin-top: 5px;
+        }
+
+        .back-btn {
+            color: var(--text-chalk);
+            text-decoration: none;
+            font-size: 0.95em;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .back-btn:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        /* ADAPTACIÓN MÓVIL */
+        @media (max-width: 600px) {
+            .board-container {
+                border-width: 6px;
+                padding: 15px 12px;
+            }
+            .subject-header {
+                flex-direction: column-reverse;
+                text-align: center;
+            }
+            .header-title h1 {
+                font-size: 1.6em;
+            }
+            .header-image img {
+                width: 90px;
+                height: 90px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <main class="board-container">
+        <!-- ENCABEZADO CON TÍTULO E IMAGEN -->
+        <header class="subject-header">
+            <div class="header-title">
+                <h1>Destrezas sociales</h1>
+            </div>
+            <div class="header-image">
+                <img src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=300&auto=format&fit=crop&q=80" alt="Icono de Destrezas sociales">
+            </div>
+        </header>
+
+        <!-- AVISO DE EXAMEN -->
+        <section class="dates-banner">
+            <span>📅 <strong>Fecha de examen:</strong> viernes 27 de noviembre.</span>
+        </section>
+
+        <!-- APARTADOS PRINCIPALES (3 OPCIONES EN POST-ITS) -->
+        <section class="sections-grid">
+            <!-- 1. Teoría -->
+            <a href="teoria-destrezas-sociales.html" class="section-card c-yellow">
+                <div>
+                    <h3>Teoría</h3>
+                    <p>Contenidos teóricos, esquemas y materiales de estudio de la asignatura.</p>
+                </div>
+                <span style="font-size: 0.85em; font-weight: bold; margin-top: 15px;">Ver teoría &rarr;</span>
+            </a>
+
+            <!-- 2. Preguntas para preparar el examen -->
+            <a href="preguntas-examen-destrezas-sociales.html" class="section-card c-blue">
+                <div>
+                    <h3>Preguntas para preparar el examen</h3>
+                    <p>Repertorio de preguntas clave y actividades de repaso orientadas al examen.</p>
+                </div>
+                <span style="font-size: 0.85em; font-weight: bold; margin-top: 15px;">Ver preguntas &rarr;</span>
+            </a>
+
+            <!-- 3. Test -->
+            <a href="test-destrezas-sociales.html" class="section-card c-mint">
+                <div>
+                    <h3>Test</h3>
+                    <p>Cuestionarios interactivos para poner a prueba los conocimientos adquiridos.</p>
+                </div>
+                <span style="font-size: 0.85em; font-weight: bold; margin-top: 15px;">Hacer test &rarr;</span>
+            </a>
+        </section>
+
+        <!-- NAVEGACIÓN INFERIOR -->
+        <div class="back-nav">
+            <a href="../index.html" class="back-btn">&larr; Volver a la pizarra principal</a>
+        </div>
+    </main>
+
+</body>
+</html>
