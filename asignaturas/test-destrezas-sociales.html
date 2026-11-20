@@ -118,203 +118,6 @@
             text-decoration: underline;
         }
 
-        /* Contenedor del examen activo */
-        .exam-view {
-            display: none;
-        }
-
-        .exam-topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            padding-bottom: 14px;
-            border-bottom: 1px dashed rgba(255, 255, 255, 0.25);
-            margin-bottom: 22px;
-        }
-
-        .exam-topbar h2 {
-            font-size: 1.45rem;
-            color: #fbf09c;
-        }
-
-        .btn-back-menu {
-            background-color: rgba(255, 255, 255, 0.12);
-            color: #f4f6f4;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            padding: 8px 14px;
-            font-size: 0.88rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .btn-back-menu:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .question-block {
-            background-color: rgba(15, 24, 19, 0.55);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 10px;
-            padding: 18px 20px;
-            margin-bottom: 16px;
-        }
-
-        .q-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #ffffff;
-            margin-bottom: 12px;
-            line-height: 1.45;
-        }
-
-        .q-options {
-            display: grid;
-            gap: 8px;
-        }
-
-        .q-option {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            background-color: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 8px;
-            padding: 10px 14px;
-            cursor: pointer;
-            font-size: 0.93rem;
-            line-height: 1.4;
-            color: #eef3f0;
-        }
-
-        .q-option:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .q-option.is-correct {
-            background-color: rgba(180, 242, 176, 0.22);
-            border-color: #b4f2b0;
-        }
-
-        .q-option.is-wrong {
-            background-color: rgba(250, 158, 158, 0.22);
-            border-color: #fa9e9e;
-        }
-
-        .exam-actions {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-top: 22px;
-        }
-
-        .btn-submit {
-            background-color: #b4f2b0;
-            color: #16211b;
-            border: none;
-            border-radius: 8px;
-            padding: 11px 20px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .btn-reset {
-            background-color: #fbf09c;
-            color: #1c2420;
-            border: none;
-            border-radius: 8px;
-            padding: 11px 20px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .score-box {
-            margin-top: 24px;
-            background-color: rgba(15, 24, 19, 0.82);
-            border: 1px solid rgba(251, 240, 156, 0.45);
-            border-radius: 12px;
-            padding: 22px 24px;
-            display: none;
-        }
-
-        .score-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            padding-bottom: 14px;
-            border-bottom: 1px dashed rgba(255, 255, 255, 0.22);
-            margin-bottom: 16px;
-        }
-
-        .score-header h3 {
-            font-size: 1.35rem;
-            color: #fbf09c;
-        }
-
-        .score-badge {
-            background-color: #fbf09c;
-            color: #1c2420;
-            font-weight: 800;
-            font-size: 1.15rem;
-            padding: 6px 14px;
-            border-radius: 8px;
-        }
-
-        .score-summary {
-            color: #e4ede7;
-            font-size: 0.95rem;
-            margin-bottom: 18px;
-            line-height: 1.5;
-        }
-
-        .mistakes-section h4 {
-            color: #fa9e9e;
-            font-size: 1.05rem;
-            margin-bottom: 12px;
-        }
-
-        .mistake-card {
-            background-color: rgba(255, 255, 255, 0.04);
-            border-left: 4px solid #fa9e9e;
-            border-radius: 8px;
-            padding: 14px 16px;
-            margin-bottom: 12px;
-        }
-
-        .mistake-q {
-            font-weight: 600;
-            color: #ffffff;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
-            line-height: 1.4;
-        }
-
-        .mistake-user {
-            color: #fab6a6;
-            font-size: 0.9rem;
-            margin-bottom: 4px;
-            line-height: 1.4;
-        }
-
-        .mistake-correct {
-            color: #b4f2b0;
-            font-size: 0.9rem;
-            font-weight: 600;
-            line-height: 1.4;
-        }
-
-        .all-correct-msg {
-            color: #b4f2b0;
-            font-weight: 600;
-            font-size: 0.96rem;
-        }
-
         @media (max-width: 820px) {
             .models-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -335,7 +138,7 @@
 <body>
 
 <div class="chalkboard">
-    <!-- VISTA 1: PORTADA DE SELECCIÓN DE MODELOS -->
+    <!-- PORTADA DE SELECCIÓN DE MODELOS VINCULADA A test-destrezas-sociales-ud1.html -->
     <div id="menu-view">
         <h1>Pon a prueba tus conocimientos</h1>
         <p class="subtitle">
@@ -343,222 +146,51 @@
         </p>
 
         <div class="models-grid">
-            <button type="button" class="model-card c-yellow" onclick="startExam('A', 1)">
+            <a href="test-destrezas-sociales-ud1.html?modelo=A&simulacro=1" class="model-card c-yellow">
                 <span class="model-card-title">📝 Modelo A</span>
                 <span class="model-card-sub">Simulacro Oficial 1</span>
-            </button>
-            <button type="button" class="model-card c-blue" onclick="startExam('B', 2)">
+            </a>
+            <a href="test-destrezas-sociales-ud1.html?modelo=B&simulacro=2" class="model-card c-blue">
                 <span class="model-card-title">📝 Modelo B</span>
                 <span class="model-card-sub">Simulacro Oficial 2</span>
-            </button>
-            <button type="button" class="model-card c-orange" onclick="startExam('C', 3)">
+            </a>
+            <a href="test-destrezas-sociales-ud1.html?modelo=C&simulacro=3" class="model-card c-orange">
                 <span class="model-card-title">📝 Modelo C</span>
                 <span class="model-card-sub">Simulacro Oficial 3</span>
-            </button>
-            <button type="button" class="model-card c-green" onclick="startExam('D', 4)">
+            </a>
+            <a href="test-destrezas-sociales-ud1.html?modelo=D&simulacro=4" class="model-card c-green">
                 <span class="model-card-title">📝 Modelo D</span>
                 <span class="model-card-sub">Simulacro Oficial 4</span>
-            </button>
-            <button type="button" class="model-card c-lilac" onclick="startExam('E', 5)">
+            </a>
+            <a href="test-destrezas-sociales-ud1.html?modelo=E&simulacro=5" class="model-card c-lilac">
                 <span class="model-card-title">📝 Modelo E</span>
                 <span class="model-card-sub">Simulacro Oficial 5</span>
-            </button>
-            <button type="button" class="model-card c-pink" onclick="startExam('F', 6)">
+            </a>
+            <a href="test-destrezas-sociales-ud1.html?modelo=F&simulacro=6" class="model-card c-pink">
                 <span class="model-card-title">📝 Modelo F</span>
                 <span class="model-card-sub">Simulacro Oficial 6</span>
-            </button>
-            <button type="button" class="model-card c-cyan" onclick="startExam('G', 7)">
+            </a>
+            <a href="test-destrezas-sociales-ud1.html?modelo=G&simulacro=7" class="model-card c-cyan">
                 <span class="model-card-title">📝 Modelo G</span>
                 <span class="model-card-sub">Simulacro Oficial 7</span>
-            </button>
-            <button type="button" class="model-card c-peach" onclick="startExam('H', 8)">
+            </a>
+            <a href="test-destrezas-sociales-ud1.html?modelo=H&simulacro=8" class="model-card c-peach">
                 <span class="model-card-title">📝 Modelo H</span>
                 <span class="model-card-sub">Simulacro Oficial 8</span>
-            </button>
-            <button type="button" class="model-card c-mint" onclick="startExam('I', 9)">
+            </a>
+            <a href="test-destrezas-sociales-ud1.html?modelo=I&simulacro=9" class="model-card c-mint">
                 <span class="model-card-title">📝 Modelo I</span>
                 <span class="model-card-sub">Simulacro Oficial 9</span>
-            </button>
-            <button type="button" class="model-card c-cream" onclick="startExam('J', 10)">
+            </a>
+            <a href="test-destrezas-sociales-ud1.html?modelo=J&simulacro=10" class="model-card c-cream">
                 <span class="model-card-title">📝 Modelo J</span>
                 <span class="model-card-sub">Simulacro Oficial 10</span>
-            </button>
+            </a>
         </div>
 
         <a href="teoria-destrezas-sociales.html" class="back-link">&larr; Volver a Destrezas Sociales</a>
     </div>
-
-    <!-- VISTA 2: EJECUCIÓN DEL EXAMEN SELECCIONADO -->
-    <div id="exam-view" class="exam-view">
-        <div class="exam-topbar">
-            <h2 id="exam-heading">Modelo A · Simulacro Oficial 1</h2>
-            <button type="button" class="btn-back-menu" onclick="backToMenu()">&larr; Cambiar de modelo</button>
-        </div>
-
-        <div id="questions-list"></div>
-
-        <div class="exam-actions">
-            <button type="button" class="btn-submit" onclick="gradeExam()">Corregir simulacro</button>
-            <button type="button" class="btn-reset" onclick="retryExam()">Reintentar (barajar A-D)</button>
-        </div>
-
-        <div id="score-box" class="score-box">
-            <div class="score-header">
-                <h3 id="score-title">Resultado del Simulacro</h3>
-                <span id="score-badge" class="score-badge">0.00 / 10</span>
-            </div>
-            <p id="score-detail" class="score-summary"></p>
-            <div id="mistakes-container" class="mistakes-section"></div>
-        </div>
-    </div>
 </div>
-
-<script>
-    // AQUÍ SE INSERTAN LAS 200 PREGUNTAS (20 POR MODELO: A, B, C, D, E, F, G, H, I, J)
-    // Cada objeto: { model: "A", q: "...", options: ["...", "...", "...", "..."], correct: 0 }
-    const EXAM_BANK = [];
-
-    let currentModel = "A";
-    let currentNum = 1;
-    let activeQuestions = [];
-
-    function shuffle(list) {
-        const arr = list.slice();
-        for (let i = arr.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [arr[i], arr[j]] = [arr[j], arr[i]];
-        }
-        return arr;
-    }
-
-    function startExam(model, num) {
-        currentModel = model;
-        currentNum = num;
-        document.getElementById("menu-view").style.display = "none";
-        document.getElementById("exam-view").style.display = "block";
-        document.getElementById("exam-heading").textContent = `Modelo ${model} · Simulacro Oficial ${num}`;
-        document.getElementById("score-box").style.display = "none";
-
-        const pool = EXAM_BANK.filter(item => item.model === model).slice(0, 20);
-        const container = document.getElementById("questions-list");
-
-        if (pool.length === 0) {
-            activeQuestions = [];
-            container.innerHTML = `<p style="color:#c8d4cd; line-height:1.5;">El <strong>Modelo ${model} (Simulacro Oficial ${num})</strong> está listo. Pega el array de 200 preguntas en <code>EXAM_BANK</code> para activar sus 20 preguntas únicas.</p>`;
-            return;
-        }
-
-        const letters = ["A", "B", "C", "D"];
-        activeQuestions = pool.map((item, idx) => {
-            const mapped = item.options.map((text, oIdx) => ({
-                text,
-                isCorrect: oIdx === item.correct
-            }));
-            const shuffled = shuffle(mapped).map((opt, pos) => ({
-                ...opt,
-                letter: letters[pos]
-            }));
-            return {
-                number: idx + 1,
-                q: item.q,
-                options: shuffled
-            };
-        });
-
-        container.innerHTML = activeQuestions.map(qItem => `
-            <div class="question-block" id="qblock_${qItem.number}">
-                <div class="q-title">${qItem.number}. ${qItem.q}</div>
-                <div class="q-options">
-                    ${qItem.options.map(opt => `
-                        <label class="q-option" data-letter="${opt.letter}">
-                            <input type="radio" name="ans_${qItem.number}" value="${opt.letter}">
-                            <span><strong>${opt.letter})</strong> ${opt.text}</span>
-                        </label>
-                    `).join("")}
-                </div>
-            </div>
-        `).join("");
-    }
-
-    function retryExam() {
-        startExam(currentModel, currentNum);
-    }
-
-    function backToMenu() {
-        document.getElementById("exam-view").style.display = "none";
-        document.getElementById("menu-view").style.display = "block";
-    }
-
-    function gradeExam() {
-        if (activeQuestions.length === 0) return;
-        let ok = 0;
-        let fail = 0;
-        let blank = 0;
-        const failedItems = [];
-
-        activeQuestions.forEach(qItem => {
-            const block = document.getElementById(`qblock_${qItem.number}`);
-            const labels = block.querySelectorAll(".q-option");
-            const checked = block.querySelector(`input[name="ans_${qItem.number}"]:checked`);
-            const correctOpt = qItem.options.find(o => o.isCorrect);
-
-            labels.forEach(lbl => {
-                lbl.classList.remove("is-correct", "is-wrong");
-                const opt = qItem.options.find(o => o.letter === lbl.dataset.letter);
-                if (opt && opt.isCorrect) lbl.classList.add("is-correct");
-            });
-
-            if (!checked) {
-                blank++;
-            } else {
-                const chosen = qItem.options.find(o => o.letter === checked.value);
-                if (chosen && chosen.isCorrect) {
-                    ok++;
-                } else {
-                    fail++;
-                    const wrongLbl = block.querySelector(`.q-option[data-letter="${checked.value}"]`);
-                    if (wrongLbl) wrongLbl.classList.add("is-wrong");
-                    failedItems.push({
-                        number: qItem.number,
-                        q: qItem.q,
-                        userAnswer: chosen ? `${chosen.letter}) ${chosen.text}` : "",
-                        correctAnswer: correctOpt ? `${correctOpt.letter}) ${correctOpt.text}` : ""
-                    });
-                }
-            }
-        });
-
-        const total = activeQuestions.length;
-        const net = ok - (fail / 3);
-        const note = Math.max(0, (net / total) * 10);
-
-        const box = document.getElementById("score-box");
-        document.getElementById("score-title").textContent = `Resultado · Modelo ${currentModel} (Simulacro Oficial ${currentNum})`;
-        document.getElementById("score-badge").textContent = `${note.toFixed(2)} / 10`;
-        document.getElementById("score-detail").textContent =
-            `Aciertos: ${ok} · Fallos: ${fail} · En blanco: ${blank} · Puntuación neta: ${net.toFixed(2)} sobre ${total} (cada 3 fallos restan 1 acierto).`;
-
-        const mistakesContainer = document.getElementById("mistakes-container");
-        if (failedItems.length === 0) {
-            mistakesContainer.innerHTML = `<p class="all-correct-msg">¡Enhorabuena! No has cometido ningún fallo en las preguntas respondidas.</p>`;
-        } else {
-            mistakesContainer.innerHTML = `
-                <h4>Revisión de preguntas falladas (${failedItems.length}):</h4>
-                ${failedItems.map(item => `
-                    <div class="mistake-card">
-                        <div class="mistake-q">${item.number}. ${item.q}</div>
-                        <div class="mistake-user">✘ Tu respuesta: ${item.userAnswer}</div>
-                        <div class="mistake-correct">✔ Respuesta correcta: ${item.correctAnswer}</div>
-                    </div>
-                `).join("")}
-            `;
-        }
-
-        box.style.display = "block";
-        box.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-</script>
 
 </body>
 </html>
-
