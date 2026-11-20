@@ -1,0 +1,2821 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pon a prueba tus conocimientos · Destrezas Sociales</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #181818;
+            color: #f4f6f4;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px 16px;
+        }
+
+        .chalkboard {
+            background: radial-gradient(circle at top left, #283c32 0%, #1d2c24 55%, #17231d 100%);
+            border: 10px solid #593e28;
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), inset 0 0 35px rgba(0, 0, 0, 0.45);
+            width: 100%;
+            max-width: 1040px;
+            padding: 40px 44px;
+        }
+
+        h1 {
+            font-size: 2.15rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 12px;
+            letter-spacing: -0.3px;
+        }
+
+        .subtitle {
+            color: #c8d4cd;
+            font-size: 0.96rem;
+            padding-top: 12px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.25);
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .models-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .model-card {
+            border: none;
+            border-radius: 10px;
+            padding: 20px 14px;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: #1c2420;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
+            transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .model-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
+            filter: brightness(1.04);
+        }
+
+        .model-card-title {
+            font-size: 1.08rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .model-card-sub {
+            font-size: 0.84rem;
+            color: #36423c;
+            font-weight: 500;
+        }
+
+        /* Paleta pastel (2 filas de 5) */
+        .c-yellow { background-color: #fbf09c; }
+        .c-blue   { background-color: #9ec5f8; }
+        .c-orange { background-color: #fad09e; }
+        .c-green  { background-color: #b4f2b0; }
+        .c-lilac  { background-color: #e4d9f8; }
+        .c-pink   { background-color: #f6c2ee; }
+        .c-cyan   { background-color: #a6e6ee; }
+        .c-peach  { background-color: #fab6a6; }
+        .c-mint   { background-color: #b7eed4; }
+        .c-cream  { background-color: #f4e2a8; }
+
+        .back-link {
+            display: inline-block;
+            color: #c8d4cd;
+            text-decoration: none;
+            font-size: 0.94rem;
+            transition: color 0.15s ease;
+        }
+
+        .back-link:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        /* Vista del examen activo sobre pizarra */
+        .exam-view {
+            display: none;
+        }
+
+        .exam-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding-bottom: 14px;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.25);
+            margin-bottom: 22px;
+        }
+
+        .exam-meta {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .exam-topbar h2 {
+            font-size: 1.45rem;
+            color: #fbf09c;
+        }
+
+        .progress-pill {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #e4ede7;
+            font-size: 0.86rem;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 999px;
+        }
+
+        .btn-back-menu {
+            background-color: rgba(255, 255, 255, 0.12);
+            color: #f4f6f4;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+
+        .btn-back-menu:hover {
+            background-color: rgba(255, 255, 255, 0.22);
+        }
+
+        .question-block {
+            background-color: rgba(15, 24, 19, 0.58);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 10px;
+            padding: 18px 20px;
+            margin-bottom: 16px;
+        }
+
+        .q-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 12px;
+            line-height: 1.45;
+        }
+
+        .q-options {
+            display: grid;
+            gap: 8px;
+        }
+
+        .q-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 8px;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-size: 0.93rem;
+            line-height: 1.4;
+            color: #eef3f0;
+            transition: background-color 0.15s ease, border-color 0.15s ease;
+        }
+
+        .q-option:hover {
+            background-color: rgba(255, 255, 255, 0.11);
+            border-color: rgba(251, 240, 156, 0.5);
+        }
+
+        .q-option input[type="radio"] {
+            margin-top: 3px;
+            accent-color: #fbf09c;
+            cursor: pointer;
+        }
+
+        .q-option.is-correct {
+            background-color: rgba(180, 242, 176, 0.22);
+            border-color: #b4f2b0;
+            font-weight: 600;
+        }
+
+        .q-option.is-wrong {
+            background-color: rgba(250, 158, 158, 0.22);
+            border-color: #fa9e9e;
+        }
+
+        .exam-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 22px;
+        }
+
+        .btn-submit {
+            background-color: #b4f2b0;
+            color: #16211b;
+            border: none;
+            border-radius: 8px;
+            padding: 11px 20px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .btn-reset {
+            background-color: #fbf09c;
+            color: #1c2420;
+            border: none;
+            border-radius: 8px;
+            padding: 11px 20px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .score-box {
+            margin-top: 24px;
+            background-color: rgba(15, 24, 19, 0.85);
+            border: 1px solid rgba(251, 240, 156, 0.45);
+            border-radius: 12px;
+            padding: 22px 24px;
+            display: none;
+        }
+
+        .score-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding-bottom: 14px;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.22);
+            margin-bottom: 16px;
+        }
+
+        .score-header h3 {
+            font-size: 1.35rem;
+            color: #fbf09c;
+        }
+
+        .score-badge {
+            background-color: #fbf09c;
+            color: #1c2420;
+            font-weight: 800;
+            font-size: 1.15rem;
+            padding: 6px 14px;
+            border-radius: 8px;
+        }
+
+        .score-summary {
+            color: #e4ede7;
+            font-size: 0.95rem;
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+
+        .mistakes-section h4 {
+            color: #fa9e9e;
+            font-size: 1.05rem;
+            margin-bottom: 12px;
+        }
+
+        .mistake-card {
+            background-color: rgba(255, 255, 255, 0.04);
+            border-left: 4px solid #fa9e9e;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+        }
+
+        .mistake-q {
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .mistake-user {
+            color: #fab6a6;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+
+        .mistake-correct {
+            color: #b4f2b0;
+            font-size: 0.9rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .all-correct-msg {
+            color: #b4f2b0;
+            font-weight: 600;
+            font-size: 0.96rem;
+        }
+
+        @media (max-width: 820px) {
+            .models-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .chalkboard {
+                padding: 26px 20px;
+                border-width: 7px;
+            }
+            .models-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="chalkboard">
+    <!-- VISTA 1: PORTADA DE SELECCIÓN DE MODELOS -->
+    <div id="menu-view">
+        <h1>Pon a prueba tus conocimientos</h1>
+        <p class="subtitle">
+            Selecciona un modelo de examen (Preguntas 1-20: Unidad 1 · Destrezas Sociales | Opciones aleatorias A-D | Fallos restan 1/3).
+        </p>
+
+        <div class="models-grid">
+            <button type="button" class="model-card c-yellow" onclick="startExam('A', 1)">
+                <span class="model-card-title">📝 Modelo A</span>
+                <span class="model-card-sub">Simulacro Oficial 1</span>
+            </button>
+            <button type="button" class="model-card c-blue" onclick="startExam('B', 2)">
+                <span class="model-card-title">📝 Modelo B</span>
+                <span class="model-card-sub">Simulacro Oficial 2</span>
+            </button>
+            <button type="button" class="model-card c-orange" onclick="startExam('C', 3)">
+                <span class="model-card-title">📝 Modelo C</span>
+                <span class="model-card-sub">Simulacro Oficial 3</span>
+            </button>
+            <button type="button" class="model-card c-green" onclick="startExam('D', 4)">
+                <span class="model-card-title">📝 Modelo D</span>
+                <span class="model-card-sub">Simulacro Oficial 4</span>
+            </button>
+            <button type="button" class="model-card c-lilac" onclick="startExam('E', 5)">
+                <span class="model-card-title">📝 Modelo E</span>
+                <span class="model-card-sub">Simulacro Oficial 5</span>
+            </button>
+            <button type="button" class="model-card c-pink" onclick="startExam('F', 6)">
+                <span class="model-card-title">📝 Modelo F</span>
+                <span class="model-card-sub">Simulacro Oficial 6</span>
+            </button>
+            <button type="button" class="model-card c-cyan" onclick="startExam('G', 7)">
+                <span class="model-card-title">📝 Modelo G</span>
+                <span class="model-card-sub">Simulacro Oficial 7</span>
+            </button>
+            <button type="button" class="model-card c-peach" onclick="startExam('H', 8)">
+                <span class="model-card-title">📝 Modelo H</span>
+                <span class="model-card-sub">Simulacro Oficial 8</span>
+            </button>
+            <button type="button" class="model-card c-mint" onclick="startExam('I', 9)">
+                <span class="model-card-title">📝 Modelo I</span>
+                <span class="model-card-sub">Simulacro Oficial 9</span>
+            </button>
+            <button type="button" class="model-card c-cream" onclick="startExam('J', 10)">
+                <span class="model-card-title">📝 Modelo J</span>
+                <span class="model-card-sub">Simulacro Oficial 10</span>
+            </button>
+        </div>
+
+        <a href="destrezas-sociales.html" class="back-link">&larr; Volver a Destrezas Sociales</a>
+    </div>
+
+    <!-- VISTA 2: EJECUCIÓN DEL EXAMEN SELECCIONADO -->
+    <div id="exam-view" class="exam-view">
+        <div class="exam-topbar">
+            <div class="exam-meta">
+                <h2 id="exam-heading">Modelo A · Simulacro Oficial 1</h2>
+                <span class="progress-pill" id="progress-text">0 / 20 respondidas</span>
+            </div>
+            <button type="button" class="btn-back-menu" onclick="backToMenu()">&larr; Cambiar de modelo</button>
+        </div>
+
+        <div id="questions-list"></div>
+
+        <div class="exam-actions">
+            <button type="button" class="btn-submit" id="submit-btn" onclick="gradeExam()">Corregir simulacro</button>
+            <button type="button" class="btn-reset" onclick="retryExam()">Reintentar (barajar A-D)</button>
+        </div>
+
+        <div id="score-box" class="score-box">
+            <div class="score-header">
+                <h3 id="score-title">Resultado del Simulacro</h3>
+                <span id="score-badge" class="score-badge">0.00 / 10</span>
+            </div>
+            <p id="score-detail" class="score-summary"></p>
+            <div id="mistakes-container" class="mistakes-section"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const EXAM_BANK = [
+  {
+    "model": "A",
+    "q": "¿Qué representa la Inteligencia Emocional en el ámbito profesional de la atención a personas en situación de dependencia?",
+    "options": [
+      "La habilidad innata de simpatizar rápidamente con todas las familias para evitar quejas administrativas",
+      "La facultad de reconocer, comprender y gestionar las emociones propias y ajenas sin llegar a reprimirlas",
+      "El dominio exclusivo de protocolos sanitarios para resolver conflictos físicos de los usuarios asistidos",
+      "La capacidad técnica de evitar cualquier sentimiento personal durante la jornada laboral en la residencia"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "A",
+    "q": "¿En qué consiste exactamente mantener una actitud de «empatía profesional» frente a la sobreimplicación?",
+    "options": [
+      "En aplicar de forma mecánica las tareas asistenciales evitando cualquier contacto afectivo con el usuario",
+      "En asumir como propio el sufrimiento de las familias llevando los problemas laborales al ámbito privado",
+      "En comprender el malestar del usuario desde su perspectiva sin desbordarse y manteniendo apoyo objetivo",
+      "En compartir por afinidad personal las mismas aficiones e intereses vitales que el usuario atendido"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "A",
+    "q": "Respecto al origen y desarrollo de las Habilidades Sociales (HHS) en el técnico TAPSD, ¿cuál es la realidad técnica?",
+    "options": [
+      "Son conductas aprendidas e integradas que se entrenan y perfeccionan mediante práctica estructurada",
+      "Consisten en técnicas de persuasión diseñadas para convencer al usuario de aceptar cualquier norma",
+      "Dependen únicamente de la intuición natural y del buen corazón del profesional que realiza los cuidados",
+      "Constituyen un rasgo genético invariable con el que se nace y que resulta imposible modificar en adultos"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "A",
+    "q": "¿Cuáles son los tres niveles en los que se proyecta el «Triple Impacto Transformador» de las habilidades sociales?",
+    "options": [
+      "En la dirección administrativa del centro, en la inspección sanitaria y en los proveedores externos",
+      "En la persona usuaria atendida, en su familia o entorno cercano y en el equipo interdisciplinar",
+      "En la reducción de costes materiales, en el ahorro de tiempo de turno y en la limpieza del edificio",
+      "En el expediente académico del técnico, en la evaluación anual y en la promoción interna laboral"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "A",
+    "q": "Un usuario con deterioro cognitivo te empuja el brazo al ponerle el abrigo porque está asustado. ¿Cuál es la respuesta adecuada?",
+    "options": [
+      "Abandonar la habitación de inmediato y dejar anotado en el parte que se niega a salir a la calle",
+      "Autorregular la propia tensión, mantener un tono calmado y validar su miedo explicando cada paso",
+      "Ponerle el abrigo rápidamente sin decir nada para evitar que vuelva a sujetarte el brazo con fuerza",
+      "Reprocharle con firmeza su conducta agresiva para que comprenda que no debe empujar al personal"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "A",
+    "q": "Llegas a casa tras la jornada laboral y pasas la tarde llorando angustiado por los problemas de un usuario. ¿Qué experimentas?",
+    "options": [
+      "Una sobreimplicación emocional que te lleva a sufrir el dolor ajeno como propio y genera desgaste",
+      "Una empatía profesional equilibrada que demuestra tu alta vocación en la atención sociosanitaria",
+      "Una barrera semántica provocada por el exceso de tecnicismos empleados durante el cambio de turno",
+      "Un estilo de comunicación pasivo que te impide expresar tus opiniones en las reuniones de equipo"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "A",
+    "q": "Al entrar por la mañana en la habitación de una usuaria en el Servicio de Ayuda a Domicilio (SAD), ¿cómo debes saludarla?",
+    "options": [
+      "Encendiendo la luz de golpe y hablando en voz alta desde la puerta para que despierte cuanto antes",
+      "Comenzando directamente a ordenar la mesilla mientras le indicas las tareas que vais a realizar hoy",
+      "Empleando diminutivos cariñosos como «cariñito» o «abuelita» para transmitirle cercanía familiar",
+      "Llamando antes de entrar, mirándola a la altura de sus ojos con tono cálido y llamándola por su nombre"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "A",
+    "q": "Tras dar una indicación sobre una rutina a una persona usuaria, ¿cómo debes comprobar que el mensaje ha llegado sin pérdidas?",
+    "options": [
+      "Asumiendo que si ha asentido con la cabeza mientras miraba la televisión ha comprendido todo bien",
+      "Repitiendo exactamente las mismas palabras con un volumen más alto para asegurar que las ha oído",
+      "Preguntándole únicamente «¿me has entendido?» antes de salir rápidamente hacia la siguiente habitación",
+      "Solicitando feedback directo pidiéndole con amabilidad que te explique con sus palabras qué va a hacer"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "A",
+    "q": "Un compañero te pide por tercera vez esta semana que hagas su parte del registro porque tiene prisa. ¿Cuál es una respuesta asertiva?",
+    "options": [
+      "Está bien, déjamelo encima de la mesa y ya lo rellenaré yo cuando acabe de acostar a los residentes",
+      "Siempre haces lo mismo y tienes mucha cara, así que búscate la vida porque no pienso ayudarte más",
+      "Entiendo que tengas prisa hoy, pero cada uno debe completar su registro; yo necesito terminar el mío",
+      "No sé si podré hacerlo luego, supongo que si me sobra algún minuto intentaré pasarlo al ordenador"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "A",
+    "q": "Le dices a un familiar «Le escucho atentamente», pero miras el móvil y mantienes los brazos cruzados. ¿Qué falla en tu comunicación?",
+    "options": [
+      "Estás aplicando la técnica del banco de niebla de manera incorrecta frente a una crítica constructiva",
+      "Se produce una distorsión cognitiva de personalización al asumir culpas que no te corresponden",
+      "Falta congruencia entre el canal verbal y los canales no verbal y paraverbal, que transmiten rechazo",
+      "Existe una barrera ambiental causada por el exceso de ruido en el pasillo principal de la residencia"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "A",
+    "q": "Vas a ayudar a vestirse a un usuario entrando en su zona íntima (a menos de 0,5 metros). ¿Qué actuación técnica es imprescindible?",
+    "options": [
+      "Pedir permiso previamente, mantener una postura respetuosa y anticipar con la voz cada movimiento",
+      "Realizar la maniobra en completo silencio para no incomodarle ni invadir su intimidad psicológica",
+      "Mantener una distancia superior a tres metros mientras le das instrucciones verbales para que se vista",
+      "Entrar directamente en su espacio personal sin avisar para que el procedimiento dure menos tiempo"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "A",
+    "q": "¿Cómo transformarías la queja «Es imposible trabajar en este turno porque nadie apunta los cambios» a un Marco-Objetivo?",
+    "options": [
+      "Propongo acordar un sistema rápido al final del turno para que todos dejemos registrados los cambios",
+      "Voy a dejar de apuntar yo también las incidencias hasta que el resto del personal cumpla su deber",
+      "Siempre pasa lo mismo en este equipo y es evidente que la organización del centro es un desastre",
+      "Quiero averiguar quién fue el compañero irresponsable que olvidó anotar los cambios de ayer tarde"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "A",
+    "q": "Según la teoría del desarrollo moral de Lawrence Kohlberg, ¿qué caracteriza al estadio 1 denominado «Moral heterónoma»?",
+    "options": [
+      "Se busca ser considerado buena persona por el grupo cercano para lograr aceptación y afecto mutuo",
+      "El adulto decide qué está bien o mal y se obedece la norma principalmente para evitar el castigo",
+      "Se defienden los derechos individuales dentro del contrato social respetando las leyes de la comunidad",
+      "Se actúa por deber cívico y responsabilidad hacia el bien común iniciando la autonomía moral plena"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "A",
+    "q": "¿Cuál es la relación que describe el «Triángulo de la Conducta Humana» ante una situación compleja en el cuidado?",
+    "options": [
+      "La conducta externa determina obligatoriamente los rasgos genéticos y el temperamento del profesional",
+      "Solo podemos controlar las acciones de los demás mediante normas rígidas sin modificar nuestros juicios",
+      "La emoción bloquea siempre cualquier pensamiento racional impidiendo elegir una conducta profesional",
+      "Pensamiento, emoción y conducta se retroalimentan entre sí, pudiendo regular cómo interpretamos y actuamos"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "A",
+    "q": "Dentro de las estrategias de pensamiento racional, ¿qué pregunta guía específicamente al «Pensamiento Causal»?",
+    "options": [
+      "¿Cómo se sentirá la persona usuaria o su familia si tomamos esta decisión sin consultarla antes?",
+      "¿Qué ocurrirá a medio plazo si aplicamos esta medida concreta con el grupo de usuarios del centro?",
+      "¿Qué ha sucedido exactamente y cuál es el origen real que ha desencadenado el problema actual?",
+      "¿Qué distintas opciones o soluciones alternativas podemos generar para resolver esta incidencia diaria?"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "A",
+    "q": "¿Qué mecanismo de defensa adaptativo consiste en prever consecuencias complejas con antelación para preparar soluciones?",
+    "options": [
+      "La proyección, al atribuir a otros compañeros los propios temores ante una situación difícil",
+      "La afiliación, al delegar completamente la toma de decisiones en el supervisor del equipo técnico",
+      "La racionalización, al elaborar excusas lógicas que justifican no intervenir ante un problema",
+      "La anticipación, que permite gestionar de forma saludable y eficaz posibles escenarios estresantes"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "A",
+    "q": "En el proceso de pérdida de información en la comunicación, ¿cuál es la secuencia exacta de los seis escalones?",
+    "options": [
+      "Lo que se ordena, se ejecuta, se supervisa, se registra, se sanciona y se comunica a la dirección",
+      "Lo que se quiere decir, se dice, se oye, se escucha, se comprende y finalmente se retiene o interpreta",
+      "Lo que se siente, se gesticula, se observa, se imita, se corrige y se evalúa mediante un cuestionario",
+      "Lo que se piensa, se escribe, se lee, se memoriza, se debate en equipo y se archiva en el expediente"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "A",
+    "q": "Dentro del paralenguaje, ¿qué función cumplen los denominados «segregados vocales» como «uh», «hum» o «mm»?",
+    "options": [
+      "Actúan como vocalizaciones de apoyo que muestran seguimiento y atención activa al interlocutor",
+      "Expresan rechazo o impaciencia para indicar al usuario que debe terminar cuanto antes su relato",
+      "Sirven para sustituir por completo las explicaciones verbales durante las transferencias posturales",
+      "Constituyen barreras fisiológicas que dificultan la comprensión en personas con déficit auditivo"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "A",
+    "q": "Según Nathaniel Branden, ¿cuál de los siguientes enunciados define el pilar de la autoestima «Vivir conscientemente»?",
+    "options": [
+      "Aceptarse a uno mismo de manera incondicional eliminando cualquier sentimiento de culpa destructiva",
+      "Mantener una coherencia estricta entre lo que se piensa, lo que se expresa y lo que se hace",
+      "Respetar la realidad tal como es, sin negar los hechos ni evadirse de la información disponible",
+      "Fijar metas profesionales realistas diseñando planes de acción concretos para alcanzarlas con éxito"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "A",
+    "q": "En la Atención Centrada en la Persona (ACP), ¿qué implica el principio de «Neutralidad Afectiva Profesional»?",
+    "options": [
+      "Mostrar frialdad emocional y distancia física para que el usuario no desarrolle apego hacia el técnico",
+      "Evitar cualquier conversación sobre la historia de vida del usuario para no remover recuerdos tristes",
+      "Tratar con mayor dedicación y afecto a los usuarios que comparten nuestros mismos valores e ideas",
+      "Aceptar incondicionalmente a la persona más allá de su pasado, carácter, creencias u orientación"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "B",
+    "q": "¿Por qué se afirma que en todo acto comunicativo humano se produce inevitablemente una «pérdida de información»?",
+    "options": [
+      "Porque los canales físicos de voz y vista destruyen siempre la mitad de las palabras pronunciadas",
+      "Porque entre lo que el emisor quiere decir y lo que el receptor retiene intervienen filtros y seis escalones",
+      "Porque las personas dependientes carecen de capacidad para procesar mensajes que superen tres palabras",
+      "Porque el código verbal resulta irrelevante frente al contexto ambiental en cualquier entorno laboral"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "B",
+    "q": "¿Cuál es la diferencia fundamental entre una persona con estilo comunicativo pasivo y otra con estilo agresivo?",
+    "options": [
+      "El pasivo utiliza el sarcasmo y el tono elevado, mientras que el agresivo mantiene la mirada baja y calla",
+      "El pasivo logra siempre acuerdos equilibrados (Yo+Tú) y el agresivo evita cualquier responsabilidad grupal",
+      "El pasivo muestra postura rígida e invade el espacio, mientras que el agresivo expresa límites con calma",
+      "El pasivo anula sus derechos por miedo al conflicto (Tú-Tú) y el agresivo impone los suyos (Yo-Yo)"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "B",
+    "q": "Según los estudios de Albert Mehrabian sobre comunicación emocional, ¿qué porcentaje corresponde a cada canal?",
+    "options": [
+      "55% comunicación verbal, 38% lenguaje no verbal y 7% componentes paraverbales del habla",
+      "38% comunicación verbal, 55% componentes paraverbales y 7% expresión corporal o cinésica",
+      "55% comunicación no verbal, 38% comunicación paraverbal y 7% palabras o contenido verbal",
+      "70% comunicación verbal explícita, 20% postura corporal y 10% distancia proxémica interpersonal"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "B",
+    "q": "¿Qué estudia la «proxémica» y cuál es la distancia adecuada para mantener una conversación individual con un usuario?",
+    "options": [
+      "Estudia el tono y ritmo de la voz; la distancia indicada es la zona pública superior a tres metros",
+      "Estudia los gestos faciales; la distancia adecuada es la zona íntima entre cero y medio metro",
+      "Estudia el uso del espacio y distancias; la recomendada es la zona personal entre 0,5 y 1,5 metros",
+      "Estudia las barreras semánticas; la distancia recomendada es la zona social entre dos y cuatro metros"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "B",
+    "q": "Vas a hablar con una persona mayor que presenta hipoacusia (oye poco). ¿Por qué debes evitar gritarle o hablarle de espaldas?",
+    "options": [
+      "Porque al gritar se distorsiona el sonido y hablar de espaldas impide el apoyo de la lectura labial",
+      "Porque gritar activa la zona pública de proxémica y reduce la eficacia de los pictogramas visuales",
+      "Porque hablar de frente genera edadismo y vulnera el principio de confidencialidad del expediente",
+      "Porque al elevar el tono de voz se produce automáticamente una barrera administrativa entre turnos"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "B",
+    "q": "Una compañera le dice a un señor de 80 años: «Venga cariño, tómate la sopita y ponte el abriguito». ¿Qué error comete?",
+    "options": [
+      "Emplea un estilo de comunicación agresivo que vulnera los derechos básicos de intimidad del usuario",
+      "Utiliza tecnicismos médicos semánticos que impiden que el residente comprenda qué debe hacer",
+      "Aplica la técnica del sándwich de forma inadecuada al mezclar dos órdenes en una misma frase",
+      "Incurre en la infantilización del lenguaje mediante diminutivos que restan dignidad al adulto mayor"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "B",
+    "q": "Atiendes a una persona usuaria cuyas ideas políticas o religiosas son opuestas a las tuyas. ¿Cómo debes actuar según la ACP?",
+    "options": [
+      "Evitando conversar sobre cualquier tema personal para prevenir discusiones durante los cuidados",
+      "Manteniendo la neutralidad afectiva profesional y respetando su proyecto de vida sin emitir juicios",
+      "Solicitando el cambio de asignación a otro compañero que comparta su misma ideología o creencias",
+      "Debatiendo con respeto sus argumentos para ayudarle a adoptar una postura más objetiva y neutral"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "B",
+    "q": "Hoy un usuario no ha querido comer el puré y piensas: «Nunca le gusta nada de lo que hago». ¿Qué distorsión cognitiva es?",
+    "options": [
+      "Descalificación de lo positivo, al restar importancia a los elogios recibidos por otros compañeros",
+      "Personalización, al atribuirse la culpa exclusiva de un hecho externo sin tener pruebas reales",
+      "Sobregeneralización, al extraer una regla universal y permanente a partir de un único hecho aislado",
+      "Pensamiento dicotómico o todo o nada, al evaluar el trabajo en extremos absolutos sin términos medios"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "B",
+    "q": "Notas ansiedad y palpitaciones antes de una reunión difícil con una familia. ¿Cómo aplicas la «respiración completa»?",
+    "options": [
+      "Conteniendo el aire en los pulmones el máximo tiempo posible mientras tensas los hombros y brazos",
+      "Espirando con fuerza por la nariz mientras repasas mentalmente todas las quejas de la familia",
+      "Inspirando lento por la nariz hacia el abdomen y espirando suave por la boca unos 10-15 minutos",
+      "Realizando inspiraciones rápidas y superficiales con el pecho durante treinta segundos seguidos"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "B",
+    "q": "Un familiar que acaba de recibir un diagnóstico grave de su madre asegura que «los médicos se equivocan y está perfecta». ¿Qué es?",
+    "options": [
+      "El mecanismo adaptativo de altruismo, orientado a proteger emocionalmente al resto de familiares",
+      "El mecanismo evitativo de negación, que rechaza la realidad dolorosa para reducir la ansiedad inicial",
+      "El mecanismo de proyección, mediante el cual atribuye al equipo médico sus propios miedos internos",
+      "El mecanismo de distorsión de fantasía, al crear un mundo imaginario donde no existen enfermedades"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "B",
+    "q": "¿Cuál de estas frases aplica correctamente la «Técnica del Sándwich» para pedir a un compañero que recoja el material?",
+    "options": [
+      "Nunca recoges el aula cuando terminas y siempre me toca a mí ordenar todo el material del taller",
+      "Si no recoges ahora mismo las fichas del taller, mañana no te dejaré utilizar la sala polivalente",
+      "Has dinamizado genial la sesión de hoy; recuerda recoger el material al acabar para dejarlo listo",
+      "¿Qué es exactamente lo que te impide recoger las cajas del taller cuando finaliza la actividad?"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "B",
+    "q": "Un familiar muy enfadado exige que des medicación sin receta a su padre y tú te niegas con calma repitiendo la norma. ¿Qué técnica usas?",
+    "options": [
+      "Disco rayado, manteniendo con serenidad y firmeza el argumento sin entrar en provocaciones",
+      "Pregunta asertiva, solicitando información detallada sobre los síntomas que presenta el residente",
+      "Banco de niebla, concediendo parte de razón a su demanda para evitar que aumente su enfado",
+      "Asertividad positiva, reconociendo su preocupación filial antes de administrarle el medicamento"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "B",
+    "q": "En el desarrollo moral de Kohlberg, ¿qué diferencia al estadio 5 (Contrato social) del estadio 6 (Principios éticos universales)?",
+    "options": [
+      "El estadio 5 corresponde a la infancia temprana y el estadio 6 se alcanza al iniciar la adolescencia",
+      "No existe diferencia real entre ambos estadios, pues los dos exigen obedecer cualquier norma vigente",
+      "El estadio 6 se basa en evitar el castigo físico y el estadio 5 busca únicamente la aprobación grupal",
+      "El estadio 6 guía la acción por la justicia universal incluso por encima de leyes si estas la vulneran"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "B",
+    "q": "¿Qué diferencia la «Simpatía» de la «Empatía Profesional» en la atención a personas en situación de dependencia?",
+    "options": [
+      "La simpatía es una competencia científica entrenada y la empatía profesional es un don innato",
+      "La simpatía depende de la afinidad personal y conlleva riesgo de trato desigual; la empatía es objetiva",
+      "La simpatía exige validar el dolor ajeno sin juzgar y la empatía consiste en dar consejos rápidos",
+      "La simpatía garantiza la neutralidad afectiva de la ACP y la empatía provoca desgaste por burnout"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "B",
+    "q": "Dentro de las estrategias cognitivas racionales, ¿en qué consiste el «Pensamiento Medio-Fin»?",
+    "options": [
+      "En generar una lluvia de ideas sin valorar todavía qué consecuencias tendrá cada alternativa elegida",
+      "En fijar objetivos claros y planificar los medios y pasos necesarios para conseguirlos eficazmente",
+      "En identificar exclusivamente las causas pasadas que originaron una conducta disruptiva en el centro",
+      "En ponerse en el lugar emocional del otro para anticipar cómo reaccionará ante una noticia difícil"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "B",
+    "q": "¿Qué distorsión cognitiva ocurre cuando un profesional afirma «Fallé en una transferencia, todo el día ha sido un desastre»?",
+    "options": [
+      "Abstracción selectiva o filtro mental, al centrarse solo en un detalle negativo ignorando lo positivo",
+      "Inferencia arbitraria, al extraer conclusiones sin contar con ningún dato objetivo que las respalde",
+      "Descalificación de lo positivo, al rechazar los agradecimientos sinceros de las familias atendidas",
+      "Interpretación del pensamiento, al creer adivinar lo que opinan sus compañeros sobre su trabajo"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "B",
+    "q": "En los elementos de la comunicación, ¿qué diferencia al «Feedback Directo» del «Feedback Indirecto»?",
+    "options": [
+      "El directo utiliza códigos pictográficos SAAC y el indirecto emplea exclusivamente el lenguaje verbal",
+      "El directo se registra siempre por escrito en el parte y el indirecto se transmite de forma oral",
+      "El directo lo emite únicamente el profesional y el indirecto procede siempre de los familiares",
+      "El directo son palabras o gestos inmediatos cara a cara; el indirecto son acciones observables a plazo"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "B",
+    "q": "Dentro de la cinésica, ¿qué significado suele tener una «sonrisa defensiva» frente a una «sonrisa de descarga»?",
+    "options": [
+      "La defensiva refleja nerviosismo o incomodidad, mientras que la de descarga libera tensión tras estrés",
+      "La defensiva expresa cortesía social amable y la de descarga indica rechazo hacia el interlocutor",
+      "Ambas son idénticas y demuestran siempre plena seguridad técnica y dominio emocional del técnico",
+      "La defensiva se utiliza en grupos públicos amplios y la de descarga en conversaciones íntimas"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "B",
+    "q": "¿En qué consiste la técnica de autorregulación conocida como «Relajación Progresiva de Jacobson»?",
+    "options": [
+      "En analizar por escrito las pruebas a favor y en contra de un pensamiento automático irracional",
+      "En repetir mentalmente frases positivas durante veinte minutos manteniendo los ojos cerrados",
+      "En realizar respiraciones abdominales profundas combinadas con estiramientos cervicales suaves",
+      "En tensionar distintos grupos musculares unos segundos y soltar de golpe para notar la distensión"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "B",
+    "q": "Según las diez reglas del arte de escuchar, ¿qué implica la regla «Aprovechar la velocidad habla/pensamiento»?",
+    "options": [
+      "Usar el margen mental entre lo que se oye y se piensa para resumir y leer entre líneas el mensaje",
+      "Hablar más rápido que el usuario para optimizar el tiempo disponible en cada atención domiciliaria",
+      "Anotar literalmente cada palabra que pronuncia el usuario sin detenerse a analizar su significado",
+      "Interrumpir al interlocutor cuando tarda en encontrar las palabras para completar sus frases por él"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "C",
+    "q": "Cuando un profesional TAPSD se comunica desde un «Marco-Objetivo» (Marta Llorente), ¿en qué centra su discurso?",
+    "options": [
+      "En enumerar todas las dificultades organizativas que impiden realizar correctamente las tareas",
+      "En evitar hablar de los problemas cotidianos para mantener un ambiente superficialmente cordial",
+      "En el propósito que se desea alcanzar y en los recursos disponibles para construir soluciones",
+      "En analizar detalladamente quién cometió el error en el turno anterior para exigir responsabilidades"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "C",
+    "q": "¿Qué se entiende por «edadismo» en el ámbito de la atención a personas mayores o en situación de dependencia?",
+    "options": [
+      "La discriminación, estereotipo o anulación de las capacidades y decisiones de alguien por su edad",
+      "El estudio evolutivo de las etapas morales y cognitivas desde la infancia hasta la vejez avanzada",
+      "La adaptación técnica del mobiliario y la iluminación para prevenir caídas en personas octogenarias",
+      "La planificación centrada en la persona que respeta la historia de vida y preferencias del mayor"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "C",
+    "q": "¿Qué significa practicar la «validación emocional» con una persona usuaria que expresa tristeza o frustración?",
+    "options": [
+      "Animarla rápidamente diciéndole que no debe llorar porque tiene muchos motivos para estar contenta",
+      "Legitimar y acoger su sentimiento sin minimizarlo, acompañándola con respeto y disponibilidad",
+      "Darle la razón en todas sus quejas aunque impliquen incumplir las normas sanitarias del centro",
+      "Cambiar de tema de conversación con humor para distraerla y evitar que siga pensando en su pena"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "C",
+    "q": "¿Qué son las «distorsiones cognitivas» y cómo pueden afectar al desempeño del profesional sociosanitario?",
+    "options": [
+      "Son lesiones neurológicas del usuario que requieren el uso inmediato de pictogramas y frases cortas",
+      "Son estrategias conscientes de análisis racional que permiten evaluar consecuencias antes de actuar",
+      "Son pensamientos automáticos irracionales que alteran la realidad y generan malestar innecesario",
+      "Son fallos en los canales administrativos internos que provocan pérdida de datos entre turnos"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "C",
+    "q": "¿Cuál es la función principal de los «mecanismos de defensa» en el funcionamiento psicológico de las personas?",
+    "options": [
+      "Son normas éticas profesionales que garantizan la confidencialidad y el respeto hacia los usuarios",
+      "Son procesos automáticos e inconscientes destinados a proteger el equilibrio emocional ante tensión",
+      "Son barreras físicas del entorno como el ruido o la mala iluminación que dificultan la comunicación",
+      "Son técnicas verbales asertivas entrenadas para responder a críticas injustas sin perder la calma"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "C",
+    "q": "¿En qué consiste la técnica asertiva del «Disco Rayado» aplicada a una situación profesional?",
+    "options": [
+      "En repetir con calma, respeto y firmeza el argumento o negativa sin entrar en provocaciones",
+      "En conceder la razón parcialmente a una crítica externa para desactivar la hostilidad del otro",
+      "En posponer la conversación hasta que el interlocutor alterado recupere un estado de serenidad",
+      "En envolver una corrección necesaria entre dos mensajes positivos de reconocimiento sincero"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "C",
+    "q": "¿Qué representa la fórmula «Yo + Tú = Nosotros» característica del estilo de comunicación asertivo?",
+    "options": [
+      "La imposición del criterio técnico propio por encima de las preferencias de la persona usuaria",
+      "La renuncia a las propias necesidades profesionales para satisfacer siempre las demandas del otro",
+      "El equilibrio entre defender los propios derechos y respetar los ajenos buscando beneficio mutuo",
+      "La delegación de los conflictos interpersonales en la dirección para evitar tensiones en el equipo"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "C",
+    "q": "¿Cómo se manifiesta el lenguaje corporal de un compañero que se comunica de forma auténticamente asertiva?",
+    "options": [
+      "Con mirada dirigida al suelo, hombros encorvados, sonrisa nerviosa y voz baja o temblorosa",
+      "Con contacto visual cálido, postura erguida y relajada, y un tono de voz firme pero bien modulado",
+      "Con mirada desafiante, postura rígida, gestos bruscos con el dedo e invasión del espacio personal",
+      "Con los brazos cruzados sobre el pecho, gestos de impaciencia y ausencia de contacto visual directo"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "C",
+    "q": "En una residencia, dos auxiliares se pasan el turno con prisas y sin revisar los partes escritos. ¿Qué consecuencia produce?",
+    "options": [
+      "Una estrategia de pensamiento alternativo que agiliza la atención directa a los residentes",
+      "Una barrera administrativa que genera pérdida de información y riesgo de errores en los cuidados",
+      "Una mejora en la automotivación del equipo al reducir el tiempo dedicado a tareas burocráticas",
+      "Un ejemplo de feedback indirecto eficaz basado en la confianza mutua entre profesionales del turno"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "C",
+    "q": "En una reunión de equipo, un compañero acapara la palabra y no deja opinar a nadie. ¿Cómo actúas asertivamente?",
+    "options": [
+      "Interviniendo con calma para valorar su aportación y pedir turno para que el resto también opine",
+      "Permaneciendo en silencio todo el tiempo y quejándote después en el pasillo con otros compañeros",
+      "Levantando la voz para cortarle de golpe y decirle que siempre monopoliza todas las reuniones",
+      "Mirando el reloj con gesto de fastidio mientras hablas por lo bajo con el compañero de al lado"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "C",
+    "q": "Mientras una usuaria te cuenta una preocupación personal, miras el reloj y piensas en la compra. ¿Qué barrera de escucha tienes?",
+    "options": [
+      "Barrera egocéntrica, al interrumpirla para contarle tus propios problemas personales y familiares",
+      "Barrera prejuzgada, al etiquetar de antemano su relato sin permitir que termine de explicarse",
+      "Barrera reactiva, al estar preparando mentalmente argumentos para rebatir lo que te está diciendo",
+      "Barrera abstraída, al mantener la atención dispersa en asuntos propios ajenos a la conversación"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "C",
+    "q": "Un usuario te dice entre lágrimas que se siente muy solo por las tardes. ¿Cómo aplicas el «parafraseo»?",
+    "options": [
+      "Anotando en tu libreta que está triste sin decirle nada para no interrumpir su desahogo emocional",
+      "Diciéndole que no tiene motivos para sentirse así porque por las tardes hay actividades en el salón",
+      "Contándole que a ti también te ocurre lo mismo cuando llegas a casa después de trabajar",
+      "Respondiendo: «Si te entiendo bien, las tardes se te hacen muy largas y echas de menos compañía»"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "C",
+    "q": "Dentro del modelo de Inteligencia Emocional de Salovey, Mayer y Goleman, ¿qué define a la «Automotivación»?",
+    "options": [
+      "La habilidad de mediar entre dos usuarios enfrentados para facilitar una reconciliación constructiva",
+      "El control inmediato de los impulsos para evitar responder con gritos ante una provocación verbal",
+      "La fuerza interior y pasión profesional ante contratiempos, como celebrar pequeños logros de autonomía",
+      "La capacidad de notar señales físicas de tensión en el propio cuerpo ante una situación exigente"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "C",
+    "q": "Un compañero te dice tras una actividad: «Aprecio mucho lo bien que has organizado hoy el taller». ¿Qué técnica emplea?",
+    "options": [
+      "Asertividad positiva, al expresar de forma sincera reconocimiento y afecto hacia otra persona",
+      "Asertividad negativa, al reconocer un error propio con naturalidad sin recurrir a excusas",
+      "Pregunta asertiva, al solicitar datos concretos sobre el desarrollo de la dinámica grupal",
+      "Técnica de ignorar, al aplazar cualquier valoración crítica para un momento más oportuno"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "C",
+    "q": "¿Cuáles son los tres pasos secuenciales que estructuran un «Mensaje Yo» (enunciado en primera persona)?",
+    "options": [
+      "Validar la emoción ajena, analizar las causas pasadas y proponer tres soluciones alternativas",
+      "Describir la conducta objetiva, expresar el sentimiento propio y pedir la conducta deseada",
+      "Criticar la intención del otro, exigir una disculpa inmediata y advertir de posibles sanciones",
+      "Dar la razón al interlocutor, repetir el argumento propio y cerrar la conversación con cortesía"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "C",
+    "q": "Entre los rasgos de personalidad descritos como ejes continuos, ¿qué evalúa el eje «Egocentrismo vs. Alocentrismo»?",
+    "options": [
+      "La capacidad de mantener criterio propio frente a la necesidad constante de aprobación externa",
+      "La orientación social externa frente a la preferencia por la introspección y el mundo interior",
+      "La reacción inmediata sin filtro previo frente a la capacidad de reflexión serena ante estímulos",
+      "El foco centrado exclusivamente en uno mismo frente a la orientación y sensibilidad hacia los demás"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "C",
+    "q": "Según los 6 pilares de la autoestima de Nathaniel Branden, ¿en qué consiste la «Integridad personal»?",
+    "options": [
+      "En defender con respeto las propias necesidades y valores frente a presiones del entorno",
+      "En asumir el control y la responsabilidad de las propias decisiones sin culpar a factores externos",
+      "En aceptar los propios errores y limitaciones sin caer en autocríticas ni culpas destructivas",
+      "En mantener coherencia entre lo que se piensa, lo que se dice y lo que finalmente se hace"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "C",
+    "q": "¿Cuál es la secuencia correcta de las 4 fases de la «Reestructuración Cognitiva» para modificar pensamientos irracionales?",
+    "options": [
+      "Observación pasiva, escucha selectiva, parafraseo emocional y validación del interlocutor",
+      "Respiración abdominal, tensión muscular, distensión progresiva y evaluación de resultados",
+      "Negación, proyección, racionalización y aceptación final de las consecuencias emocionales",
+      "Identificación, análisis de pruebas objetivas, generación de alternativas y cambio de esquemas"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "C",
+    "q": "En las 10 reglas del arte de escuchar, ¿qué significa la regla número 2 denominada «Evaluar el contenido»?",
+    "options": [
+      "Centrarse en el fondo y significado del mensaje aunque la forma de expresarse sea torpe",
+      "Corregir los errores gramaticales del interlocutor para ayudarle a expresarse con propiedad",
+      "Apuntar únicamente los datos estadísticos descartando cualquier referencia a sentimientos",
+      "Calificar numéricamente la calidad expositiva del usuario antes de responder a su demanda"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "C",
+    "q": "¿Qué distancia abarca la «Zona Social» en proxémica y en qué situaciones profesionales resulta más adecuada?",
+    "options": [
+      "De 0 a 0,5 metros; indicada para realizar la higiene personal y las transferencias en cama",
+      "Más de 3 metros; indicada para charlas informativas dirigidas a auditorios muy numerosos",
+      "De 1,5 a 3 metros; indicada para dinamizar talleres grupales y mantener reuniones de equipo",
+      "De 0,5 a 1,5 metros; indicada para entrevistas individuales y escucha activa cercana"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "D",
+    "q": "¿Cuál es la diferencia esencial entre simplemente «oír» y practicar la «escucha activa»?",
+    "options": [
+      "No existe diferencia práctica, ya que ambos términos describen la recepción auditiva del mensaje",
+      "Oír requiere tomar notas escritas de todo y escuchar activamente consiste en permanecer en silencio",
+      "Oír es percibir sonidos físicamente, mientras que escuchar activamente implica captar ideas y emociones",
+      "Oír se produce solo en distancias públicas y escuchar activamente exige contacto físico constante"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "D",
+    "q": "¿Qué caracteriza al «Pensamiento Alternativo» al abordar un problema en el equipo de trabajo?",
+    "options": [
+      "Generar distintas opciones y soluciones posibles en lugar de aferrarse a una única vía de acción",
+      "Anticipar únicamente los riesgos negativos que podría provocar cualquier cambio en las rutinas",
+      "Averiguar con exactitud quién fue el responsable inicial del fallo ocurrido durante el servicio",
+      "Aceptar sin cuestionar la primera propuesta planteada por el miembro más antiguo del equipo"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "D",
+    "q": "Un compañero te critica diciendo: «Siempre tardas mucho en levantar a los usuarios». ¿Qué respuesta usa el «Banco de Niebla»?",
+    "options": [
+      "Es mentira, tú tardas muchísimo más que yo y encima dejas las camas sin hacer todos los días",
+      "Perdona, soy un desastre y nunca consigo organizar bien mis tiempos por las mañanas en planta",
+      "Si no te gusta mi ritmo de trabajo, habla con la coordinadora para que nos cambie de pasillo",
+      "Puede que otros compañeros vayan más rápido, pero prefiero asegurar cada transferencia sin riesgos"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "D",
+    "q": "En una actividad grupal dos usuarios discuten por elegir un juego de mesa. ¿Cómo aplicas el «pensamiento consecuencial»?",
+    "options": [
+      "Eligiendo tú mismo el juego que prefieres para ahorrar tiempo y empezar cuanto antes la sesión",
+      "Preguntando quién empezó primero la discusión para atribuir la responsabilidad del conflicto",
+      "Invitándoles a valorar qué pasará con cada opción y cómo pueden turnarse para disfrutar ambos",
+      "Retirando ambos juegos de la mesa para evitar que la discusión continúe durante el taller"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "D",
+    "q": "Respecto al impacto en la familia y entorno cercano, ¿qué efecto positivo producen las HHS del profesional TAPSD?",
+    "options": [
+      "Evitan que la familia visite al usuario con frecuencia para no interferir en las rutinas diarias",
+      "Consiguen que los familiares deleguen por completo todas las decisiones legales en la residencia",
+      "Sustituyen la necesidad de informar sobre incidencias médicas mediante un trato meramente cordial",
+      "Generan tranquilidad, alivio y confianza, previniendo quejas, sobreprotección o hipervigilancia"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "D",
+    "q": "Cuando un profesional interpreta el gesto serio de un usuario pensando «No me mira, le caigo mal», ¿qué distorsión comete?",
+    "options": [
+      "Pensamiento dicotómico, al clasificar a todos los usuarios en buenos o malos sin términos medios",
+      "Inferencia arbitraria, al extraer una conclusión negativa sin contar con pruebas que la confirmen",
+      "Sobregeneralización, al aplicar una regla permanente tras haber cometido un fallo técnico puntual",
+      "Descalificación de lo positivo, al ignorar los logros alcanzados durante las sesiones anteriores"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "D",
+    "q": "¿Qué mecanismo de defensa emplea un profesional que inventa excusas tranquilizadoras para justificar no haber hecho un registro?",
+    "options": [
+      "Anticipación, al prever las consecuencias administrativas que tendrá el olvido en el expediente",
+      "Altruismo, al priorizar el bienestar emocional del equipo por encima de las normas escritas",
+      "Racionalización, al buscar justificaciones aparentemente lógicas para ocultar una realidad incómoda",
+      "Idealización, al atribuir cualidades extraordinarias a la organización del turno de mañana"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "D",
+    "q": "¿Por qué es obligatorio comprobar el feedback del receptor tras dar una indicación importante en los cuidados?",
+    "options": [
+      "Porque garantiza que el mensaje verbal supere el 55% de impacto propuesto por Albert Mehrabian",
+      "Porque permite demostrar la autoridad técnica del profesional frente a los usuarios dependientes",
+      "Porque verifica que el mensaje se ha comprendido bien tras superar los 6 pasos de pérdida posible",
+      "Porque sustituye el registro escrito en los partes diarios ahorrando tiempo al equipo técnico"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "D",
+    "q": "Al interactuar con un usuario que presenta afasia o deterioro neurocognitivo, ¿cómo debemos adaptar el mensaje verbal?",
+    "options": [
+      "Hablando en tono infantilizado con diminutivos para que el mensaje resulte mucho más afectuoso",
+      "Empleando frases cortas, claras y sencillas apoyadas en pictogramas o gestos naturales de adulto",
+      "Elevando considerablemente el volumen de voz aunque la persona no presente ningún déficit auditivo",
+      "Utilizando oraciones largas con tecnicismos médicos para estimular su capacidad de comprensión"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "D",
+    "q": "¿Qué consecuencias suele sufrir a medio plazo un profesional que mantiene de forma habitual un estilo de comunicación pasivo?",
+    "options": [
+      "Sobrecarga laboral, acumulación de frustración personal y un elevado riesgo de sufrir burnout",
+      "Consolidación de una alta autoestima y reconocimiento unánime por parte de familias y equipo",
+      "Ruptura inmediata con los compañeros por imponer sus criterios mediante gritos y sarcasmo",
+      "Control absoluto de los tiempos del turno al delegar sus tareas en el resto de auxiliares"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "D",
+    "q": "¿En qué consiste la técnica de «Asertividad Empática» ante una demanda de un familiar en un momento inoportuno?",
+    "options": [
+      "En ceder inmediatamente a su petición para evitar que presente una reclamación en dirección",
+      "En validar primero su emoción o preocupación antes de marcar con claridad el límite profesional",
+      "En preguntarle qué es exactamente lo que le molesta sin ofrecer ninguna alternativa de atención",
+      "En ignorar la presencia del familiar hasta terminar todas las tareas pendientes en la planta"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "D",
+    "q": "Un compañero te reprocha algo de forma vaga («Es que contigo no se puede trabajar»). ¿Qué técnica te permite concretar?",
+    "options": [
+      "La técnica del sándwich, elogiando su puntualidad antes de pedirle que cambie de turno",
+      "La pregunta asertiva, pidiendo información concreta sobre qué conducta específica le ha molestado",
+      "La asertividad negativa, admitiendo que tiene razón en todo para cerrar pronto la discusión",
+      "El disco rayado, repitiendo sin parar que eres un buen profesional con mucha experiencia"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "D",
+    "q": "¿Cuál de los siguientes mitos sobre las habilidades sociales en la dependencia es falso según la evidencia técnica?",
+    "options": [
+      "Que pueden entrenarse y perfeccionarse mediante aprendizaje estructurado a lo largo de la vida",
+      "Que buscan el beneficio mutuo (Win-Win) y protegen la salud mental del profesional sociosanitario",
+      "Que deben ir acompañadas de valores éticos para evitar convertirse en herramientas de manipulación",
+      "Que basta con ser educado y amable, cuando en realidad exige flexibilidad para adaptar el lenguaje"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "D",
+    "q": "En la teoría de Kohlberg, ¿qué caracteriza al estadio 3 denominado «Expectativas interpersonales» (11 a 15 años)?",
+    "options": [
+      "El anhelo de ser considerado buena persona para ser aceptado y querido, primando intereses compartidos",
+      "El cumplimiento estricto del deber cívico y las leyes para mantener el orden del sistema social",
+      "El compromiso social guiado por principios éticos universales por encima de las normas vigentes",
+      "La obediencia ciega a la autoridad adulta motivada exclusivamente por el miedo al castigo físico"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "D",
+    "q": "¿Qué es el «Autoconocimiento Emocional» dentro de los cinco pilares de la Inteligencia Emocional?",
+    "options": [
+      "La habilidad de resolver conflictos grupales mediando entre personas con intereses opuestos",
+      "La capacidad de identificar qué sentimos en cada momento y qué estímulo concreto lo desencadena",
+      "La capacidad de influir en las emociones de los usuarios para que obedezcan sin protestar",
+      "El dominio técnico de ejercicios de relajación muscular para aplicarlos antes de dormir"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "D",
+    "q": "¿Qué mecanismo de defensa de distorsión de la realidad consiste en atribuir cualidades exageradamente positivas o negativas a otros?",
+    "options": [
+      "El sentido del humor, al destacar aspectos divertidos para reducir la tensión del equipo",
+      "La omnipotencia, al actuar como si se tuviera un poder superior a las circunstancias reales",
+      "La idealización o devaluación, que altera gravemente la percepción objetiva de las personas",
+      "La fantasía, al evadirse en la imaginación en lugar de afrontar los problemas cotidianos"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "D",
+    "q": "Dentro de los componentes no verbales, ¿qué aspectos engloba la «Apariencia Personal» del profesional TAPSD?",
+    "options": [
+      "La distancia en metros que se mantiene respecto al usuario durante las actividades de ocio",
+      "La orientación erguida del tronco y el contacto visual directo a la altura de los ojos",
+      "El volumen audible, el ritmo pausado y los silencios comprensivos utilizados al conversar",
+      "La higiene, el aliño y la pulcritud del uniforme, transmitiendo orden, respeto y seguridad técnica"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "D",
+    "q": "¿Qué diferencia a la barrera de escucha «Reactiva» de la barrera «Egocéntrica»?",
+    "options": [
+      "En la reactiva el oyente solo prepara su defensa y en la egocéntrica lleva el tema a su terreno",
+      "La reactiva ocurre cuando hay mucho ruido ambiental y la egocéntrica cuando hay mala iluminación",
+      "Ambas son técnicas positivas de escucha activa que favorecen la empatía con el usuario",
+      "La reactiva consiste en tomar apuntes excesivos y la egocéntrica en mantener la mente abierta"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "D",
+    "q": "En los ejes continuos de rasgos de personalidad, ¿qué describe el eje «Autosuficiencia vs. Dependencia»?",
+    "options": [
+      "La iniciativa y movimiento constante frente a la pasividad ante las tareas de la vida diaria",
+      "La orientación hacia la interacción social externa frente a la preferencia por el mundo interior",
+      "La alta reactividad afectiva frente a la estabilidad emocional o frialdad ante los estímulos",
+      "La actuación según criterio propio frente a la necesidad constante de aprobación de los demás"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "D",
+    "q": "Según Nathaniel Branden, ¿qué implica el pilar de la autoestima denominado «Autorresponsabilidad»?",
+    "options": [
+      "Asumir el control de las propias decisiones, acciones y bienestar sin culpar a otras personas",
+      "Coherencia ética entre los valores declarados y la conducta cotidiana en el puesto de trabajo",
+      "Fijar metas vitales realistas estableciendo planes de acción concretos para alcanzarlas",
+      "Aceptar la realidad objetiva sin negar los hechos desagradables que ocurren en el entorno"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "E",
+    "q": "¿Cuál es la definición técnica más precisa de las Habilidades Sociales (HHS) en el contexto TAPSD?",
+    "options": [
+      "Normas administrativas internas que regulan el horario y las funciones de cada categoría laboral",
+      "Capacidades innatas de simpatía que permiten caer bien a los usuarios desde el primer contacto",
+      "Conductas aprendidas para interactuar de forma eficaz y respetuosa sin vulnerar derechos ajenos",
+      "Estrategias persuasivas diseñadas para lograr que las familias acepten cualquier norma del centro"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "E",
+    "q": "¿Qué efecto positivo tienen las habilidades sociales del técnico directamente sobre la persona usuaria?",
+    "options": [
+      "Sustituyen el contacto con sus familiares cercanos mediante la relación exclusiva con el personal",
+      "Garantizan que el usuario obedezca todas las indicaciones sin expresar dudas ni preferencias",
+      "Preservan su dignidad e identidad adulta, reducen su ansiedad y fomentan su participación en AVD",
+      "Eliminan la necesidad de utilizar ayudas técnicas durante las transferencias y el aseo diario"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "E",
+    "q": "¿Qué riesgo ético conlleva basar la atención a los usuarios en la «Simpatía» en lugar de la «Empatía Profesional»?",
+    "options": [
+      "Generar una distancia excesiva que impide comprender las necesidades básicas de los residentes",
+      "Provocar un agotamiento emocional inmediato que obliga al profesional a solicitar la baja laboral",
+      "Ofrecer un trato desigual favoreciendo a quienes nos caen bien frente al derecho a igual calidad",
+      "Utilizar un lenguaje excesivamente técnico que dificulta la comprensión de las personas mayores"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "E",
+    "q": "Según Albert Mehrabian, cuando existe incongruencia entre lo que decimos y cómo lo expresamos, ¿qué canal tiene mayor impacto?",
+    "options": [
+      "Las palabras exactas pronunciadas, que representan el 55% de la credibilidad del mensaje emitido",
+      "El contexto físico y la iluminación de la sala, que determinan el 70% de la comprensión mutua",
+      "La comunicación no verbal (55%), seguida del paralenguaje (38%), frente al 7% de las palabras",
+      "El registro escrito en el expediente clínico, que supera cualquier señal gestual del profesional"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "E",
+    "q": "Si necesitas realizar una cura o higiene personal a un usuario, ¿en qué zona proxémica debes situarte y cómo actuar?",
+    "options": [
+      "En la zona social (1,5-3 m), manteniendo distancia para proteger su intimidad física y emocional",
+      "En la zona íntima (0-0,5 m), pidiendo permiso previo y explicando con calma cada paso a realizar",
+      "En la zona pública (+3 m), dando indicaciones en voz alta para que realice la tarea de forma autónoma",
+      "En la zona personal (0,5-1,5 m), evitando cualquier contacto físico directo durante todo el aseo"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "E",
+    "q": "Un técnico piensa: «Si no me sale perfecta esta actividad grupal, soy un completo fracaso como profesional». ¿Qué distorsión es?",
+    "options": [
+      "Pensamiento «Todo o Nada» o dicotómico, al evaluar el desempeño en extremos absolutos sin matices",
+      "Personalización, al atribuirse la responsabilidad de un fallo ocurrido en otro turno distinto",
+      "Inferencia arbitraria, al suponer lo que piensan sus compañeros sin haber hablado con ellos",
+      "Abstracción selectiva, al recordar únicamente las críticas recibidas hace varios meses atrás"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "E",
+    "q": "Un compañero te felicita por tu paciencia con un usuario complejo y piensas: «Lo dice solo por compromiso». ¿Qué distorsión es?",
+    "options": [
+      "Filtro mental, al centrarse exclusivamente en los errores técnicos cometidos durante la semana",
+      "Interpretación del pensamiento, al anticipar que el compañero te pedirá un favor a cambio",
+      "Sobregeneralización, al extraer una regla universal a partir de un comentario positivo aislado",
+      "Descalificación de lo positivo, al restar valor y autenticidad a los logros o reconocimientos"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "E",
+    "q": "¿Qué diferencia al estilo comunicativo «Agresivo» del estilo «Asertivo» en una reunión interdisciplinar?",
+    "options": [
+      "El agresivo mantiene postura encorvada y voz baja, mientras el asertivo señala con el dedo al hablar",
+      "El agresivo impone sus derechos vulnerando los ajenos (Yo-Yo) y el asertivo dialoga con respeto (Yo+Tú)",
+      "El agresivo utiliza mensajes en primera persona y el asertivo recurre al sarcasmo para convencer",
+      "El agresivo evita opinar para no molestar y el asertivo impone su criterio mediante interrupciones"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "E",
+    "q": "¿Cuándo está especialmente indicado aplicar la «Técnica de Ignorar» dentro del repertorio de habilidades asertivas?",
+    "options": [
+      "Cuando un compañero nos pide información clínica relevante sobre la medicación de un residente",
+      "Cuando deseamos felicitar a un miembro del equipo por su implicación en un taller terapéutico",
+      "Cuando un usuario solicita ayuda básica para ir al baño durante el horario de cambio de turno",
+      "Cuando el interlocutor está muy alterado o agresivo, posponiendo el diálogo hasta recuperar calma"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "E",
+    "q": "¿En qué consiste la «Asertividad Negativa» como herramienta de comunicación profesional?",
+    "options": [
+      "En responder con críticas personales cuando un familiar señala un fallo en la atención recibida",
+      "En saber decir «no» con serenidad o admitir un error propio sin dramatismos ni excusas vacías",
+      "En rechazar cualquier propuesta de mejora planteada por otros compañeros del equipo técnico",
+      "En mantener una actitud pesimista frente a las posibilidades de rehabilitación de los usuarios"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "E",
+    "q": "Cuando un usuario con déficit visual está sentado en el salón y vas a acercarte para ayudarle, ¿qué debes hacer primero?",
+    "options": [
+      "Avisar previamente con la voz identificándote y explicando qué vas a hacer antes de tocarle",
+      "Hablarle desde el otro extremo del salón a más de cuatro metros para respetar su espacio personal",
+      "Tocarle suavemente el hombro por detrás antes de hablar para no asustarle con el sonido de tu voz",
+      "Sujetarle directamente del brazo para guiarle hacia el comedor sin hacerle perder tiempo"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "E",
+    "q": "Según la Atención Centrada en la Persona (ACP), ¿qué respuesta ejemplifica una correcta «validación emocional» ante el llanto?",
+    "options": [
+      "«Veo que esta situación le hace sufrir mucho; me quedo aquí a su lado para acompañarle y apoyarle»",
+      "«Si sigue llorando así se va a poner peor, así que cálmese ahora mismo y tómese la merienda»",
+      "«No llore más por eso, que ya es mayor y aquí en la residencia tiene todo lo que necesita»",
+      "«No tiene ningún motivo real para estar triste porque sus hijos vinieron a verle el domingo»"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "E",
+    "q": "¿Qué valores éticos deben acompañar siempre a las habilidades sociales para evitar que deriven en manipulación?",
+    "options": [
+      "Rapidez, obediencia ciega, competitividad individual, reserva absoluta y distancia afectiva",
+      "Simpatía selectiva, autoridad jerárquica, persuasión comercial y flexibilidad normativa",
+      "Intuición espontánea, improviso técnico, paternalismo protector y discreción administrativa",
+      "Respeto, tolerancia, confidencialidad, sinceridad, compañerismo y buena fe en cada actuación"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "E",
+    "q": "En el desarrollo moral de Kohlberg, ¿qué caracteriza al estadio 2 «Individualista-Instrumental» (8 a 11 años)?",
+    "options": [
+      "La consolidación de la autonomía moral guiada por el deber cívico y el respeto al orden social",
+      "Una perspectiva individualista que empieza a considerar el punto de vista ajeno e intereses mutuos",
+      "El compromiso con principios universales de justicia por encima de cualquier norma establecida",
+      "La obediencia absoluta al adulto basada exclusivamente en el temor a recibir un castigo físico"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "E",
+    "q": "Dentro de las estrategias de pensamiento racional, ¿qué facultad evalúa «¿Qué pasará si elijo esta opción?»?",
+    "options": [
+      "El pensamiento causal, centrado en identificar el origen histórico del conflicto interpersonal",
+      "El pensamiento consecuencial, que valora los efectos futuros de cada alternativa antes de actuar",
+      "El pensamiento medio-fin, orientado exclusivamente a enumerar los recursos materiales disponibles",
+      "El pensamiento de perspectiva, enfocado en comprender las emociones que experimenta el otro"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "E",
+    "q": "¿Qué mecanismo de defensa consiste en atribuir a otras personas sentimientos, impulsos o pensamientos propios inaceptables?",
+    "options": [
+      "La proyección, que funciona como una estrategia evitativa para no reconocer conflictos internos",
+      "La omnipotencia, al comportarse como si se poseyera un control absoluto sobre cualquier suceso",
+      "La negación, al rechazar la existencia de una enfermedad diagnosticada por el equipo médico",
+      "La afiliación, al buscar apoyo emocional y consejo práctico en los compañeros del equipo"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "E",
+    "q": "Dentro del paralenguaje, ¿qué elementos se incluyen en la categoría de «Calificativos vocales»?",
+    "options": [
+      "La postura erguida, la mirada directa a los ojos y la pulcritud del uniforme profesional",
+      "Las vocalizaciones breves de seguimiento como «uh», «hum» o «mm» durante la escucha activa",
+      "Las manifestaciones fisiológicas sonoras como reír, suspirar, gemir o jadear al conversar",
+      "El volumen audible sin gritar, el tono cálido, el ritmo pausado y los silencios comprensivos"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "E",
+    "q": "En las 10 reglas del arte de escuchar, ¿qué propone la regla número 1 «Encontrar áreas de interés»?",
+    "options": [
+      "Tomar notas exhaustivas de cada palabra pronunciada para no perder ningún detalle secundario",
+      "Interrumpir al usuario para reconducir la conversación hacia asuntos más entretenidos para ambos",
+      "Buscar elementos de utilidad y aprendizaje incluso cuando el interlocutor trata temas áridos o lentos",
+      "Escuchar únicamente los temas que coinciden con nuestras aficiones personales y desconectar en el resto"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "E",
+    "q": "Según Nathaniel Branden, ¿en qué consiste el pilar de la autoestima «Autoafirmación»?",
+    "options": [
+      "En negar los propios errores profesionales para mantener una imagen impecable ante el equipo",
+      "En fijar objetivos laborales a largo plazo diseñando un cronograma detallado de actividades",
+      "En aceptar las críticas destructivas sin defender nunca el propio criterio ni las necesidades propias",
+      "En respetar y defender las propias necesidades, valores y convicciones de forma legítima y digna"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "E",
+    "q": "¿Qué eje continuo de rasgos de personalidad diferencia la «iniciativa y movimiento» frente a la «pasividad»?",
+    "options": [
+      "El eje Actividad vs. Inactividad, que describe el grado de dinamismo y proactividad habitual",
+      "El eje Impulsividad vs. Serenidad, referido a la reacción sin filtro frente a la reflexión previa",
+      "El eje Emotividad vs. Falta de emotividad, referido a la intensidad de la reactividad afectiva",
+      "El eje Extraversión vs. Introversión, referido a la orientación social externa o interna"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "F",
+    "q": "Un usuario te pregunta algo técnico y empleas palabras como «disfagia», «decúbito» o «ablución» sin explicarlas. ¿Qué barrera creas?",
+    "options": [
+      "Una barrera semántica, provocada por el uso de tecnicismos o términos desconocidos para el receptor",
+      "Una barrera fisiológica, originada por un déficit sensorial auditivo o visual del interlocutor",
+      "Una barrera ambiental, derivada de las condiciones acústicas y lumínicas de la sala de estar",
+      "Una barrera administrativa, causada por el mal funcionamiento de los registros entre turnos"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "F",
+    "q": "¿Cuál es la actitud correcta del profesional TAPSD ante el pilar ético de «Aceptación del Aprendizaje y el Cambio» en ACP?",
+    "options": [
+      "Aplicar siempre exactamente las mismas rutinas aprendidas hace años sin cuestionar su eficacia",
+      "Delegar en la dirección cualquier ajuste en el plan de atención individual sin aportar observaciones",
+      "Mantener una actitud abierta, humilde y reflexiva cada día para adaptar los apoyos a la persona",
+      "Considerar que una vez obtenido el título profesional ya no es necesario revisar las habilidades"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "F",
+    "q": "¿Qué caracteriza a la barrera de escucha activa denominada «Prejuzgada»?",
+    "options": [
+      "Distraerse mirando el reloj o pensando en tareas domésticas mientras el usuario nos habla",
+      "Interrumpir constantemente al interlocutor antes de que termine de formular su idea principal",
+      "Seleccionar únicamente los datos que confirman nuestras propias opiniones descartando el resto",
+      "Etiquetar y juzgar de antemano lo que el otro va a decir sin escucharlo con apertura real"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "F",
+    "q": "Si un compañero te interrumpe continuamente al dar el parte, ¿cómo formularías un «Mensaje Yo» completo?",
+    "options": [
+      "Eres un maleducado que nunca respeta el turno de palabra cuando estamos pasando la información",
+      "Siempre haces lo mismo en todos los cambios de turno y así es imposible coordinarse en planta",
+      "Cuando me interrumpes al dar el parte me siento desorganizado; te pido que esperes a que acabe",
+      "No importa, sigue hablando tú primero que ya me quedaré yo más tarde para apuntar mis cosas"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "F",
+    "q": "¿Qué efecto tiene la «Infantilización del lenguaje» (uso de voz de bebé o diminutivos) en la atención a personas mayores?",
+    "options": [
+      "Constituye una barrera psicológica que resta dignidad, autonomía y estatus adulto al usuario",
+      "Representa una técnica asertiva positiva recomendada para reducir la ansiedad ante el aseo",
+      "Favorece la empatía profesional al generar un vínculo afectivo similar al entorno familiar",
+      "Mejora la comprensión auditiva en personas con hipoacusia leve sin necesidad de vocalizar"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "F",
+    "q": "En el esquema de la comunicación, ¿qué función cumple el «Código» y qué ejemplos son válidos en TAPSD?",
+    "options": [
+      "Es el espacio físico donde ocurre la charla, como el comedor, el pasillo o el domicilio",
+      "Es la respuesta observable a largo plazo que confirma si el usuario ha cumplido una tarea",
+      "Es el conjunto de signos compartidos que permiten cifrar el mensaje: idioma, SAAC o pictogramas",
+      "Es el soporte material por donde viajan las ondas sonoras o los estímulos táctiles directos"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "F",
+    "q": "¿Qué diferencia al «Marco-Problema» del «Marco-Objetivo» cuando surge un conflicto en el equipo interdisciplinar?",
+    "options": [
+      "Ambos marcos son idénticos y sirven para redactar las incidencias graves en el libro de turno",
+      "El Marco-Problema se usa con las familias y el Marco-Objetivo exclusivamente con los residentes",
+      "El Marco-Problema busca recursos disponibles y el Marco-Objetivo analiza las metas futuras",
+      "El Marco-Problema se centra en la queja y la culpa, mientras el Marco-Objetivo orienta a soluciones"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "F",
+    "q": "Un técnico piensa: «Ese familiar me ha pedido hablar con la directora porque seguro que quiere denunciarme». ¿Qué distorsión es?",
+    "options": [
+      "Descalificación de lo positivo, al ignorar las buenas valoraciones recibidas durante el mes",
+      "Interpretación del pensamiento, al creer saber lo que otra persona piensa sin evidencia real",
+      "Sobregeneralización, al concluir que todas las familias del centro son conflictivas y exigentes",
+      "Abstracción selectiva, al fijarse solo en un detalle menor olvidando el conjunto de la jornada"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "F",
+    "q": "¿Qué impacto producen las habilidades sociales del TAPSD en el funcionamiento del «Equipo Interdisciplinar»?",
+    "options": [
+      "Sustituyen las funciones de coordinación del responsable asistencial en cada turno de trabajo",
+      "Permiten que cada profesional trabaje de forma aislada sin necesidad de realizar reuniones",
+      "Garantizan un flujo de información preciso sin errores y protegen frente al desgaste o burnout",
+      "Evitan tener que registrar los cambios de estado de los usuarios en los partes de enfermería"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "F",
+    "q": "En la técnica de «confirmar o aclarar» dentro de la escucha activa, ¿qué actuación realiza el profesional?",
+    "options": [
+      "Permanece en silencio absoluto asintiendo con la cabeza sin formular ninguna pregunta al usuario",
+      "Formula preguntas abiertas o de verificación para asegurarse de haber comprendido bien el mensaje",
+      "Cambia de tema suavemente cuando detecta que el usuario expresa emociones intensas de tristeza",
+      "Repite literalmente en voz alta todas las palabras del usuario con el mismo tono emocional"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "F",
+    "q": "¿Por qué la comunicación paraverbal (38%) resulta tan determinante cuando atendemos a una persona nerviosa o desorientada?",
+    "options": [
+      "Porque sustituye el uso de pictogramas y sistemas alternativos en usuarios con afasia severa",
+      "Porque un tono cálido, volumen moderado y ritmo pausado transmiten calma más allá de las palabras",
+      "Porque las palabras exactas carecen de cualquier significado en personas mayores de setenta años",
+      "Porque permite mantener una distancia física superior a tres metros sin necesidad de acercarse"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "F",
+    "q": "Un usuario se niega a ducharse hoy. Aplicando «Pensamiento de Perspectiva», ¿qué se plantea el profesional?",
+    "options": [
+      "¿Cómo se estará sintiendo él ahora mismo y qué temor o pudor puede haber detrás de su negativa?",
+      "¿Qué sanción o consecuencia negativa le ocurrirá si no cumple el horario establecido de higiene?",
+      "¿Quién fue el compañero del turno anterior que no le preparó la ropa limpia encima de la cama?",
+      "¿Cómo puedo convencerle rápidamente para terminar mi lista de tareas antes de la hora del café?"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "F",
+    "q": "En los 6 estadios morales de Kohlberg, ¿qué caracteriza al estadio 4 «Sistemas sociales y de conciencia» (15 a 19 años)?",
+    "options": [
+      "Se inicia la autonomía moral actuando por deber, responsabilidad y cumplimiento de normas por el bien común",
+      "Se prioriza el interés individual inmediato intercambiando favores concretos con los demás",
+      "Se cuestionan todas las leyes sociales aplicando principios éticos universales abstractos",
+      "Se obedece exclusivamente por miedo al castigo impuesto por figuras de autoridad externa"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "F",
+    "q": "¿Cuál de estos mecanismos de defensa pertenece al grupo de los «Adaptativos» (saludables y eficaces)?",
+    "options": [
+      "La proyección de los propios sentimientos de enfado hacia otros compañeros del mismo turno",
+      "La negación de un problema médico grave para evitar la angustia que produce el diagnóstico",
+      "El sentido del humor, que permite afrontar el estrés destacando aspectos distendidos sin negar realidad",
+      "La idealización extrema de un profesional seguida de una devaluación repentina ante cualquier fallo"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "F",
+    "q": "Dentro de la cinésica, ¿qué comunica una postura con los «brazos cruzados» frente a una postura «erguida y relajada»?",
+    "options": [
+      "Ambas posturas comunican exactamente lo mismo si se acompañan de una sonrisa de cortesía",
+      "Los brazos cruzados proyectan cierre o rechazo, mientras la postura erguida y abierta invita al diálogo",
+      "Los brazos cruzados son recomendables en la zona íntima para proteger el uniforme del técnico",
+      "Los brazos cruzados transmiten máxima disponibilidad y la postura erguida indica rigidez agresiva"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "F",
+    "q": "En el paralenguaje, ¿qué ejemplos corresponden a las «Caracterizaciones vocales»?",
+    "options": [
+      "Las muletillas de confirmación como «mm», «ajá» o «uh» empleadas mientras el otro habla",
+      "El uso de tecnicismos sanitarios complejos durante las reuniones con familiares de residentes",
+      "El timbre grave de la voz, la velocidad rápida al hablar y las pausas silenciosas prolongadas",
+      "Acciones sonoras no verbales como reír, suspirar, gemir, bostezar o jadear durante la interacción"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "F",
+    "q": "Según las 10 reglas del arte de escuchar, ¿qué indica la regla 3 «Dominar los sentimientos»?",
+    "options": [
+      "Anotar en el registro diario todas las reacciones emocionales observadas durante la entrevista",
+      "No juzgar ni discutir impulsivamente antes de haber comprendido por completo el mensaje del otro",
+      "Evitar que el interlocutor exprese sentimientos tristes reconduciendo la charla hacia temas alegres",
+      "Reprimir cualquier emoción propia fingiendo indiferencia absoluta ante el sufrimiento del usuario"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "F",
+    "q": "En la Reestructuración Cognitiva de 4 fases, ¿qué se realiza exactamente en la fase 2 denominada «Análisis»?",
+    "options": [
+      "Evaluar de forma objetiva las pruebas reales a favor y en contra del pensamiento automático",
+      "Detectar por primera vez el pensamiento automático irracional que dispara el malestar emocional",
+      "Consolidar nuevas respuestas emocionales y conductuales serenas en situaciones cotidianas",
+      "Aplicar la relajación progresiva de Jacobson para eliminar la tensión muscular acumulada"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "F",
+    "q": "Según Nathaniel Branden, ¿qué significa el pilar de la autoestima «Autoaceptación»?",
+    "options": [
+      "Buscar constantemente la aprobación externa para confirmar la propia valía como profesional",
+      "Aceptar sin cuestionar todas las exigencias de los demás aunque vulneren los propios derechos",
+      "Conformarse con cualquier error técnico sin esforzarse por mejorar las competencias profesionales",
+      "Aceptarse a uno mismo con sus luces y limitaciones sin caer en culpas ni autocríticas destructivas"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "F",
+    "q": "¿Qué barrera comunicativa se produce cuando el televisor está a todo volumen y hay deslumbramientos en la sala?",
+    "options": [
+      "Barrera semántica, provocada por la dificultad para interpretar los mensajes emitidos por televisión",
+      "Barrera sociocultural, derivada de las diferentes costumbres y hábitos de ocio de los usuarios",
+      "Barrera psicológica, originada por el rechazo emocional hacia las actividades grupales del centro",
+      "Barrera ambiental o física, generada por estímulos externos del entorno que interfieren el canal"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "G",
+    "q": "En el Triángulo de la Conducta Humana, si un usuario grita y tú piensas «Lo hace para fastidiarme», ¿qué ocurrirá probablemente?",
+    "options": [
+      "Lograrás desescalar la situación gracias a que el pensamiento no influye en la emoción sentida",
+      "Sentirás rabia o tensión y responderás con una conducta defensiva que escalará el conflicto",
+      "Mantendrás una postura asertiva equilibrada sin necesidad de regular tus propios impulsos",
+      "Experimentarás serenidad inmediata y aplicarás automáticamente una validación emocional empática"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "G",
+    "q": "¿Cuál es la clave fundamental de la Inteligencia Emocional aplicada al cuidado de personas dependientes?",
+    "options": [
+      "Evitar cualquier vínculo comunicativo con familias exigentes para prevenir tensiones en el turno",
+      "Priorizar siempre las emociones propias por encima de las necesidades de las personas atendidas",
+      "Lograr no sentir ninguna emoción durante la jornada para actuar con frialdad estrictamente técnica",
+      "Saber reconocer y gestionar lo que sentimos para actuar con profesionalidad sin reprimir emociones"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "G",
+    "q": "¿Qué diferencia a la barrera de escucha «Selectiva» de la barrera «Impulsiva»?",
+    "options": [
+      "La selectiva ocurre por ruidos externos y la impulsiva por desconocimiento del idioma del usuario",
+      "En la selectiva solo se oye lo que interesa y en la impulsiva se interrumpe antes de dejar acabar",
+      "La selectiva consiste en tomar demasiadas notas y la impulsiva en mantener silencios prolongados",
+      "Ambas consisten en parafrasear las ideas principales del interlocutor para confirmar el mensaje"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "G",
+    "q": "Un familiar te dice: «Aquí nunca hacéis caso a lo que os pedimos». ¿Cómo responderías aplicando «Asertividad Empática»?",
+    "options": [
+      "Eso es totalmente falso, aquí trabajamos sin parar todo el día y nadie nos agradece el esfuerzo",
+      "Hablaremos otro día cuando se le haya pasado el enfado y pueda hablar con más educación",
+      "Tiene usted toda la razón, somos un desastre y nunca atendemos bien las peticiones de las familias",
+      "Comprendo su preocupación por su padre; revisemos juntos qué necesita para darle respuesta hoy"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "G",
+    "q": "¿Qué elementos componen el esquema básico de la comunicación interpersonal?",
+    "options": [
+      "Emisor, receptor, mensaje, código, canal, contexto o entorno y feedback o retroalimentación",
+      "Identificación, análisis objetivo, generación de alternativas y cambio de esquemas mentales",
+      "Pensamiento, emoción, conducta, autoestima, empatía profesional y neutralidad afectiva",
+      "Cinésica, proxémica, paralenguaje, apariencia personal, edadismo e infantilización verbal"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "G",
+    "q": "Cuando un técnico asume la culpa de un retraso en las comidas causado por una avería en cocina, ¿qué distorsión comete?",
+    "options": [
+      "Inferencia arbitraria, al suponer que los usuarios están enfadados sin haberles preguntado",
+      "Abstracción selectiva, al fijarse únicamente en el postre ignorando el resto del menú servido",
+      "Personalización, al atribuirse la responsabilidad de hechos externos ajenos a su control real",
+      "Pensamiento dicotómico, al valorar el servicio de comedor como un éxito total o un fracaso"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "G",
+    "q": "¿Por qué es importante mantener la mirada «directa, suave y a la altura de los ojos del usuario» en cinésica?",
+    "options": [
+      "Porque sustituye el uso de ayudas técnicas auditivas en personas con sordera profunda bilateral",
+      "Porque transmite respeto, igualdad adulta y atención plena, especialmente si usa silla de ruedas",
+      "Porque evita tener que emplear palabras sencillas durante las actividades de la vida diaria",
+      "Porque permite intimidar sutilmente al usuario para que colabore rápido en las movilizaciones"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "G",
+    "q": "Si un usuario utiliza silla de ruedas y quieres conversar con él en la zona personal, ¿cómo debes posicionarte?",
+    "options": [
+      "Sentándote o agachándote a la altura de sus ojos entre 0,5 y 1,5 metros con postura abierta",
+      "De pie justo detrás de su silla inclinándote sobre su cabeza mientras le hablas en voz alta",
+      "A más de tres metros de distancia para evitar invadir su espacio personal de seguridad",
+      "De pie con los brazos cruzados frente a él para marcar claramente tu rol técnico en el centro"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "G",
+    "q": "¿Qué riesgo conlleva el uso habitual del estilo de comunicación «Agresivo» en un equipo sociosanitario?",
+    "options": [
+      "Genera tensión, rechazo, actitudes defensivas y deterioro de la cohesión del equipo de trabajo",
+      "Produce acumulación silenciosa de sobrecarga en el propio emisor por no expresar sus límites",
+      "Garantiza la validación emocional de los usuarios al establecer normas claras e indiscutibles",
+      "Fomenta la participación activa y la confianza mutua entre todos los turnos de la residencia"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "G",
+    "q": "En las 10 reglas del arte de escuchar, ¿qué significa la regla 4 «Escuchar ideas»?",
+    "options": [
+      "Proponer continuamente ideas propias al interlocutor para resolverle sus problemas cuanto antes",
+      "Evaluar la corrección gramatical de las frases empleadas antes de emitir una respuesta verbal",
+      "Captar la idea central y esencial del mensaje por encima de datos sueltos o anecdóticos",
+      "Anotar todas las fechas y cifras exactas que menciona el usuario durante la entrevista inicial"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "G",
+    "q": "¿Cómo contribuye la aplicación de habilidades sociales a prevenir el «burnout» o desgaste profesional en TAPSD?",
+    "options": [
+      "Evita tener que atender a usuarios con deterioro cognitivo avanzado o conductas complejas",
+      "Permite realizar las tareas físicas en la mitad de tiempo reduciendo el esfuerzo muscular",
+      "Facilita el apoyo mutuo en el equipo, la gestión emocional serena y el establecimiento de límites",
+      "Elimina por completo cualquier situación de estrés o conflicto con familiares en la residencia"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "G",
+    "q": "Al transformar un problema en «Marco-Objetivo», ¿qué tipo de preguntas debemos formularnos?",
+    "options": [
+      "¿Cuánto tiempo más tendremos que soportar estas condiciones sin que nadie haga nada al respecto?",
+      "¿Por qué siempre me tocan a mí los casos más difíciles y quién tiene la culpa de este desorden?",
+      "¿Qué ha fallado exactamente en el pasado y cómo podemos demostrar quién cometió el error?",
+      "¿Qué queremos conseguir exactamente en esta situación y qué recursos o pasos tenemos para lograrlo?"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "G",
+    "q": "En el desarrollo moral de Kohlberg, ¿qué caracteriza al estadio 5 «Contrato social y derechos individuales» (+19 años)?",
+    "options": [
+      "La búsqueda exclusiva de aprobación afectiva por parte del grupo de iguales más cercano",
+      "La ausencia total de autonomía moral al depender siempre del criterio de las autoridades",
+      "El cumplimiento del contrato social por el bien común defendiendo derechos sin vulnerar los ajenos",
+      "La obediencia automática a las normas del adulto para evitar castigos físicos o reprimendas"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "G",
+    "q": "Dentro de las estrategias de pensamiento racional, ¿en qué consiste el «Pensamiento Causal» aplicado a una incidencia?",
+    "options": [
+      "En enumerar cinco posibles soluciones creativas para aplicarlas simultáneamente en el taller",
+      "En anticipar las emociones que sentirá la familia cuando le comuniquemos el cambio de habitación",
+      "En analizar de forma objetiva qué ha sucedido y cuál es el origen real del problema planteado",
+      "En diseñar el cronograma de medios materiales necesarios para ejecutar un plan de intervención"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "G",
+    "q": "¿Qué mecanismo de defensa adaptativo consiste en actuar en favor de otras personas de forma desinteresada y constructiva?",
+    "options": [
+      "El altruismo, que canaliza la energía hacia el apoyo genuino y saludable hacia los demás",
+      "La racionalización, al justificar mediante argumentos lógicos una conducta poco adecuada",
+      "La proyección, al atribuir a otros compañeros las propias inseguridades ante una tarea nueva",
+      "La negación, al evitar afrontar las consecuencias emocionales de una pérdida significativa"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "G",
+    "q": "¿Qué diferencia a la «Zona Personal» (0,5-1,5 m) de la «Zona Pública» (+3 m) en proxémica?",
+    "options": [
+      "No existe diferencia funcional, ya que la distancia física no influye en la calidad comunicativa",
+      "La personal es exclusiva para desconocidos y la pública para realizar transferencias posturales",
+      "La personal se emplea para charlas ante grupos grandes y la pública para el aseo en cama",
+      "La personal es idónea para conversaciones individuales y la pública para charlas a grupos amplios"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "G",
+    "q": "Según las 10 reglas del arte de escuchar, ¿qué recomienda la regla 5 «Tomar notas»?",
+    "options": [
+      "Redactar el informe completo mientras el familiar nos explica su preocupación en el despacho",
+      "Apuntar únicamente esquemas o palabras clave esenciales sin distraerse ni perder contacto visual",
+      "Transcribir literalmente cada frase del usuario sin levantar la vista del cuaderno de registro",
+      "Evitar escribir cualquier dato durante la reunión para confiar exclusivamente en la memoria"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "G",
+    "q": "En los ejes continuos de rasgos de personalidad, ¿qué describe el eje «Impulsividad vs. Serenidad»?",
+    "options": [
+      "La reacción inmediata sin filtro previo frente a la capacidad de reflexión pausada antes de actuar",
+      "La preferencia por la interacción grupal frente a la necesidad de espacios de introspección",
+      "La orientación altruista hacia los demás frente al foco centrado en los intereses propios",
+      "El grado de iniciativa motora frente a la tendencia a la pasividad en las tareas cotidianas"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "G",
+    "q": "Según Nathaniel Branden, ¿qué implica el pilar de la autoestima «Vivir con propósito»?",
+    "options": [
+      "Aceptar la realidad objetiva sin negar los hechos difíciles que surgen en el entorno laboral",
+      "Fijar metas realistas y diseñar planes de acción concretos para alcanzarlas con constancia",
+      "Mantener coherencia entre los valores internos y las acciones observables en la vida diaria",
+      "Defender las propias necesidades frente a los demás utilizando un estilo de comunicación firme"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "G",
+    "q": "En la Reestructuración Cognitiva de 4 fases, ¿qué se logra en la fase 4 denominada «Cambio de esquemas»?",
+    "options": [
+      "Detectar el pensamiento automático irracional en el instante en que aparece el malestar",
+      "Buscar pruebas objetivas que contradigan la interpretación catastrofista inicial del suceso",
+      "Redactar una lista de posibles alternativas realistas ante una situación conflictiva",
+      "Consolidar respuestas emocionales y conductuales más serenas y adaptativas ante futuros retos"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "H",
+    "q": "En el esquema comunicativo, ¿qué elemento constituye el medio físico por donde circula el mensaje (voz, vista, tacto)?",
+    "options": [
+      "El contexto, referido exclusivamente a las relaciones jerárquicas dentro del centro de día",
+      "El canal, que debe adaptarse a las capacidades sensoriales de la persona usuaria atendida",
+      "El feedback, que confirma de manera inmediata o diferida la comprensión del interlocutor",
+      "El código, formado por el conjunto de reglas gramaticales o pictogramas compartidos"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "H",
+    "q": "¿Por qué el mito «Las habilidades sociales sirven para convencer o manipular» es incompatible con la ética profesional?",
+    "options": [
+      "Porque las técnicas de comunicación no tienen ningún efecto real sobre la conducta de los usuarios",
+      "Porque la manipulación solo está permitida cuando el usuario presenta deterioro cognitivo leve",
+      "Porque el objetivo del técnico es imponer siempre su criterio sanitario por el bien del residente",
+      "Porque las HHS buscan el beneficio mutuo (Win-Win) y el respeto a los derechos sin manipulación"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "H",
+    "q": "¿Qué caracteriza a la técnica asertiva de «Asertividad Positiva» en la relación con compañeros y usuarios?",
+    "options": [
+      "Envolver una crítica sobre un error cometido entre dos comentarios amables de cortesía",
+      "Decir «no» con firmeza ante una petición injusta sin dar explicaciones innecesarias",
+      "Repetir con serenidad el mismo argumento varias veces hasta que el interlocutor ceda",
+      "Expresar de forma sincera, clara y oportuna el reconocimiento, aprecio o afecto hacia el otro"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "H",
+    "q": "Un familiar te pregunta con tono muy nervioso por qué su madre lleva hoy una camiseta distinta. ¿Qué respuesta muestra IE?",
+    "options": [
+      "Autorregular tu calma, validar su inquietud y explicarle con amabilidad que se cambió tras el desayuno",
+      "Contestarle molesto que hay muchos residentes y que no puede estar pendiente de cada prenda",
+      "Decirle que seguramente su madre habrá manchado la otra camiseta por ser muy descuidada",
+      "Ignorar su pregunta y seguir repartiendo la medicación para no perder tiempo en el pasillo"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "H",
+    "q": "¿Qué barrera comunicativa se produce cuando un profesional no tiene en cuenta las costumbres o creencias religiosas de un usuario?",
+    "options": [
+      "Barrera ambiental, causada por la falta de intimidad física en las habitaciones compartidas",
+      "Barrera orgánica o fisiológica, derivada de alteraciones en los órganos sensoriales o del habla",
+      "Barrera semántica, provocada por el empleo de abreviaturas clínicas en los partes diarios",
+      "Barrera sociocultural, originada por diferencias de origen, valores, tradiciones o religión"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "H",
+    "q": "Al aplicar el «sentido del tiempo» como técnica de escucha activa, ¿qué recurso utiliza el profesional?",
+    "options": [
+      "Acelerar el ritmo del habla para aprovechar la velocidad del pensamiento y terminar antes",
+      "Mirar constantemente el reloj para indicar al usuario que dispone de dos minutos para hablar",
+      "Interrumpir los silencios incómodos cambiando rápidamente hacia un tema de conversación ligero",
+      "Respetar los silencios comprensivos dando margen para que la persona organice sus ideas y emociones"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "H",
+    "q": "¿Qué diferencia a la «Abstracción Selectiva (Filtro Mental)» de la «Sobregeneralización»?",
+    "options": [
+      "La abstracción selectiva consiste en leer la mente ajena y la sobregeneralización en culparse",
+      "No existe diferencia, ya que ambos términos designan la evaluación en extremos de todo o nada",
+      "El filtro mental se centra solo en un detalle negativo ignorando lo positivo; la otra crea regla global",
+      "La abstracción selectiva ocurre solo en familias y la sobregeneralización en los profesionales"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "H",
+    "q": "En la comunicación con una persona que presenta afasia expresiva, ¿qué actitud facilita una interacción digna y eficaz?",
+    "options": [
+      "Completar todas sus frases rápidamente para ahorrarle el esfuerzo de intentar articular palabras",
+      "Hablarle con tono infantilizado y volumen muy elevado para estimular su atención auditiva",
+      "Darle tiempo sin prisas, usar frases sencillas, apoyar con pictogramas y validar sus intentos",
+      "Evitar hacerle preguntas directas dirigiéndose exclusivamente a sus familiares acompañantes"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "H",
+    "q": "Dentro de los 5 pilares de la Inteligencia Emocional, ¿en qué consiste la «Autorregulación o Autocontrol»?",
+    "options": [
+      "En dominar los impulsos inmediatos para no reaccionar en caliente ante gritos o provocaciones",
+      "En identificar exclusivamente qué emoción sentimos sin modificar nuestra respuesta conductual",
+      "En comprender el mapa mental de otra persona poniéndose en su lugar emocional con objetividad",
+      "En celebrar los pequeños avances de autonomía de los usuarios para mantener la ilusión laboral"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "H",
+    "q": "¿Por qué la «Técnica del Sándwich» resulta útil al señalar un aspecto de mejora a un compañero de equipo?",
+    "options": [
+      "Porque obliga al interlocutor a aceptar nuestra propuesta sin darle opción a expresar su opinión",
+      "Porque encuadra la crítica constructiva entre dos reconocimientos sinceros, reduciendo defensividad",
+      "Porque permite ocultar la crítica de forma que el compañero no se entere de qué ha hecho mal",
+      "Porque sustituye la necesidad de mantener reuniones de seguimiento sobre el cumplimiento de tareas"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "H",
+    "q": "Cuando un profesional practica «Escucha Activa» siguiendo la regla 6, ¿qué señales transmite al usuario?",
+    "options": [
+      "Muestra atención física y mental real mediante postura orientada, mirada cálida y seguimiento",
+      "Interrumpe cada pocos segundos para demostrar que ya conoce la solución a su problema",
+      "Permanece de pie junto a la puerta mirando el teléfono móvil mientras asiente mecánicamente",
+      "Toma notas sin levantar la cabeza del papel para registrar todos los detalles de la conversación"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "H",
+    "q": "¿Qué principio de la Atención Centrada en la Persona (ACP) exige acompañar el proyecto de vida sin juzgar su historia?",
+    "options": [
+      "El respeto a la diversidad sustentado en la neutralidad afectiva y la validación emocional",
+      "La sobreimplicación afectiva, consistente en asumir como propias las preocupaciones familiares",
+      "La simpatía selectiva, basada en establecer vínculos más estrechos con usuarios afines",
+      "La eficiencia técnica administrativa, centrada en cumplir los tiempos estipulados para cada tarea"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "H",
+    "q": "En los 6 estadios morales de Kohlberg, ¿qué diferencia al estadio 1 (Heterónoma) del estadio 4 (Sistemas sociales)?",
+    "options": [
+      "En el estadio 1 se obedece por miedo al castigo y en el 4 por deber y responsabilidad social",
+      "En el estadio 1 prima el contrato social adulto y en el 4 la búsqueda de aprobación infantil",
+      "Ambos estadios corresponden a la etapa adulta y se basan en principios éticos universales",
+      "En el estadio 1 existe plena autonomía moral y en el 4 se depende totalmente del criterio adulto"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "H",
+    "q": "¿Qué mecanismo de defensa de distorsión de la realidad consiste en evadirse en la imaginación en lugar de resolver el problema?",
+    "options": [
+      "El altruismo, al canalizar el malestar propio ayudando de forma desinteresada a los demás",
+      "La afiliación, al buscar apoyo emocional y consejo en compañeros o profesionales cercanos",
+      "La anticipación, al prever posibles obstáculos futuros para diseñar soluciones preventivas",
+      "La fantasía, que sustituye el afrontamiento real de la dificultad por escenarios imaginarios"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "H",
+    "q": "Dentro de las estrategias cognitivas racionales, ¿qué pregunta define al «Pensamiento de Perspectiva»?",
+    "options": [
+      "¿Qué distintas alternativas de solución podemos generar antes de tomar una decisión final?",
+      "¿Cuál ha sido la causa exacta que ha provocado este retraso en la actividad de la mañana?",
+      "¿Cómo se sentirá la otra persona ante esta situación y cómo percibe ella lo que está ocurriendo?",
+      "¿Qué medios materiales y humanos necesitamos organizar para alcanzar el objetivo propuesto?"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "H",
+    "q": "En las 10 reglas del arte de escuchar, ¿qué propone la regla 7 «Evitar distracciones»?",
+    "options": [
+      "Realizar varias tareas manuales simultáneamente mientras se escucha el relato del residente",
+      "Concentrarse plenamente en la conversación y aislar ruidos o interrupciones del entorno",
+      "Permitir que la televisión siga encendida para que el usuario se sienta más acompañado",
+      "Centrarse únicamente en los gestos faciales del interlocutor ignorando el contenido verbal"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "H",
+    "q": "En los ejes continuos de rasgos de personalidad, ¿qué evalúa el eje «Extraversión vs. Introversión»?",
+    "options": [
+      "La alta reactividad emocional frente a la estabilidad afectiva o frialdad ante los estímulos",
+      "La orientación hacia la interacción social externa frente a la preferencia por el mundo interior",
+      "La actuación guiada por criterio propio frente a la necesidad de aprobación de los demás",
+      "El foco centrado en las propias necesidades frente a la sensibilidad altruista hacia otros"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "H",
+    "q": "En la Reestructuración Cognitiva de 4 fases, ¿qué se realiza en la fase 3 denominada «Generación de alternativas»?",
+    "options": [
+      "Identificar el pensamiento automático negativo que aparece de forma espontánea ante el estrés",
+      "Evaluar exclusivamente las pruebas que confirman nuestro temor inicial sobre el problema",
+      "Crear interpretaciones más realistas, objetivas y funcionales como «Puedo intentarlo»",
+      "Tensar y relajar distintos grupos musculares siguiendo el protocolo de Jacobson"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "H",
+    "q": "¿Qué ocurre en el paso 4 del «Proceso de Pérdida de Información» («Lo que se escucha»)?",
+    "options": [
+      "El mensaje se transforma en ondas sonoras que viajan físicamente a través del aire",
+      "La mente filtra conscientemente los sonidos recibidos, descartando algunos datos según atención",
+      "El emisor organiza mentalmente las ideas complejas que desea transmitir antes de hablar",
+      "El receptor almacena definitivamente en su memoria a largo plazo una versión simplificada"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "H",
+    "q": "Dentro de las técnicas de autorregulación, ¿cuál es el objetivo fisiológico de la «Respiración Completa»?",
+    "options": [
+      "Provocar hiperventilación controlada para distraer la mente de pensamientos automáticos",
+      "Aumentar la frecuencia cardíaca y el tono muscular para reaccionar con rapidez ante urgencias",
+      "Activar el sistema nervioso parasimpático mediante espiraciones suaves para inducir calma",
+      "Tensar voluntariamente los músculos abdominales para bloquear la sensación de ansiedad"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "I",
+    "q": "¿Por qué las Habilidades Sociales se consideran una «competencia técnica científica» y no simple intuición?",
+    "options": [
+      "Porque solo pueden aplicarse siguiendo un guion rígido idéntico para todas las personas atendidas",
+      "Porque sustituyen por completo la necesidad de tener empatía o sensibilidad hacia el sufrimiento",
+      "Porque requieren el uso constante de aparatos electrónicos para medir las emociones del usuario",
+      "Porque se fundamentan en psicología social, neurobiología y ética, pudiendo entrenarse y evaluarse"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "I",
+    "q": "Un usuario te cuenta un problema y respondes: «A mí me pasó algo mucho peor el año pasado». ¿Qué barrera de escucha cometes?",
+    "options": [
+      "Barrera selectiva, al prestar atención únicamente a los datos médicos relevantes del relato",
+      "Barrera egocéntrica, al desviar la conversación hacia tu propio terreno y experiencias personales",
+      "Barrera prejuzgada, al dar por sentado que el usuario está exagerando su malestar actual",
+      "Barrera abstraída, al mantener la mente ocupada en tareas pendientes del turno de tarde"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "I",
+    "q": "¿Cuál es la fórmula que define al estilo de comunicación «Pasivo o Inhibido» y qué conducta lo caracteriza?",
+    "options": [
+      "Tú-Tú: anula sus propios derechos, calla opiniones y evita poner límites por miedo al conflicto",
+      "Yo+Tú=Nosotros: expresa ideas y límites con claridad, respeto y contacto visual cálido",
+      "Yo-Nosotros: delega todas las decisiones técnicas en el equipo manteniendo postura erguida",
+      "Yo-Yo: impone sus criterios mediante interrupciones, tono elevado y mirada desafiante"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "I",
+    "q": "Cuando un profesional aplica la técnica asertiva de «admitir un error propio sin dramatismos ni excusas», ¿qué técnica usa?",
+    "options": [
+      "Asertividad negativa, asumiendo la equivocación con naturalidad y serenidad profesional",
+      "Banco de niebla, concediendo parte de razón a una crítica externa sin cambiar de opinión",
+      "Disco rayado, repitiendo con firmeza una negativa ante una petición contraria a las normas",
+      "Asertividad positiva, reconociendo las cualidades y el buen trabajo realizado por un compañero"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "I",
+    "q": "¿Qué diferencia al «Feedback Directo» del «Feedback Indirecto» en el trabajo diario con personas dependientes?",
+    "options": [
+      "El directo se realiza siempre por teléfono y el indirecto mediante correo electrónico formal",
+      "El directo lo emiten los familiares y el indirecto exclusivamente los supervisores del centro",
+      "El directo sirve para corregir errores y el indirecto para felicitar al personal del turno",
+      "El directo son respuestas verbales o gestuales inmediatas; el indirecto son acciones observables"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "I",
+    "q": "Un técnico piensa: «Seguro que mis compañeros creen que soy lento porque hoy he tardado más en el aseo». ¿Qué distorsión es?",
+    "options": [
+      "Descalificación de lo positivo, al restar mérito a los cuidados realizados correctamente",
+      "Sobregeneralización, al concluir que nunca conseguirá realizar los aseos en el tiempo previsto",
+      "Interpretación del pensamiento, al asumir lo que otros piensan sin contar con ninguna evidencia",
+      "Pensamiento dicotómico, al valorar la jornada entera como un fracaso absoluto sin matices"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "I",
+    "q": "¿Qué mecanismo de defensa evitativo consiste en rechazar la realidad de un diagnóstico doloroso o problema evidente?",
+    "options": [
+      "La anticipación, al preparar soluciones realistas ante posibles complicaciones médicas futuras",
+      "La afiliación, al solicitar orientación y apoyo emocional al equipo interdisciplinar del centro",
+      "La negación, que protege temporalmente de la angustia pero dificulta afrontar la situación",
+      "El altruismo, al volcarse en ayudar a otras familias para aliviar la propia preocupación"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "I",
+    "q": "En proxémica, ¿qué precaución ética y técnica exige entrar en la «Zona Íntima» (0 a 0,5 metros) de un usuario?",
+    "options": [
+      "Utilizar diminutivos afectuosos para suavizar la invasión de su espacio corporal privado",
+      "Pedir permiso previo, explicar cada paso con voz cálida y respetar su pudor e intimidad",
+      "Entrar rápidamente y en silencio para reducir al mínimo el tiempo de contacto físico cercano",
+      "Mantener la mirada desviada hacia la ventana para no incomodar al usuario durante la higiene"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "I",
+    "q": "¿Cómo ayuda el «parafraseo» durante una conversación difícil con un familiar preocupado?",
+    "options": [
+      "Sirve para repetir sus mismas palabras con tono irónico y hacerle ver que está equivocado",
+      "Permite ganar tiempo mientras pensamos en una excusa para justificar un fallo administrativo",
+      "Evita tener que dar una respuesta concreta sobre los cuidados que recibe su familiar",
+      "Demuestra escucha activa, confirma que hemos comprendido su mensaje y reduce la tensión emocional"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "I",
+    "q": "¿Qué ejemplo refleja una comunicación congruente según la regla de Albert Mehrabian (7% verbal, 38% paraverbal, 55% no verbal)?",
+    "options": [
+      "Decir «Estoy encantado de ayudarle» mientras suspiras con fastidio y miras hacia el reloj",
+      "Decir «Le entiendo perfectamente» mientras ordenas papeles sin establecer contacto visual",
+      "Decir «Tómese su tiempo» con voz pausada y cálida, postura abierta y mirada serena a los ojos",
+      "Decir «No pasa nada» con tono seco y elevado mientras cruzas los brazos y frunces el ceño"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "I",
+    "q": "¿Qué consecuencia tiene la «sobreimplicación emocional» a medio plazo en un profesional de atención a la dependencia?",
+    "options": [
+      "Mejora la objetividad técnica y garantiza un trato equitativo a todos los usuarios del centro",
+      "Fortalece la resiliencia psicológica al compartir intensamente el sufrimiento de cada familia",
+      "Favorece la aplicación de la neutralidad afectiva exigida por la Atención Centrada en la Persona",
+      "Conduce al agotamiento emocional, depresión y elevado riesgo de abandono de la profesión"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "I",
+    "q": "¿Cuál de las siguientes actuaciones combate directamente el «edadismo» en una residencia o centro de día?",
+    "options": [
+      "Organizar únicamente actividades infantiles como pintar dibujos simples con ceras de colores",
+      "Dirigirse siempre a los hijos cuando haya que informar sobre cambios en la rutina del mayor",
+      "Respetar su historia de vida, fomentar su toma de decisiones y tratarlos como adultos plenos",
+      "Tomar todas las decisiones cotidianas por los residentes para evitarles el esfuerzo de elegir"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "I",
+    "q": "En las 10 reglas del arte de escuchar, ¿qué propone la regla 8 «Ejercitar la mente»?",
+    "options": [
+      "Afrontar los temas complejos o densos como un reto de comprensión en lugar de desconectar",
+      "Memorizar palabra por palabra todas las intervenciones de los compañeros en las reuniones",
+      "Evitar conversaciones profundas limitándose a preguntas cerradas de respuesta sí o no",
+      "Realizar ejercicios de cálculo mental mientras el usuario relata sus recuerdos personales"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "I",
+    "q": "Según las 10 reglas del arte de escuchar, ¿qué significa la regla 9 «Mantener la mente abierta»?",
+    "options": [
+      "Aceptar como verdaderas todas las acusaciones injustas sin defender el criterio profesional",
+      "Interpretar objetivamente palabras con alta carga emotiva sin reaccionar de forma defensiva",
+      "Permitir interrupciones constantes durante las entrevistas individuales con las familias",
+      "Cambiar continuamente de opinión en función de quien sea el interlocutor en cada momento"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "I",
+    "q": "En los ejes continuos de rasgos de personalidad, ¿qué evalúa el eje «Emotividad vs. Falta de emotividad»?",
+    "options": [
+      "La alta reactividad afectiva ante estímulos frente a la estabilidad emocional o frialdad",
+      "El grado de iniciativa motora frente a la pasividad ante las responsabilidades cotidianas",
+      "La tendencia a buscar compañía social frente a la preferencia por actividades individuales",
+      "La capacidad de mantener criterio propio frente a la dependencia de aprobación externa"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "I",
+    "q": "¿Qué mecanismo de defensa de distorsión de la realidad consiste en actuar como si se fuera superior a las circunstancias?",
+    "options": [
+      "El sentido del humor, al relativizar una situación tensa mediante una observación amable",
+      "La racionalización, al construir explicaciones lógicas para justificar una conducta evitativa",
+      "La negación, al rechazar la existencia de una limitación física o diagnóstico médico",
+      "La omnipotencia, que distorsiona la realidad impidiendo pedir ayuda o reconocer límites"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "I",
+    "q": "En la Reestructuración Cognitiva de 4 fases, ¿cuál es el primer paso imprescindible antes de analizar pruebas?",
+    "options": [
+      "La identificación: detectar el pensamiento automático irracional que dispara el malestar",
+      "El cambio de esquemas: consolidar hábitos emocionales serenos en situaciones futuras",
+      "La generación de alternativas: redactar interpretaciones más realistas sobre lo ocurrido",
+      "La relajación muscular: soltar la tensión acumulada en hombros y cuello durante diez minutos"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "I",
+    "q": "Dentro de la cinésica, ¿qué función cumple la «sonrisa de cortesía» en la acogida inicial a un usuario o familiar?",
+    "options": [
+      "Liberar una fuerte tensión acumulada tras haber vivido una situación crítica de estrés",
+      "Transmitir amabilidad, apertura social y bienvenida respetuosa facilitando el contacto",
+      "Sustituir por completo la presentación verbal y el saludo personalizado por su nombre",
+      "Ocultar nerviosismo o incomodidad ante una crítica recibida por parte de un compañero"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "I",
+    "q": "¿Qué diferencia al pensamiento «Alternativo» del pensamiento «Consecuencial» en la toma de decisiones?",
+    "options": [
+      "El alternativo busca el origen pasado del fallo y el consecuencial fija los objetivos finales",
+      "No existe diferencia real, ya que ambos consisten en ponerse en el lugar emocional del otro",
+      "El alternativo genera distintas opciones de solución y el consecuencial valora sus efectos",
+      "El alternativo se aplica en conflictos individuales y el consecuencial solo en talleres grupales"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "I",
+    "q": "Según Nathaniel Branden, ¿qué relación guarda el pilar «Vivir conscientemente» con la práctica profesional TAPSD?",
+    "options": [
+      "Consiste en seguir las rutinas establecidas de forma automática sin reflexionar sobre ellas",
+      "Implica observar la realidad objetiva de cada usuario sin negar hechos ni actuar en piloto automático",
+      "Exige defender las propias opiniones por encima de las preferencias de las personas atendidas",
+      "Permite ignorar las incidencias negativas del turno para mantener siempre el optimismo"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "J",
+    "q": "¿Cuál es la relación correcta entre las Habilidades Sociales (HHS) y los valores éticos en la intervención sociosanitaria?",
+    "options": [
+      "Los valores éticos (respeto, confidencialidad, buena fe) guían las HHS para evitar manipulación",
+      "Las habilidades sociales sustituyen a los valores éticos cuando es necesario agilizar el trabajo",
+      "Las habilidades sociales buscan persuadir al usuario dejando la ética para situaciones legales",
+      "Los valores éticos solo son relevantes en la dirección del centro y no en el trato directo diario"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "J",
+    "q": "¿Qué caracteriza a la barrera de escucha activa denominada «Reactiva»?",
+    "options": [
+      "No escuchar para comprender, sino estar preparando mentalmente la propia defensa o réplica",
+      "Anotar esquemas breves en una libreta para recordar las indicaciones del cambio de turno",
+      "Asentir con la cabeza sin decir nada mientras se piensa en las tareas domésticas pendientes",
+      "Distraerse con ruidos ambientales del pasillo mientras un usuario intenta explicar qué le ocurre"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "J",
+    "q": "Un usuario te dice: «Hoy estoy muy torpe, no sirvo para nada». Aplicando «Validación Emocional» y ACP, ¿cómo respondes?",
+    "options": [
+      "«A mí también me pasa muchas veces cuando duermo poco, pero enseguida se me pasa todo»",
+      "«Veo que hoy se siente frustrado porque le ha costado más; vamos paso a paso, yo le apoyo»",
+      "«Si sigue pensando así se va a deprimir, así que deje de quejarse y termine el ejercicio»",
+      "«No diga tonterías, hombre, que usted está estupendo y hoy hace un día precioso para pasear»"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "J",
+    "q": "¿Qué diferencia a la «Empatía Profesional» de la «Sobreimplicación Emocional»?",
+    "options": [
+      "La empatía comprende sin desbordarse manteniendo apoyo objetivo; la otra lleva el dolor a casa",
+      "La empatía profesional se basa en afinidad personal y la sobreimplicación en protocolos escritos",
+      "No existe diferencia, ya que ambas consisten en asumir como propio el dolor de las familias",
+      "La empatía profesional implica llorar con el usuario y la sobreimplicación mantener distancia fría"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "J",
+    "q": "Cuando un profesional utiliza el «Marco-Objetivo» ante un retraso en las duchas, ¿cómo formula su intervención?",
+    "options": [
+      "«Es imposible acabar a tiempo porque el turno de noche siempre deja todo sin preparar»",
+      "«Vamos a reorganizar el orden de los aseos entre los dos para llegar a tiempo al desayuno»",
+      "«Siempre pasa lo mismo los lunes y nadie en esta residencia hace nada para solucionarlo»",
+      "«La culpa es de los usuarios que hoy están más lentos y no colaboran nada al vestirse»"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "J",
+    "q": "¿Qué componente no verbal pertenece a la «Cinésica» y qué transmite en la relación de ayuda?",
+    "options": [
+      "La expresión facial, la mirada, los tipos de sonrisa y la postura corporal abierta o cerrada",
+      "La distancia en metros entre interlocutores, que delimita las zonas íntima, personal y social",
+      "El timbre, el volumen audible y los segregados vocales como «hum» que acompañan al habla",
+      "La limpieza y pulcritud del uniforme sanitario que proyecta seguridad técnica y orden"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "J",
+    "q": "Si un familiar está gritando muy alterado en la recepción, ¿qué combinación de técnicas asertivas es más eficaz?",
+    "options": [
+      "Responder elevando más la voz (estilo agresivo) para demostrar autoridad profesional inmediata",
+      "Callar mirando al suelo (estilo pasivo) y aceptar todas sus acusaciones para que se marche",
+      "Técnica de ignorar para posponer el diálogo hasta que haya calma, o asertividad empática serena",
+      "Asertividad positiva elogiando su carácter mientras le entregas medicación sin prescripción"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "J",
+    "q": "¿En qué consiste la «técnica de mostrar empatía» dentro de las herramientas de Escucha Activa?",
+    "options": [
+      "En permanecer completamente inmóvil y sin expresión facial para mantener neutralidad absoluta",
+      "En darle la razón en todo al usuario aunque sus demandas pongan en riesgo su salud física",
+      "En contarle experiencias personales similares para demostrarle que sabemos más que él",
+      "En reflejar comprensión hacia sus sentimientos con gestos cálidos y frases de acogida sincera"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "J",
+    "q": "¿Por qué las opciones de respuesta en una comunicación verbal con personas dependientes deben evitar tecnicismos?",
+    "options": [
+      "Porque las palabras representan el 93% del impacto emocional según los estudios de Mehrabian",
+      "Porque el uso de lenguaje sencillo sustituye la necesidad de verificar el feedback del receptor",
+      "Para prevenir barreras semánticas que impidan comprender el mensaje y generen inseguridad",
+      "Para mantener una distancia proxémica pública superior a tres metros en todas las estancias"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "J",
+    "q": "Un técnico piensa: «Si un usuario se queja de la comida, todo mi trabajo en el comedor es inútil». ¿Qué distorsión es?",
+    "options": [
+      "Inferencia arbitraria, al adivinar lo que piensan sus compañeros sin haberles preguntado",
+      "Personalización, al atribuirse la responsabilidad de una avería en los hornos de la cocina",
+      "Pensamiento dicotómico o «Todo o Nada», al evaluar la labor en extremos absolutos sin matices",
+      "Descalificación de lo positivo, al rechazar los elogios de la dirección por considerarlos falsos"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "J",
+    "q": "¿Qué efecto positivo tienen las destrezas sociales del TAPSD en la participación de la persona usuaria en las AVD?",
+    "options": [
+      "Garantizan que acepte sin cuestionar cualquier cambio de horario impuesto por la organización",
+      "Permiten realizar las tareas por el usuario mucho más rápido evitando que tenga que esforzarse",
+      "Eliminan la necesidad de adaptar el entorno físico o utilizar productos de apoyo técnico",
+      "Fomentan su colaboración activa y preservan sus capacidades remanentes y autonomía personal"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "J",
+    "q": "¿Cuál es la diferencia entre los 6 escalones de pérdida de información y el papel del «Feedback»?",
+    "options": [
+      "Los 6 escalones garantizan que no se pierda ningún dato y el feedback sirve solo para despedirse",
+      "Los 6 escalones ocurren solo por escrito y el feedback únicamente en conversaciones telefónicas",
+      "En los 6 escalones se filtra y reduce el mensaje, y el feedback permite verificar qué se comprendió",
+      "No tienen relación, ya que la pérdida de información depende exclusivamente del ruido ambiental"
+    ],
+    "correct": 2
+  },
+  {
+    "model": "J",
+    "q": "Según Kohlberg, ¿qué diferencia el desarrollo moral convencional del nivel más alto (Estadio 6: Principios universales)?",
+    "options": [
+      "El estadio 6 busca únicamente ser aceptado por los amigos y el convencional evita el esfuerzo",
+      "El estadio 6 guía la conciencia por la justicia universal incluso si las leyes la contradicen",
+      "El estadio 6 se basa en el temor al castigo infantil y el convencional en la obediencia adulta",
+      "No existe evolución moral tras los 15 años, permaneciendo todas las personas en el estadio 3"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "J",
+    "q": "En el Triángulo de la Conducta Humana, ¿sobre qué vértices podemos intervenir directamente como profesionales?",
+    "options": [
+      "Sobre nuestros propios pensamientos (interpretación) y nuestra conducta observable ante el suceso",
+      "Exclusivamente sobre la conducta externa de los demás mediante sanciones administrativas",
+      "Únicamente sobre el entorno físico del centro sin modificar nuestra forma de interpretar hechos",
+      "Sobre ningún vértice, ya que tanto emociones como pensamientos son reacciones automáticas fijas"
+    ],
+    "correct": 0
+  },
+  {
+    "model": "J",
+    "q": "¿Qué mecanismo de defensa adaptativo consiste en buscar apoyo, consejo y acompañamiento saludable en otras personas?",
+    "options": [
+      "La proyección, al atribuir a otros compañeros las propias frustraciones acumuladas en el turno",
+      "La negación, al rechazar de plano la existencia de un conflicto interpersonal en el equipo",
+      "La idealización, al considerar que un compañero nunca comete ningún error profesional",
+      "La afiliación, que permite compartir cargas emocionales y afrontar dificultades con apoyo mutuo"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "J",
+    "q": "En la Relajación Progresiva de Jacobson, ¿por qué se tensiona brevemente un grupo muscular antes de soltarlo?",
+    "options": [
+      "Para acelerar el ritmo respiratorio y activar el sistema nervioso simpático ante el estrés",
+      "Para aprender a diferenciar conscientemente el estado de rigidez frente al de distensión profunda",
+      "Para provocar fatiga muscular intensa que impida sentir cualquier tipo de emoción negativa",
+      "Para aumentar la fuerza física necesaria antes de realizar transferencias de residentes en cama"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "J",
+    "q": "En las 10 reglas del arte de escuchar, ¿qué indica la regla 10 «Aprovechar la velocidad habla/pensamiento»?",
+    "options": [
+      "Completar las palabras del interlocutor cuando habla despacio para agilizar la conversación",
+      "Emplear la mayor rapidez del pensamiento respecto al habla para sintetizar y leer entre líneas",
+      "Hablar a máxima velocidad para transmitir toda la información posible antes de que se distraigan",
+      "Desconectar la atención durante las pausas largas aprovechando para revisar mensajes pendientes"
+    ],
+    "correct": 1
+  },
+  {
+    "model": "J",
+    "q": "Según Nathaniel Branden, ¿cómo se define el pilar de la autoestima «Autoafirmación» en el entorno laboral?",
+    "options": [
+      "Atribuir los éxitos del equipo exclusivamente al esfuerzo individual realizado por uno mismo",
+      "Evitar cualquier desacuerdo con los demás para mantener una imagen amable y complaciente",
+      "Imponer las propias decisiones mediante un estilo agresivo para ganar respeto en el equipo",
+      "Respetar y defender con dignidad las propias necesidades, valores y criterios profesionales"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "J",
+    "q": "Dentro de las cinco estrategias de pensamiento racional, ¿cuál integra todas las anteriores para fijar metas y pasos?",
+    "options": [
+      "El pensamiento causal, centrado exclusivamente en investigar el origen pasado de las incidencias",
+      "El pensamiento de perspectiva, enfocado únicamente en identificar las emociones de los familiares",
+      "La inferencia arbitraria, que permite extraer conclusiones rápidas sin necesidad de comprobar datos",
+      "El pensamiento medio-fin, que establece objetivos claros y planifica los medios para lograrlos"
+    ],
+    "correct": 3
+  },
+  {
+    "model": "J",
+    "q": "En la Atención Centrada en la Persona (ACP), ¿qué significa mantener una «Neutralidad Afectiva Profesional»?",
+    "options": [
+      "Evitar cualquier tipo de comunicación emocional limitándose a ejecutar técnicas sanitarias",
+      "Mostrar mayor cercanía y paciencia únicamente con las personas que tienen carácter afable",
+      "Ofrecer aceptación incondicional y trato digno a cada persona sin juzgar su pasado o creencias",
+      "Tratar a todos los usuarios con frialdad distante evitando sonreír o mostrar calidez humana"
+    ],
+    "correct": 2
+  }
+];
+
+    const LETTERS = ["A", "B", "C", "D"];
+    let currentModel = "A";
+    let currentNum = 1;
+    let activeQuestions = [];
+    let isGraded = false;
+
+    function shuffle(list) {
+        const arr = list.slice();
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function startExam(model, num) {
+        currentModel = model;
+        currentNum = num;
+        isGraded = false;
+
+        document.getElementById("menu-view").style.display = "none";
+        document.getElementById("exam-view").style.display = "block";
+        document.getElementById("exam-heading").textContent = `Modelo ${model} · Simulacro Oficial ${num}`;
+        document.getElementById("score-box").style.display = "none";
+        document.getElementById("submit-btn").disabled = false;
+
+        const pool = EXAM_BANK.filter(item => item.model === model).slice(0, 20);
+        const container = document.getElementById("questions-list");
+
+        if (pool.length === 0) {
+            activeQuestions = [];
+            document.getElementById("progress-text").textContent = "0 / 0 respondidas";
+            container.innerHTML = `<p style="color:#c8d4cd; line-height:1.5;">No hay preguntas disponibles para el <strong>Modelo ${model}</strong>.</p>`;
+            return;
+        }
+
+        activeQuestions = pool.map((item, idx) => {
+            const mapped = item.options.map((text, oIdx) => ({
+                text,
+                isCorrect: oIdx === item.correct
+            }));
+            const shuffled = shuffle(mapped).map((opt, pos) => ({
+                ...opt,
+                letter: LETTERS[pos]
+            }));
+            return {
+                number: idx + 1,
+                q: item.q,
+                options: shuffled
+            };
+        });
+
+        container.innerHTML = activeQuestions.map(qItem => `
+            <div class="question-block" id="qblock_${qItem.number}">
+                <div class="q-title">${qItem.number}. ${qItem.q}</div>
+                <div class="q-options">
+                    ${qItem.options.map(opt => `
+                        <label class="q-option" data-letter="${opt.letter}">
+                            <input type="radio" name="ans_${qItem.number}" value="${opt.letter}" onchange="updateProgress()">
+                            <span><strong>${opt.letter})</strong> ${opt.text}</span>
+                        </label>
+                    `).join("")}
+                </div>
+            </div>
+        `).join("");
+
+        updateProgress();
+        document.getElementById("exam-view").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function updateProgress() {
+        let answered = 0;
+        activeQuestions.forEach(qItem => {
+            if (document.querySelector(`input[name="ans_${qItem.number}"]:checked`)) {
+                answered++;
+            }
+        });
+        document.getElementById("progress-text").textContent = `${answered} / ${activeQuestions.length} respondidas`;
+    }
+
+    function retryExam() {
+        startExam(currentModel, currentNum);
+    }
+
+    function backToMenu() {
+        document.getElementById("exam-view").style.display = "none";
+        document.getElementById("menu-view").style.display = "block";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function gradeExam() {
+        if (activeQuestions.length === 0 || isGraded) return;
+        isGraded = true;
+        document.getElementById("submit-btn").disabled = true;
+
+        let ok = 0;
+        let fail = 0;
+        let blank = 0;
+        const failedItems = [];
+
+        activeQuestions.forEach(qItem => {
+            const block = document.getElementById(`qblock_${qItem.number}`);
+            const labels = block.querySelectorAll(".q-option");
+            const radios = block.querySelectorAll(`input[name="ans_${qItem.number}"]`);
+            const checked = block.querySelector(`input[name="ans_${qItem.number}"]:checked`);
+            const correctOpt = qItem.options.find(o => o.isCorrect);
+
+            radios.forEach(r => { r.disabled = true; });
+            labels.forEach(lbl => {
+                lbl.classList.remove("is-correct", "is-wrong");
+                const opt = qItem.options.find(o => o.letter === lbl.dataset.letter);
+                if (opt && opt.isCorrect) lbl.classList.add("is-correct");
+            });
+
+            if (!checked) {
+                blank++;
+            } else {
+                const chosen = qItem.options.find(o => o.letter === checked.value);
+                if (chosen && chosen.isCorrect) {
+                    ok++;
+                } else {
+                    fail++;
+                    const wrongLbl = block.querySelector(`.q-option[data-letter="${checked.value}"]`);
+                    if (wrongLbl) wrongLbl.classList.add("is-wrong");
+                    failedItems.push({
+                        number: qItem.number,
+                        q: qItem.q,
+                        userAnswer: chosen ? `${chosen.letter}) ${chosen.text}` : "",
+                        correctAnswer: correctOpt ? `${correctOpt.letter}) ${correctOpt.text}` : ""
+                    });
+                }
+            }
+        });
+
+        const total = activeQuestions.length;
+        const net = ok - (fail / 3);
+        const note = Math.max(0, (net / total) * 10);
+
+        const box = document.getElementById("score-box");
+        document.getElementById("score-title").textContent = `Resultado · Modelo ${currentModel} (Simulacro Oficial ${currentNum})`;
+        document.getElementById("score-badge").textContent = `${note.toFixed(2)} / 10`;
+        document.getElementById("score-detail").textContent =
+            `Aciertos: ${ok} · Fallos: ${fail} · En blanco: ${blank} · Puntuación neta: ${net.toFixed(2)} sobre ${total} (cada 3 fallos restan 1 acierto).`;
+
+        const mistakesContainer = document.getElementById("mistakes-container");
+        if (failedItems.length === 0) {
+            mistakesContainer.innerHTML = `<p class="all-correct-msg">¡Enhorabuena! No has cometido ningún fallo en las preguntas respondidas.</p>`;
+        } else {
+            mistakesContainer.innerHTML = `
+                <h4>Revisión de preguntas falladas (${failedItems.length}):</h4>
+                ${failedItems.map(item => `
+                    <div class="mistake-card">
+                        <div class="mistake-q">${item.number}. ${item.q}</div>
+                        <div class="mistake-user">✘ Tu respuesta: ${item.userAnswer}</div>
+                        <div class="mistake-correct">✔ Respuesta correcta: ${item.correctAnswer}</div>
+                    </div>
+                `).join("")}
+            `;
+        }
+
+        box.style.display = "block";
+        box.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+</script>
+
+</body>
+</html>
