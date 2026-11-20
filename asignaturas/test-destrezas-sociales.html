@@ -28,7 +28,7 @@
             border-radius: 16px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), inset 0 0 35px rgba(0, 0, 0, 0.45);
             width: 100%;
-            max-width: 1040px;
+            max-width: 1080px;
             padding: 40px 44px;
         }
 
@@ -85,6 +85,7 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
+            cursor: pointer;
         }
 
         .nav-card:hover {
@@ -112,6 +113,71 @@
         .c-blue   { background-color: #9ec5f8; }
         .c-green  { background-color: #b4f2b0; }
         .c-orange { background-color: #fad09e; }
+
+        .models-panel {
+            background-color: rgba(15, 24, 19, 0.72);
+            border: 1px solid rgba(251, 240, 156, 0.35);
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+
+        .models-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .models-title {
+            font-size: 1.22rem;
+            color: #fbf09c;
+            font-weight: 700;
+        }
+
+        .models-meta {
+            font-size: 0.88rem;
+            color: #c8d4cd;
+        }
+
+        .models-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+            gap: 14px;
+        }
+
+        .model-link {
+            text-decoration: none;
+            background-color: #24372d;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 10px;
+            padding: 15px 16px;
+            color: #f4f6f4;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+        }
+
+        .model-link:hover {
+            transform: translateY(-2px);
+            background-color: #2d4639;
+            border-color: #fbf09c;
+        }
+
+        .model-code {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fbf09c;
+        }
+
+        .model-info {
+            font-size: 0.83rem;
+            color: #d4e0d8;
+            line-height: 1.35;
+        }
 
         .summary-box {
             background-color: rgba(15, 24, 19, 0.55);
@@ -184,30 +250,80 @@
 
     <h1>Destrezas Sociales</h1>
     <p class="subtitle">
-        Espacio interactivo del módulo de Destrezas Sociales para el ciclo de Técnico en Atención a Personas en Situación de Dependencia. Accede a los simulacros de examen, repasa los contenidos clave y pon en práctica tus habilidades comunicativas y emocionales.
+        Espacio interactivo del módulo de Destrezas Sociales para el ciclo de Técnico en Atención a Personas en Situación de Dependencia. Accede directamente a los 10 modelos de examen de 20 preguntas cada uno o consulta los contenidos de la unidad.
     </p>
 
     <div class="cards-grid">
-        <a href="test-destrezas.html" class="nav-card c-yellow">
+        <a href="#modelos-examen" class="nav-card c-yellow">
             <span class="nav-card-title">📝 Simulacros de Examen</span>
             <span class="nav-card-desc">10 modelos (A–J) con 20 preguntas cada uno: 10 teóricas y 10 prácticas, con penalización de 1/3 por fallo.</span>
         </a>
 
-        <a href="destrezas-sociales.html" class="nav-card c-blue">
+        <a href="teoria-destrezas-sociales.html" class="nav-card c-blue">
             <span class="nav-card-title">📚 Contenidos de la Unidad</span>
             <span class="nav-card-desc">Guía de estudio de la Unidad 1: habilidades sociales, inteligencia emocional, comunicación y atención centrada en la persona.</span>
         </a>
 
-        <a href="test-destrezas.html" class="nav-card c-green">
+        <a href="test-destrezas-sociales.html?modo=practico" class="nav-card c-green">
             <span class="nav-card-title">🎯 Práctica por Casos</span>
             <span class="nav-card-desc">Situaciones reales de residencia, SAD y equipo interdisciplinar para entrenar asertividad, escucha y autorregulación.</span>
         </a>
 
-        <a href="destrezas-sociales.html" class="nav-card c-orange">
+        <a href="teoria-destrezas-sociales.html" class="nav-card c-orange">
             <span class="nav-card-title">🧠 Herramientas y Técnicas</span>
             <span class="nav-card-desc">Marco-Objetivo, mensajes Yo, banco de niebla, disco rayado, técnica del sándwich, respiración y reestructuración.</span>
         </a>
     </div>
+
+    <section id="modelos-examen" class="models-panel">
+        <div class="models-header">
+            <h2 class="models-title">10 Modelos de Examen · 20 preguntas por modelo</h2>
+            <span class="models-meta">10 teóricas + 10 prácticas · Penalización de 1/3 por error</span>
+        </div>
+
+        <div class="models-grid">
+            <a href="test-destrezas-sociales.html?modelo=A" class="model-link">
+                <span class="model-code">Modelo A</span>
+                <span class="model-info">20 preguntas (10 teoría · 10 práctica)</span>
+            </a>
+            <a href="test-destrezas-sociales.html?modelo=B" class="model-link">
+                <span class="model-code">Modelo B</span>
+                <span class="model-info">20 preguntas (10 teoría · 10 práctica)</span>
+            </a>
+            <a href="test-destrezas-sociales.html?modelo=C" class="model-link">
+                <span class="model-code">Modelo C</span>
+                <span class="model-info">20 preguntas (10 teoría · 10 práctica)</span>
+            </a>
+            <a href="test-destrezas-sociales.html?modelo=D" class="model-link">
+                <span class="model-code">Modelo D</span>
+                <span class="model-info">20 preguntas (10 teoría · 10 práctica)</span>
+            </a>
+            <a href="test-destrezas-sociales.html?modelo=E" class="model-link">
+                <span class="model-code">Modelo E</span>
+                <span class="model-info">20 preguntas (10 teoría · 10 práctica)</span>
+            </a>
+            <a href="test-destrezas-sociales.html?modelo=F" class="model-link">
+                <span class="model-code">Modelo F</span>
+                <span class="model-info">20 preguntas (10 teoría · 10 práctica)</span>
+            </a>
+            <a href="test-destrezas-sociales.html?modelo=G" class="model-link">
+                <span class="model-code">Modelo G</span>
+                <span class="model-info">20 preguntas (10 teoría · 10 práctica)</span>
+            </a>
+            <a href="test-destrezas-sociales.html?modelo=H" class="model-link">
+                <span class="model-code">Modelo H</span>
+                <span class="model-info">20 preguntas (10 teoría · 10 práctica)</span>
+            </a>
+            <a href="test-destrezas-sociales.html?modelo=I" class="model-link">
+                <span class="model-code">Modelo I</span>
+                <span class="model-info">20 preguntas (10 teoría · 10 práctica)</span>
+            </a>
+            <a href="test-destrezas-sociales.html?modelo=J" class="model-link">
+                <span class="model-code">Modelo J</span>
+                <span class="model-info">20 preguntas (10 teoría · 10 práctica)</span>
+            </a>
+        </div>
+    </section>
 
     <div class="summary-box">
         <h2 class="summary-title">Bloques temáticos · Unidad 1: El arte de conectar</h2>
@@ -222,8 +338,8 @@
     </div>
 
     <div class="footer-links">
-        <a href="destrezas-sociales.html" class="link-item">&larr; Ir a Destrezas Sociales</a>
-        <a href="test-destrezas.html" class="link-item">Abrir batería de exámenes (Modelos A–J) &rarr;</a>
+        <a href="teoria-destrezas-sociales.html" class="link-item">&larr; Ir a Teoría de Destrezas Sociales</a>
+        <a href="test-destrezas-sociales.html" class="link-item">Abrir batería completa de exámenes (Modelos A–J) &rarr;</a>
     </div>
 </div>
 
