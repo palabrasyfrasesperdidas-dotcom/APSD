@@ -161,6 +161,12 @@
             font-weight: 600;
         }
 
+        #questions-container {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
         .question-box {
             background: rgba(255, 255, 255, 0.06);
             border-radius: 10px;
@@ -396,34 +402,34 @@
     <main class="board-container">
         <header>
             <h1>Pon a prueba tus conocimientos</h1>
-            <p class="subtitle">Selecciona un modelo de examen de inglés (4 frases para completar con 4 opciones cada uno). Al terminar verás tu nota y los errores cometidos.</p>
+            <p class="subtitle">Selecciona un modelo de examen de inglés (20 frases para completar con 4 opciones cada uno, alternando todos los temas de gramática). Al terminar verás tu nota y los errores cometidos.</p>
         </header>
 
         <!-- 6 MODELOS -->
         <section class="models-grid" aria-label="Modelos de examen">
             <button type="button" class="model-card m-yellow" data-model="A" onclick="selectModel('A')">
                 <strong>📝 Modelo A</strong>
-                <span>Simulacro 1 · 4 preguntas</span>
+                <span>Simulacro 1 · 20 preguntas</span>
             </button>
             <button type="button" class="model-card m-blue" data-model="B" onclick="selectModel('B')">
                 <strong>📝 Modelo B</strong>
-                <span>Simulacro 2 · 4 preguntas</span>
+                <span>Simulacro 2 · 20 preguntas</span>
             </button>
             <button type="button" class="model-card m-peach" data-model="C" onclick="selectModel('C')">
                 <strong>📝 Modelo C</strong>
-                <span>Simulacro 3 · 4 preguntas</span>
+                <span>Simulacro 3 · 20 preguntas</span>
             </button>
             <button type="button" class="model-card m-mint" data-model="D" onclick="selectModel('D')">
                 <strong>📝 Modelo D</strong>
-                <span>Simulacro 4 · 4 preguntas</span>
+                <span>Simulacro 4 · 20 preguntas</span>
             </button>
             <button type="button" class="model-card m-lavender" data-model="E" onclick="selectModel('E')">
                 <strong>📝 Modelo E</strong>
-                <span>Simulacro 5 · 4 preguntas</span>
+                <span>Simulacro 5 · 20 preguntas</span>
             </button>
             <button type="button" class="model-card m-pink" data-model="F" onclick="selectModel('F')">
                 <strong>📝 Modelo F</strong>
-                <span>Simulacro 6 · 4 preguntas</span>
+                <span>Simulacro 6 · 20 preguntas</span>
             </button>
         </section>
 
@@ -431,7 +437,7 @@
         <section id="exam-panel" class="exam-panel" aria-live="polite">
             <div class="exam-top-bar">
                 <h2 id="exam-title">Modelo A</h2>
-                <span id="answered-counter" class="progress-pill">Respondidas: 0 / 4</span>
+                <span id="answered-counter" class="progress-pill">Respondidas: 0 / 20</span>
             </div>
 
             <div id="questions-container"></div>
@@ -459,205 +465,155 @@
     </main>
 
     <script>
-        // 6 modelos x 4 preguntas = 24 frases.
-        // La posición de la respuesta correcta varía en cada pregunta.
         const EXAM_MODELS = {
             A: {
                 label: "Modelo A — Simulacro 1",
                 questions: [
-                    {
-                        before: "What ",
-                        after: " you do every morning before starting your shift?",
-                        options: ["are", "do", "does", "have"],
-                        answer: "do",
-                        tip: "En preguntas con verbo de acción en presente simple y sujeto 'you', usamos el auxiliar 'do' ('What do you do...?')."
-                    },
-                    {
-                        before: "Look at the resident in the garden: what ",
-                        after: " you doing right now?",
-                        options: ["do", "have", "are", "is"],
-                        answer: "are",
-                        tip: "El presente continuo con 'you' y 'doing' para una acción en progreso se forma con 'are' ('What are you doing...?')."
-                    },
-                    {
-                        before: "She ",
-                        after: " got a very clear and calm voice.",
-                        options: ["is", "has", "does", "have"],
-                        answer: "has",
-                        tip: "Con 'have got' en 3.ª persona del singular ('she') usamos 'has got'."
-                    },
-                    {
-                        before: "There aren't ",
-                        after: " extra chairs in the activity room.",
-                        options: ["some", "a", "any", "the"],
-                        answer: "any",
-                        tip: "En frases negativas con plural contable usamos 'any' ('aren't any')."
-                    }
+                    { before: "I ", after: " a care assistant in a day centre.", options: ["am", "is", "are", "have"], answer: "am", tip: "Con 'I' en presente simple del verbo 'to be' usamos 'am'." },
+                    { before: "I ", after: " got a new schedule for this month.", options: ["has", "have", "am", "are"], answer: "have", tip: "Con 'I' y 'got' usamos 'have got'." },
+                    { before: "", after: " chair right next to me is very comfortable.", options: ["These", "Those", "This", "That"], answer: "This", tip: "'This' se usa para un objeto singular ('chair') que está cerca." },
+                    { before: "There ", after: " a glass of water on the table.", options: ["are", "is", "some", "any"], answer: "is", tip: "Con un sustantivo singular ('a glass of water') usamos 'There is'." },
+                    { before: "What ", after: " you do every morning before starting your shift?", options: ["are", "do", "does", "have"], answer: "do", tip: "En preguntas en presente simple con verbo de acción y 'you', usamos 'What do you...?'." },
+                    { before: "What ", after: " you doing right now in the activity room?", options: ["do", "have", "are", "is"], answer: "are", tip: "En presente continuo ('right now') con 'you', preguntamos 'What are you doing...?'." },
+                    { before: "Active listening is ", after: " than just hearing words.", options: ["most important", "more important", "the most important", "importanter"], answer: "more important", tip: "Comparativo de un adjetivo largo ('important'): 'more + adjetivo + than'." },
+                    { before: "She ", after: " in the garden with the residents.", options: ["are", "is", "am", "do"], answer: "is", tip: "Con tercera persona singular ('she') en presente de 'to be' se usa 'is'." },
+                    { before: "She ", after: " got a very clear and calm voice.", options: ["have", "are", "has", "is"], answer: "has", tip: "Con 'she' y 'got' usamos 'has got'." },
+                    { before: "Can you see ", after: " door at the end of the corridor?", options: ["this", "these", "that", "those"], answer: "that", tip: "'That' indica un elemento singular ('door') que está lejos." },
+                    { before: "There ", after: " three residents sitting in the courtyard.", options: ["is", "was", "are", "has"], answer: "are", tip: "Con un sustantivo plural ('three residents') usamos 'There are'." },
+                    { before: "How ", after: " you usually calm a nervous family member?", options: ["is", "have", "do", "are"], answer: "do", tip: "Para preguntar por un hábito con 'you' en presente simple usamos 'How do you...?'." },
+                    { before: "What ", after: " you doing at the moment? The bell is ringing.", options: ["does", "do", "are", "has"], answer: "are", tip: "'What are you doing at the moment?' pregunta por una acción en este instante." },
+                    { before: "Empathy is one of ", after: " values in person-centred care.", options: ["the most important", "more important", "most important", "importantest"], answer: "the most important", tip: "Superlativo de un adjetivo largo ('important'): 'the most + adjetivo'." },
+                    { before: "They ", after: " ready for the morning shift.", options: ["is", "am", "are", "does"], answer: "are", tip: "Con plural ('they') en presente de 'to be' usamos 'are'." },
+                    { before: "We ", after: " got enough time to explain everything calmly.", options: ["hasn't", "haven't", "aren't", "don't"], answer: "haven't", tip: "Con 'we' y 'got', la negativa es 'haven't got'." },
+                    { before: "Look at ", after: " notes right here in my hand.", options: ["that", "those", "these", "this"], answer: "these", tip: "'These' es el plural de cercanía ('estos/estas')." },
+                    { before: "Please pass me ", after: " water; the room is warm.", options: ["any", "some", "an", "many"], answer: "some", tip: "En peticiones o frases afirmativas con incontables ('water') usamos 'some'." },
+                    { before: "How ", after: " you feel when a shift starts with tension?", options: ["are", "do", "has", "is"], answer: "do", tip: "Con 'feel' en presente simple y sujeto 'you', preguntamos 'How do you feel...?'." },
+                    { before: "What ", after: " you doing with that wheelchair over there?", options: ["do", "are", "have", "does"], answer: "are", tip: "Con 'you' y acción en curso ('doing'), usamos 'What are you doing...?'." }
                 ]
             },
             B: {
                 label: "Modelo B — Simulacro 2",
                 questions: [
-                    {
-                        before: "How ",
-                        after: " you usually calm a nervous family member?",
-                        options: ["is", "have", "do", "are"],
-                        answer: "do",
-                        tip: "Para preguntar por un hábito o procedimiento en presente simple con 'you', usamos 'How do you...?'"
-                    },
-                    {
-                        before: "Please pass me ",
-                        after: " water; the room is very warm.",
-                        options: ["any", "some", "these", "those"],
-                        answer: "some",
-                        tip: "En peticiones o frases afirmativas con sustantivos incontables ('water') usamos 'some'."
-                    },
-                    {
-                        before: "Active listening is ",
-                        after: " than just hearing words.",
-                        options: ["most important", "more important", "the most important", "importanter"],
-                        answer: "more important",
-                        tip: "El comparativo de un adjetivo largo ('important') se forma con 'more + adjetivo + than'."
-                    },
-                    {
-                        before: "Right now, the caregiver ",
-                        after: " explaining the steps slowly.",
-                        options: ["is", "has", "does", "do"],
-                        answer: "is",
-                        tip: "En presente continuo con 'the caregiver' (3.ª persona singular) se usa 'is + verbo-ing'."
-                    }
+                    { before: "Today's session is ", after: " than yesterday's workshop.", options: ["gooder", "best", "better", "more good"], answer: "better", tip: "'Good' es irregular: su forma comparativa es 'better' ('better than')." },
+                    { before: "He ", after: " not tired today; he slept well.", options: ["are", "am", "is", "have"], answer: "is", tip: "Con 'he' y negación con 'not' usamos 'is not' ('He is not...')." },
+                    { before: "He ", after: " got a fever today.", options: ["haven't", "aren't", "hasn't", "doesn't"], answer: "hasn't", tip: "Con 'he' y 'got', la negativa es 'hasn't got'." },
+                    { before: "Who left ", after: " folders over there on the far table?", options: ["this", "these", "that", "those"], answer: "those", tip: "'Those' es el plural de lejanía ('esos/esas' o 'aquellos/aquellas')." },
+                    { before: "There aren't ", after: " extra chairs in this room.", options: ["some", "a", "any", "much"], answer: "any", tip: "En oraciones negativas con plurales contables usamos 'any'." },
+                    { before: "What ", after: " you usually write in the daily report?", options: ["are", "is", "do", "have"], answer: "do", tip: "Para rutinas en presente simple con 'you' usamos 'What do you usually...?'." },
+                    { before: "Right now, the caregiver ", after: " explaining the steps slowly.", options: ["is", "has", "does", "do"], answer: "is", tip: "En presente continuo con 'the caregiver' (3.ª persona singular) usamos 'is + -ing'." },
+                    { before: "Respect is ", after: " quality a caregiver can show.", options: ["the best", "better", "best", "good"], answer: "the best", tip: "'The best' es el superlativo irregular de 'good'." },
+                    { before: "We ", after: " not late for the team meeting.", options: ["isn't", "aren't", "am not", "doesn't"], answer: "aren't", tip: "Con 'we' en negativa del verbo 'to be' usamos 'aren't'." },
+                    { before: "", after: " you got a pen to write the reminder?", options: ["Has", "Are", "Do", "Have"], answer: "Have", tip: "Las preguntas con 'have got' y 'you' empiezan por 'Have you got...?'." },
+                    { before: "", after: " glass of water is for the resident here.", options: ["These", "Those", "This", "There"], answer: "This", tip: "'This' acompaña a un singular ('glass') que está cerca." },
+                    { before: "Are there ", after: " new messages for the afternoon shift?", options: ["some", "a", "any", "much"], answer: "any", tip: "En preguntas generales con plurales contables empleamos 'any'." },
+                    { before: "She ", after: " carefully to the family's concerns.", options: ["listen", "listens", "listening", "are listen"], answer: "listens", tip: "En presente simple afirmativo con 'she', el verbo lleva '-s' ('listens')." },
+                    { before: "She ", after: " sleeping at the moment; she is reading.", options: ["doesn't", "isn't", "haven't", "aren't"], answer: "isn't", tip: "La negativa en presente continuo con 'she' es 'isn't + verbo-ing'." },
+                    { before: "This explanation is ", after: " than the first one.", options: ["short", "shorter", "the shortest", "more short"], answer: "shorter", tip: "Adjetivo corto ('short') en comparativo: 'shorter than'." },
+                    { before: "I ", after: " not angry; I am just explaining the rule.", options: ["isn't", "aren't", "am not", "don't"], answer: "am not", tip: "La forma negativa con 'I' y 'to be' es 'am not' (no 'amn't')." },
+                    { before: "", after: " she got a mobility aid in the room?", options: ["Have", "Does", "Has", "Is"], answer: "Has", tip: "Con 'she' y 'got', la pregunta empieza por 'Has she got...?'." },
+                    { before: "Please close ", after: " window far away from the bed.", options: ["this", "these", "that", "those"], answer: "that", tip: "'That' se usa para un singular ('window') alejado." },
+                    { before: "There are ", after: " leaflets on the reception desk.", options: ["any", "some", "an", "much"], answer: "some", tip: "En oraciones afirmativas con plurales contables ('leaflets') usamos 'some'." },
+                    { before: "They ", after: " work on Sundays in the day centre.", options: ["doesn't", "aren't", "don't", "hasn't"], answer: "don't", tip: "Con 'they' y verbo de acción ('work'), la negativa es 'don't'." }
                 ]
             },
             C: {
                 label: "Modelo C — Simulacro 3",
                 questions: [
-                    {
-                        before: "Are there ",
-                        after: " new care plans on the desk today?",
-                        options: ["some", "any", "this", "that"],
-                        answer: "any",
-                        tip: "En preguntas generales con plural contable ('new care plans') empleamos 'any'."
-                    },
-                    {
-                        before: "What ",
-                        after: " you doing at the moment? The bell is ringing.",
-                        options: ["does", "do", "are", "has"],
-                        answer: "are",
-                        tip: "'What are you doing at the moment?' pregunta por una acción que ocurre en este instante (presente continuo)."
-                    },
-                    {
-                        before: "My colleague ",
-                        after: " not rush when helping elderly residents.",
-                        options: ["isn't", "doesn't", "haven't", "aren't"],
-                        answer: "doesn't",
-                        tip: "La negativa en presente simple con verbo de acción ('rush') y sujeto singular ('my colleague') usa 'doesn't'."
-                    },
-                    {
-                        before: "Come closer and look at ",
-                        after: " notes right here in my hand.",
-                        options: ["that", "those", "these", "there"],
-                        answer: "these",
-                        tip: "'These' es el plural de cercanía ('estos/estas') para objetos que tienes cerca."
-                    }
+                    { before: "We ", after: " using technical words right now.", options: ["don't", "hasn't", "aren't", "doesn't"], answer: "aren't", tip: "La negativa en presente continuo con 'we' es 'aren't + verbo-ing'." },
+                    { before: "Monday is ", after: " day of the week in the centre.", options: ["busier", "the busiest", "most busy", "busyest"], answer: "the busiest", tip: "Adjetivo corto acabado en '-y' ('busy') en superlativo: 'the busiest'." },
+                    { before: "", after: " you calm before starting the session?", options: ["Is", "Are", "Am", "Do"], answer: "Are", tip: "Las preguntas con 'to be' y sujeto 'you' empiezan por 'Are'." },
+                    { before: "They ", after: " got two family visits this afternoon.", options: ["has", "is", "have", "does"], answer: "have", tip: "Con 'they' y 'got' usamos 'have got'." },
+                    { before: "", after: " exercises are for today's morning session.", options: ["This", "That", "These", "There"], answer: "These", tip: "'These' acompaña a un plural ('exercises') cercano." },
+                    { before: "I don't have ", after: " questions about the schedule today.", options: ["some", "a", "any", "one"], answer: "any", tip: "En frases negativas usamos 'any' ('don't have any')." },
+                    { before: "He ", after: " rush when helping a resident get dressed.", options: ["don't", "doesn't", "isn't", "aren't"], answer: "doesn't", tip: "Con 'he' y verbo de acción ('rush'), la negativa es 'doesn't'." },
+                    { before: "Are you ", after: " attention to the family's request right now?", options: ["pay", "pays", "paying", "paid"], answer: "paying", tip: "Tras 'Are you...' en presente continuo, el verbo principal lleva '-ing' ('paying')." },
+                    { before: "This exercise is ", after: " than yesterday's exercise.", options: ["easy", "easiest", "easier", "more easy"], answer: "easier", tip: "'Easy' en comparativo cambia '-y' por '-ier': 'easier than'." },
+                    { before: "", after: " the resident awake right now?", options: ["Are", "Am", "Is", "Does"], answer: "Is", tip: "Con sujeto singular ('the resident') y 'to be' preguntamos con 'Is'." },
+                    { before: "The centre ", after: " got a quiet space for family talks.", options: ["have", "are", "has", "do"], answer: "has", tip: "Con sujeto singular ('The centre') y 'got' usamos 'has got'." },
+                    { before: "Do you recognize ", after: " people standing at the far end of the hall?", options: ["this", "that", "these", "those"], answer: "those", tip: "'Those' se usa para personas plurales ('people') que están lejos." },
+                    { before: "Would you like ", after: " tea before we begin?", options: ["any", "some", "a", "few"], answer: "some", tip: "En ofrecimientos educados usamos 'some' ('Would you like some...?')." },
+                    { before: "", after: " she speak slowly when talking to older adults?", options: ["Do", "Is", "Does", "Have"], answer: "Does", tip: "Las preguntas en presente simple con 'she' y verbo de acción empiezan por 'Does'." },
+                    { before: "I ", after: " preparing the materials for the group right now.", options: ["am", "is", "do", "have"], answer: "am", tip: "Con 'I' en presente continuo usamos 'am + verbo-ing' ('I am preparing')." },
+                    { before: "That was ", after: " misunderstanding of the whole week.", options: ["worser", "worse", "the worst", "most bad"], answer: "the worst", tip: "'Bad' es irregular: su superlativo es 'the worst'." },
+                    { before: "", after: " they new to the care home?", options: ["Is", "Am", "Does", "Are"], answer: "Are", tip: "Con sujeto plural ('they') y 'to be' preguntamos con 'Are'." },
+                    { before: "You ", after: " got a great idea for the group activity.", options: ["has", "is", "have", "am"], answer: "have", tip: "Con 'you' y 'got' usamos 'have got'." },
+                    { before: "", after: " booklet here explains the daily routine.", options: ["Those", "These", "This", "They"], answer: "This", tip: "'This' indica cercanía con un sustantivo singular ('booklet')." },
+                    { before: "There ", after: " no noise in the room during the rest hour.", options: ["are", "is", "were", "have"], answer: "is", tip: "Con 'no noise' (incontable en singular) usamos 'There is'." }
                 ]
             },
             D: {
                 label: "Modelo D — Simulacro 4",
                 questions: [
-                    {
-                        before: "How ",
-                        after: " you feel when a shift starts with high tension?",
-                        options: ["are", "do", "has", "is"],
-                        answer: "do",
-                        tip: "Con el verbo 'feel' en presente simple para 'you', la pregunta habitual es 'How do you feel...?'"
-                    },
-                    {
-                        before: "Empathy is one of ",
-                        after: " values in person-centred care.",
-                        options: ["the most important", "more important", "most important", "importantest"],
-                        answer: "the most important",
-                        tip: "El superlativo de un adjetivo largo en un grupo se forma con 'the most + adjetivo'."
-                    },
-                    {
-                        before: "We ",
-                        after: " got enough time to do this transfer calmly.",
-                        options: ["hasn't", "haven't", "isn't", "doesn't"],
-                        answer: "haven't",
-                        tip: "Con 'we' y 'got', la forma negativa es 'haven't got'."
-                    },
-                    {
-                        before: "There ",
-                        after: " two armchairs near the window.",
-                        options: ["is", "was", "are", "be"],
-                        answer: "are",
-                        tip: "Con plural ('two armchairs') en presente usamos 'there are'."
-                    }
+                    { before: "", after: " you practise active listening every day?", options: ["Does", "Are", "Do", "Is"], answer: "Do", tip: "Las preguntas en presente simple con 'you' y verbo de acción empiezan por 'Do'." },
+                    { before: "", after: " he walking on his own right now?", options: ["Do", "Does", "Is", "Are"], answer: "Is", tip: "En presente continuo con 'he', la pregunta empieza por 'Is he + verbo-ing?'." },
+                    { before: "The afternoon shift is ", after: " than the morning shift.", options: ["noisier", "noisiest", "more noisy", "noisy"], answer: "noisier", tip: "'Noisy' en comparativo cambia '-y' por '-ier': 'noisier than'." },
+                    { before: "The room ", after: " quiet and bright this morning.", options: ["are", "am", "is", "have"], answer: "is", tip: "Con sustantivo singular ('The room') en presente de 'to be' se usa 'is'." },
+                    { before: "She ", after: " got any questions about the care plan.", options: ["haven't", "hasn't", "isn't", "aren't"], answer: "hasn't", tip: "Con 'she' y 'got', la forma negativa es 'hasn't got'." },
+                    { before: "Bring me ", after: " blankets on that distant shelf, please.", options: ["this", "these", "that", "those"], answer: "those", tip: "'Those' indica lejanía con un sustantivo plural ('blankets')." },
+                    { before: "There ", after: " two steps before the entrance door.", options: ["is", "am", "are", "has"], answer: "are", tip: "Con 'two steps' (plural) usamos 'There are'." },
+                    { before: "How ", after: " you adapt your voice for someone with hearing loss?", options: ["is", "does", "do", "are"], answer: "do", tip: "En presente simple con 'you' y verbo de acción ('adapt'), usamos 'How do you...?'." },
+                    { before: "They ", after: " talking to the social worker at this moment.", options: ["is", "am", "are", "do"], answer: "are", tip: "Con 'they' en presente continuo usamos 'are + verbo-ing' ('They are talking')." },
+                    { before: "Patience is ", after: " than rushing through tasks.", options: ["more helpful", "most helpful", "the most helpful", "helpfuler"], answer: "more helpful", tip: "'Helpful' es adjetivo largo: en comparativo usamos 'more helpful than'." },
+                    { before: "My colleagues ", after: " very supportive during busy shifts.", options: ["is", "am", "are", "has"], answer: "are", tip: "Con plural ('My colleagues') en presente de 'to be' usamos 'are'." },
+                    { before: "I ", after: " got a new schedule for this month.", options: ["has", "have", "am", "are"], answer: "have", tip: "Con 'I' y 'got' usamos 'have got'." },
+                    { before: "", after: " chair right next to me is very comfortable.", options: ["These", "Those", "This", "That"], answer: "This", tip: "'This' se usa para un objeto singular ('chair') que está cerca." },
+                    { before: "There ", after: " a glass of water on the table.", options: ["are", "is", "some", "any"], answer: "is", tip: "Con un sustantivo singular ('a glass of water') usamos 'There is'." },
+                    { before: "He ", after: " his shift at three in the afternoon.", options: ["finish", "finishes", "finishing", "is finish"], answer: "finishes", tip: "Con 'he', los verbos acabados en '-sh' añaden '-es' ('finishes')." },
+                    { before: "What ", after: " you doing right now in the activity room?", options: ["do", "have", "are", "is"], answer: "are", tip: "En presente continuo ('right now') con 'you', preguntamos 'What are you doing...?'." },
+                    { before: "Active listening is ", after: " than just hearing words.", options: ["most important", "more important", "the most important", "importanter"], answer: "more important", tip: "Comparativo de un adjetivo largo ('important'): 'more + adjetivo + than'." },
+                    { before: "", after: " I in the right room for the workshop?", options: ["Are", "Is", "Am", "Do"], answer: "Am", tip: "La pregunta con 'to be' y 'I' se forma con 'Am I...?'." },
+                    { before: "She ", after: " got a very clear and calm voice.", options: ["have", "are", "has", "is"], answer: "has", tip: "Con 'she' y 'got' usamos 'has got'." },
+                    { before: "Can you see ", after: " door at the end of the corridor?", options: ["this", "these", "that", "those"], answer: "that", tip: "'That' indica un elemento singular ('door') que está lejos." }
                 ]
             },
             E: {
                 label: "Modelo E — Simulacro 5",
                 questions: [
-                    {
-                        before: "What ",
-                        after: " you doing with that wheelchair over there?",
-                        options: ["do", "are", "have", "does"],
-                        answer: "are",
-                        tip: "'What are you doing...?' se usa para preguntar qué acción está realizando alguien en ese momento."
-                    },
-                    {
-                        before: "Can you point to ",
-                        after: " door at the end of the corridor?",
-                        options: ["this", "these", "that", "those"],
-                        answer: "that",
-                        tip: "'That' indica un elemento singular ('door') que está lejos del hablante."
-                    },
-                    {
-                        before: "She ",
-                        after: " a care assistant; she is the social worker.",
-                        options: ["aren't", "isn't", "doesn't", "don't"],
-                        answer: "isn't",
-                        tip: "Con el verbo 'to be' en presente simple para 'she', negamos con 'isn't'."
-                    },
-                    {
-                        before: "What ",
-                        after: " you usually write in the daily report?",
-                        options: ["are", "is", "do", "have"],
-                        answer: "do",
-                        tip: "Para rutinas en presente simple con 'you' ('What do you usually write...?') usamos 'do'."
-                    }
+                    { before: "We ", after: " the daily notes before leaving.", options: ["reviews", "review", "reviewing", "are review"], answer: "review", tip: "Con 'we' en presente simple afirmativo usamos el verbo en forma base ('review')." },
+                    { before: "What ", after: " you doing at the moment? The bell is ringing.", options: ["does", "do", "are", "has"], answer: "are", tip: "'What are you doing at the moment?' pregunta por una acción en este instante." },
+                    { before: "Empathy is one of ", after: " values in person-centred care.", options: ["the most important", "more important", "most important", "importantest"], answer: "the most important", tip: "Superlativo de un adjetivo largo ('important'): 'the most + adjetivo'." },
+                    { before: "I ", after: " a care assistant in a day centre.", options: ["am", "is", "are", "have"], answer: "am", tip: "Con 'I' en presente simple del verbo 'to be' usamos 'am'." },
+                    { before: "We ", after: " got enough time to explain everything calmly.", options: ["hasn't", "haven't", "aren't", "don't"], answer: "haven't", tip: "Con 'we' y 'got', la negativa es 'haven't got'." },
+                    { before: "Look at ", after: " notes right here in my hand.", options: ["that", "those", "these", "this"], answer: "these", tip: "'These' es el plural de cercanía ('estos/estas')." },
+                    { before: "There ", after: " three residents sitting in the courtyard.", options: ["is", "was", "are", "has"], answer: "are", tip: "Con un sustantivo plural ('three residents') usamos 'There are'." },
+                    { before: "What ", after: " you do every morning before starting your shift?", options: ["are", "do", "does", "have"], answer: "do", tip: "En preguntas en presente simple con verbo de acción y 'you', usamos 'What do you...?'." },
+                    { before: "What ", after: " you doing with that wheelchair over there?", options: ["do", "are", "have", "does"], answer: "are", tip: "Con 'you' y acción en curso ('doing'), usamos 'What are you doing...?'." },
+                    { before: "Today's session is ", after: " than yesterday's workshop.", options: ["gooder", "best", "better", "more good"], answer: "better", tip: "'Good' es irregular: su forma comparativa es 'better' ('better than')." },
+                    { before: "She ", after: " in the garden with the residents.", options: ["are", "is", "am", "do"], answer: "is", tip: "Con tercera persona singular ('she') en presente de 'to be' se usa 'is'." },
+                    { before: "He ", after: " got a fever today.", options: ["haven't", "aren't", "hasn't", "doesn't"], answer: "hasn't", tip: "Con 'he' y 'got', la negativa es 'hasn't got'." },
+                    { before: "Who left ", after: " folders over there on the far table?", options: ["this", "these", "that", "those"], answer: "those", tip: "'Those' es el plural de lejanía ('esos/esas' o 'aquellos/aquellas')." },
+                    { before: "Please pass me ", after: " water; the room is warm.", options: ["any", "some", "an", "many"], answer: "some", tip: "En peticiones o frases afirmativas con incontables ('water') usamos 'some'." },
+                    { before: "How ", after: " you usually calm a nervous family member?", options: ["is", "have", "do", "are"], answer: "do", tip: "Para preguntar por un hábito con 'you' en presente simple usamos 'How do you...?'." },
+                    { before: "Right now, the caregiver ", after: " explaining the steps slowly.", options: ["is", "has", "does", "do"], answer: "is", tip: "En presente continuo con 'the caregiver' (3.ª persona singular) usamos 'is + -ing'." },
+                    { before: "Respect is ", after: " quality a caregiver can show.", options: ["the best", "better", "best", "good"], answer: "the best", tip: "'The best' es el superlativo irregular de 'good'." },
+                    { before: "They ", after: " ready for the morning shift.", options: ["is", "am", "are", "does"], answer: "are", tip: "Con plural ('they') en presente de 'to be' usamos 'are'." },
+                    { before: "", after: " you got a pen to write the reminder?", options: ["Has", "Are", "Do", "Have"], answer: "Have", tip: "Las preguntas con 'have got' y 'you' empiezan por 'Have you got...?'." },
+                    { before: "", after: " glass of water is for the resident here.", options: ["These", "Those", "This", "There"], answer: "This", tip: "'This' acompaña a un singular ('glass') que está cerca." }
                 ]
             },
             F: {
                 label: "Modelo F — Simulacro 6",
                 questions: [
-                    {
-                        before: "Today's session is ",
-                        after: " than yesterday's workshop.",
-                        options: ["gooder", "best", "better", "more good"],
-                        answer: "better",
-                        tip: "'Good' es irregular: su forma comparativa es 'better' ('better than')."
-                    },
-                    {
-                        before: "Are you ",
-                        after: " attention to the family's request right now?",
-                        options: ["pay", "pays", "paying", "paid"],
-                        answer: "paying",
-                        tip: "Tras 'Are you...' en presente continuo ('right now'), el verbo principal lleva '-ing' ('paying')."
-                    },
-                    {
-                        before: "How ",
-                        after: " you adapt your language for a person with hearing loss?",
-                        options: ["is", "does", "do", "are"],
-                        answer: "do",
-                        tip: "La estructura de pregunta en presente simple con sujeto 'you' es 'How do you + verbo base...?'"
-                    },
-                    {
-                        before: "Respect is ",
-                        after: " quality a caregiver can show.",
-                        options: ["the best", "better", "best", "good"],
-                        answer: "the best",
-                        tip: "'The best' es el superlativo irregular de 'good' para destacar la cualidad máxima."
-                    }
+                    { before: "There aren't ", after: " extra chairs in this room.", options: ["some", "a", "any", "much"], answer: "any", tip: "En oraciones negativas con plurales contables usamos 'any'." },
+                    { before: "How ", after: " you feel when a shift starts with tension?", options: ["are", "do", "has", "is"], answer: "do", tip: "Con 'feel' en presente simple y sujeto 'you', preguntamos 'How do you feel...?'." },
+                    { before: "She ", after: " sleeping at the moment; she is reading.", options: ["doesn't", "isn't", "haven't", "aren't"], answer: "isn't", tip: "La negativa en presente continuo con 'she' es 'isn't + verbo-ing'." },
+                    { before: "This explanation is ", after: " than the first one.", options: ["short", "shorter", "the shortest", "more short"], answer: "shorter", tip: "Adjetivo corto ('short') en comparativo: 'shorter than'." },
+                    { before: "He ", after: " not tired today; he slept well.", options: ["are", "am", "is", "have"], answer: "is", tip: "Con 'he' y negación con 'not' usamos 'is not' ('He is not...')." },
+                    { before: "", after: " she got a mobility aid in the room?", options: ["Have", "Does", "Has", "Is"], answer: "Has", tip: "Con 'she' y 'got', la pregunta empieza por 'Has she got...?'." },
+                    { before: "Please close ", after: " window far away from the bed.", options: ["this", "these", "that", "those"], answer: "that", tip: "'That' se usa para un singular ('window') alejado." },
+                    { before: "Are there ", after: " new messages for the afternoon shift?", options: ["some", "a", "any", "much"], answer: "any", tip: "En preguntas generales con plurales contables empleamos 'any'." },
+                    { before: "What ", after: " you usually write in the daily report?", options: ["are", "is", "do", "have"], answer: "do", tip: "Para rutinas en presente simple con 'you' usamos 'What do you usually...?'." },
+                    { before: "We ", after: " using technical words right now.", options: ["don't", "hasn't", "aren't", "doesn't"], answer: "aren't", tip: "La negativa en presente continuo con 'we' es 'aren't + verbo-ing'." },
+                    { before: "Monday is ", after: " day of the week in the centre.", options: ["busier", "the busiest", "most busy", "busyest"], answer: "the busiest", tip: "Adjetivo corto acabado en '-y' ('busy') en superlativo: 'the busiest'." },
+                    { before: "We ", after: " not late for the team meeting.", options: ["isn't", "aren't", "am not", "doesn't"], answer: "aren't", tip: "Con 'we' en negativa del verbo 'to be' usamos 'aren't'." },
+                    { before: "They ", after: " got two family visits this afternoon.", options: ["has", "is", "have", "does"], answer: "have", tip: "Con 'they' y 'got' usamos 'have got'." },
+                    { before: "", after: " exercises are for today's morning session.", options: ["This", "That", "These", "There"], answer: "These", tip: "'These' acompaña a un plural ('exercises') cercano." },
+                    { before: "There are ", after: " leaflets on the reception desk.", options: ["any", "some", "an", "much"], answer: "some", tip: "En oraciones afirmativas con plurales contables ('leaflets') usamos 'some'." },
+                    { before: "She ", after: " carefully to the family's concerns.", options: ["listen", "listens", "listening", "are listen"], answer: "listens", tip: "En presente simple afirmativo con 'she', el verbo lleva '-s' ('listens')." },
+                    { before: "Are you ", after: " attention to the family's request right now?", options: ["pay", "pays", "paying", "paid"], answer: "paying", tip: "Tras 'Are you...' en presente continuo, el verbo principal lleva '-ing' ('paying')." },
+                    { before: "This exercise is ", after: " than yesterday's exercise.", options: ["easy", "easiest", "easier", "more easy"], answer: "easier", tip: "'Easy' en comparativo cambia '-y' por '-ier': 'easier than'." },
+                    { before: "I ", after: " not angry; I am just explaining the rule.", options: ["isn't", "aren't", "am not", "don't"], answer: "am not", tip: "La forma negativa con 'I' y 'to be' es 'am not' (no 'amn't')." },
+                    { before: "The centre ", after: " got a quiet space for family talks.", options: ["have", "are", "has", "do"], answer: "has", tip: "Con sujeto singular ('The centre') y 'got' usamos 'has got'." }
                 ]
             }
         };
@@ -749,7 +705,7 @@
             const questions = EXAM_MODELS[currentModelKey].questions;
 
             if (Object.keys(userAnswers).length < questions.length) {
-                document.getElementById('validation-msg').textContent = "Completa las 4 frases antes de corregir el examen.";
+                document.getElementById('validation-msg').textContent = `Completa las ${questions.length} frases antes de corregir el examen.`;
                 return;
             }
 
