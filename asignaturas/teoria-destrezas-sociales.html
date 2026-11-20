@@ -3,16 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Destrezas sociales - APSD</title>
+    <title>Teoría - Destrezas Sociales</title>
     <style>
         :root {
             --bg-board: #2b3a32;
             --board-frame: #4a3525;
             --text-chalk: #f4f4f0;
             --postit-yellow: #fff3a8;
-            --postit-blue: #a0c4ff;
-            --postit-mint: #b9fbc0;
-            --postit-peach: #ffd6a5;
             --text-dark: #2b2b2b;
         }
 
@@ -24,116 +21,100 @@
         }
 
         body {
-            background-color: #1e1e1e;
+            background-color: #1a2420;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
+            background-size: 24px 24px;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 15px;
+            padding: 20px;
         }
 
         .board-container {
             width: 100%;
             max-width: 1100px;
             background-color: var(--bg-board);
-            border: 12px solid var(--board-frame);
-            border-radius: 16px;
-            padding: 30px 25px;
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.5);
+            border: 14px solid var(--board-frame);
+            border-radius: 18px;
+            padding: 35px 30px;
+            box-shadow: inset 0 0 60px rgba(0,0,0,0.6), 0 15px 35px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
             gap: 25px;
         }
 
-        /* ENCABEZADO SUPERIOR */
-        .subject-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px dashed rgba(255,255,255,0.2);
-            padding-bottom: 20px;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .header-title h1 {
+        header h1 {
             color: var(--text-chalk);
-            font-size: 2.2em;
-            line-height: 1.2;
+            font-size: 2.1em;
+            border-bottom: 2px dashed rgba(255,255,255,0.25);
+            padding-bottom: 15px;
             font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
-        .header-image img {
-            width: 110px;
-            height: 110px;
-            object-fit: cover;
-            border-radius: 12px;
-            border: 3px solid rgba(255,255,255,0.3);
-            background: #fff;
-        }
-
-        /* BLOQUE DE AVISO */
-        .dates-banner {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-chalk);
-            padding: 15px 20px;
-            border-radius: 8px;
-            font-size: 1.05em;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            border-left: 4px solid var(--postit-yellow);
-        }
-
-        .dates-banner span strong {
-            color: var(--postit-yellow);
-        }
-
-        /* CUADRÍCULA DE SECCIONES (3 POST-ITS) */
-        .sections-grid {
+        .topics-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
-            padding: 10px 0;
+            padding: 5px 0;
         }
 
-        .section-card {
+        .topic-card {
+            background-color: var(--postit-yellow);
+            color: var(--text-dark);
+            border-radius: 6px 6px 6px 16px;
+            padding: 24px 22px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 25px 20px;
-            min-height: 170px;
-            text-decoration: none;
-            color: var(--text-dark);
-            border-radius: 4px 4px 4px 15px;
-            box-shadow: 3px 5px 12px rgba(0, 0, 0, 0.3);
+            box-shadow: 4px 6px 15px rgba(0,0,0,0.35);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            gap: 18px;
+            min-height: 185px;
         }
 
-        .section-card:hover {
-            transform: scale(1.03);
-            box-shadow: 5px 8px 18px rgba(0, 0, 0, 0.4);
+        .topic-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 6px 9px 20px rgba(0,0,0,0.45);
         }
 
-        .section-card h3 {
+        .topic-card h3 {
             font-size: 1.25em;
-            margin-bottom: 10px;
             font-weight: 700;
+            color: #222;
+            line-height: 1.3;
         }
 
-        .section-card p {
+        .topic-card p {
             font-size: 0.9em;
-            opacity: 0.9;
+            opacity: 0.85;
+            margin-top: 8px;
+            line-height: 1.4;
         }
 
-        /* Colores de los post-its */
-        .c-yellow { background-color: var(--postit-yellow); }
-        .c-blue   { background-color: var(--postit-blue); }
-        .c-mint   { background-color: var(--postit-mint); }
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background-color: var(--board-frame);
+            color: var(--text-chalk);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.92em;
+            padding: 10px 16px;
+            border-radius: 8px;
+            align-self: flex-start;
+            transition: background-color 0.2s ease, transform 0.15s ease;
+        }
 
-        /* NAVEGACIÓN INFERIOR */
+        .download-btn:hover {
+            background-color: #36261a;
+            transform: scale(1.02);
+        }
+
         .back-nav {
-            text-align: left;
             margin-top: 5px;
         }
 
@@ -144,7 +125,7 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            opacity: 0.8;
+            opacity: 0.85;
             transition: opacity 0.2s;
         }
 
@@ -153,22 +134,13 @@
             text-decoration: underline;
         }
 
-        /* ADAPTACIÓN MÓVIL */
         @media (max-width: 600px) {
             .board-container {
-                border-width: 6px;
-                padding: 15px 12px;
+                border-width: 8px;
+                padding: 20px 15px;
             }
-            .subject-header {
-                flex-direction: column-reverse;
-                text-align: center;
-            }
-            .header-title h1 {
+            header h1 {
                 font-size: 1.6em;
-            }
-            .header-image img {
-                width: 90px;
-                height: 90px;
             }
         }
     </style>
@@ -176,54 +148,25 @@
 <body>
 
     <main class="board-container">
-        <!-- ENCABEZADO CON TÍTULO E IMAGEN -->
-        <header class="subject-header">
-            <div class="header-title">
-                <h1>Destrezas sociales</h1>
-            </div>
-            <div class="header-image">
-                <img src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=300&auto=format&fit=crop&q=80" alt="Icono de Destrezas sociales">
-            </div>
+        <header>
+            <h1>Teoría - Documentos y Temas Disponibles</h1>
         </header>
 
-        <!-- AVISO DE EXAMEN -->
-        <section class="dates-banner">
-            <span>📅 <strong>Fecha de examen:</strong> viernes 27 de noviembre.</span>
-        </section>
-
-        <!-- APARTADOS PRINCIPALES (3 OPCIONES EN POST-ITS) -->
-        <section class="sections-grid">
-            <!-- 1. Teoría -->
-            <a href="teoria-destrezas-sociales.html" class="section-card c-yellow">
+        <div class="topics-grid">
+            <!-- Unidad 1 -->
+            <div class="topic-card">
                 <div>
-                    <h3>Teoría</h3>
-                    <p>Contenidos teóricos, esquemas y materiales de estudio de la asignatura.</p>
+                    <h3>Unidad 1: Habilidades Sociales y Comunicación</h3>
+                    <p>Documento teórico de apuntes y contenidos fundamentales de la unidad.</p>
                 </div>
-                <span style="font-size: 0.85em; font-weight: bold; margin-top: 15px;">Ver teoría &rarr;</span>
-            </a>
+                <a href="destrezas-sociales-ud1.pdf" class="download-btn" download>
+                    <span>📥</span> Descargar PDF
+                </a>
+            </div>
+        </div>
 
-            <!-- 2. Preguntas para preparar el examen -->
-            <a href="preguntas-examen-destrezas-sociales-ud1.docx" class="section-card c-blue" download>
-                <div>
-                    <h3>Preguntas para preparar el examen</h3>
-                    <p>Repertorio de preguntas clave y actividades de repaso orientadas al examen.</p>
-                </div>
-                <span style="font-size: 0.85em; font-weight: bold; margin-top: 15px;">Descargar Word &rarr;</span>
-            </a>
-
-            <!-- 3. Test -->
-            <a href="test-destrezas-sociales.html" class="section-card c-mint">
-                <div>
-                    <h3>Test</h3>
-                    <p>Cuestionarios interactivos para poner a prueba los conocimientos adquiridos.</p>
-                </div>
-                <span style="font-size: 0.85em; font-weight: bold; margin-top: 15px;">Hacer test &rarr;</span>
-            </a>
-        </section>
-
-        <!-- NAVEGACIÓN INFERIOR -->
         <div class="back-nav">
-            <a href="../index.html" class="back-btn">&larr; Volver a la pizarra principal</a>
+            <a href="destrezas-sociales.html" class="back-btn">&larr; Volver a la asignatura</a>
         </div>
     </main>
 
