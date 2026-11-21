@@ -1,0 +1,2642 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pon a prueba tus conocimientos - Primeros Auxilios</title>
+  <style>
+    :root {
+      --board-bg-gradient: radial-gradient(circle at 50% 20%, #263c2c 0%, #18261c 100%);
+      --frame-border: #5a3c24;
+      --frame-shadow: rgba(0, 0, 0, 0.55);
+      --text-main: #f4f6f3;
+      --text-muted: #c7d1c9;
+      --card-text: #162019;
+      --card-subtext: #2c3a30;
+      --btn-bg: #3b2818;
+      --btn-hover: #4e3520;
+      --btn-text: #f7f4ee;
+      --c1: #fff099;
+      --c2: #a8c7fa;
+      --c3: #ffd4a3;
+      --c4: #c4f0c2;
+      --c5: #d9c6ff;
+      --c6: #f7b8e8;
+      --c7: #b8ece3;
+      --c8: #ffbeb3;
+      --c9: #cce7ff;
+      --c10: #f3e49c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background-color: #141715;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 16px 16px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 16px;
+    }
+
+    .board-frame {
+      width: 100%;
+      max-width: 1080px;
+      background: var(--board-bg-gradient);
+      border: 10px solid var(--frame-border);
+      border-radius: 18px;
+      box-shadow: 0 22px 50px var(--frame-shadow), inset 0 0 40px rgba(0, 0, 0, 0.35);
+      padding: 42px 44px 36px;
+    }
+
+    h1 {
+      font-size: clamp(1.9rem, 3.8vw, 2.7rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      font-size: 0.98rem;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+      line-height: 1.45;
+    }
+
+    .models-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .model-btn {
+      border: none;
+      border-radius: 10px;
+      padding: 18px 14px;
+      text-align: left;
+      cursor: pointer;
+      color: var(--card-text);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.32);
+      transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 92px;
+    }
+
+    .model-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 13px 24px rgba(0, 0, 0, 0.42);
+      filter: brightness(1.02);
+    }
+
+    .model-btn:active {
+      transform: translateY(-1px);
+    }
+
+    .model-btn.active-model {
+      outline: 3px solid #ffffff;
+      outline-offset: 2px;
+    }
+
+    .model-title {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .model-sub {
+      font-size: 0.84rem;
+      color: var(--card-subtext);
+      font-weight: 500;
+    }
+
+    .m1 { background-color: var(--c1); }
+    .m2 { background-color: var(--c2); }
+    .m3 { background-color: var(--c3); }
+    .m4 { background-color: var(--c4); }
+    .m5 { background-color: var(--c5); }
+    .m6 { background-color: var(--c6); }
+    .m7 { background-color: var(--c7); }
+    .m8 { background-color: var(--c8); }
+    .m9 { background-color: var(--c9); }
+    .m10 { background-color: var(--c10); }
+
+    .quiz-panel {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 14px;
+      padding: 28px;
+      margin-bottom: 28px;
+      display: none;
+    }
+
+    .quiz-panel.visible {
+      display: block;
+    }
+
+    .quiz-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-bottom: 16px;
+      margin-bottom: 22px;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.22);
+    }
+
+    .quiz-header h2 {
+      font-size: 1.35rem;
+      color: var(--text-main);
+    }
+
+    .quiz-meta {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      background: rgba(0, 0, 0, 0.25);
+      padding: 6px 12px;
+      border-radius: 999px;
+    }
+
+    .question-card {
+      background: rgba(16, 26, 19, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .question-text {
+      font-size: 1.02rem;
+      font-weight: 600;
+      line-height: 1.45;
+      margin-bottom: 14px;
+      color: #ffffff;
+    }
+
+    .options-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .option-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 8px;
+      padding: 11px 13px;
+      cursor: pointer;
+      font-size: 0.94rem;
+      line-height: 1.38;
+      color: var(--text-main);
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .option-label:hover {
+      background: rgba(255, 255, 255, 0.11);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .option-label input[type="radio"] {
+      margin-top: 3px;
+      accent-color: #c4f0c2;
+      flex-shrink: 0;
+    }
+
+    .quiz-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .action-btn {
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-size: 0.96rem;
+      font-weight: 700;
+      cursor: pointer;
+      background-color: #c4f0c2;
+      color: #152218;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.28);
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+    }
+
+    .secondary-btn {
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 8px;
+      padding: 11px 16px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      transition: background-color 0.15s ease;
+    }
+
+    .secondary-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .results-box {
+      margin-top: 24px;
+      background: rgba(12, 20, 14, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 24px;
+      display: none;
+    }
+
+    .results-box.visible {
+      display: block;
+    }
+
+    .score-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding-bottom: 18px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .score-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #fff099;
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+    }
+
+    .wrong-item {
+      background: rgba(229, 83, 75, 0.12);
+      border-left: 4px solid #e5534b;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+
+    .wrong-item p {
+      margin-bottom: 6px;
+      font-size: 0.93rem;
+      line-height: 1.42;
+    }
+
+    .wrong-item p:last-child {
+      margin-bottom: 0;
+    }
+
+    .correct-badge {
+      color: #c4f0c2;
+      font-weight: 700;
+    }
+
+    .user-wrong-badge {
+      color: #ff9c96;
+      font-weight: 600;
+    }
+
+    .perfect-msg {
+      background: rgba(196, 240, 194, 0.14);
+      border-left: 4px solid #c4f0c2;
+      border-radius: 8px;
+      padding: 16px;
+      color: #e4ffe3;
+      font-weight: 600;
+    }
+
+    .footer-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 0.94rem;
+    }
+
+    .back-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .back-link:hover {
+      color: var(--text-main);
+      text-decoration: underline;
+    }
+
+    @media (max-width: 920px) {
+      .models-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .options-list {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .board-frame {
+        padding: 28px 20px 24px;
+      }
+
+      .models-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="board-frame">
+    <h1>Pon a prueba tus conocimientos</h1>
+    <p class="subtitle">Selecciona un modelo de examen (20 preguntas por test · Primeros Auxilios: UD 1, 2 y 3.1 · Opciones A-D equilibradas y rotadas · Cada fallo resta 1/3 de punto).</p>
+
+    <section class="models-grid" aria-label="Modelos de examen disponibles" id="modelsGrid">
+      <button type="button" class="model-btn m1" data-model="1">
+        <span class="model-title">☑ Modelo A</span>
+        <span class="model-sub">Simulacro Oficial 1</span>
+      </button>
+      <button type="button" class="model-btn m2" data-model="2">
+        <span class="model-title">☑ Modelo B</span>
+        <span class="model-sub">Simulacro Oficial 2</span>
+      </button>
+      <button type="button" class="model-btn m3" data-model="3">
+        <span class="model-title">☑ Modelo C</span>
+        <span class="model-sub">Simulacro Oficial 3</span>
+      </button>
+      <button type="button" class="model-btn m4" data-model="4">
+        <span class="model-title">☑ Modelo D</span>
+        <span class="model-sub">Simulacro Oficial 4</span>
+      </button>
+      <button type="button" class="model-btn m5" data-model="5">
+        <span class="model-title">☑ Modelo E</span>
+        <span class="model-sub">Simulacro Oficial 5</span>
+      </button>
+      <button type="button" class="model-btn m6" data-model="6">
+        <span class="model-title">☑ Modelo F</span>
+        <span class="model-sub">Simulacro Oficial 6</span>
+      </button>
+      <button type="button" class="model-btn m7" data-model="7">
+        <span class="model-title">☑ Modelo G</span>
+        <span class="model-sub">Simulacro Oficial 7</span>
+      </button>
+      <button type="button" class="model-btn m8" data-model="8">
+        <span class="model-title">☑ Modelo H</span>
+        <span class="model-sub">Simulacro Oficial 8</span>
+      </button>
+      <button type="button" class="model-btn m9" data-model="9">
+        <span class="model-title">☑ Modelo I</span>
+        <span class="model-sub">Simulacro Oficial 9</span>
+      </button>
+      <button type="button" class="model-btn m10" data-model="10">
+        <span class="model-title">☑ Modelo J</span>
+        <span class="model-sub">Simulacro Oficial 10</span>
+      </button>
+    </section>
+
+    <section class="quiz-panel" id="quizPanel" aria-live="polite">
+      <div class="quiz-header">
+        <h2 id="quizTitle">Modelo A · Simulacro Oficial 1</h2>
+        <span class="quiz-meta" id="quizMeta">20 preguntas · Fallos restan 1/3</span>
+      </div>
+
+      <form id="quizForm">
+        <div id="questionsContainer"></div>
+        <div class="quiz-actions">
+          <button type="submit" class="action-btn" id="submitQuizBtn">Corregir prueba</button>
+          <button type="button" class="secondary-btn" id="chooseAnotherTopBtn">Probar otro test</button>
+        </div>
+      </form>
+
+      <div class="results-box" id="resultsBox">
+        <div class="score-summary">
+          <div>
+            <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 4px;">Calificación final</div>
+            <div class="score-value" id="finalScoreText">0,00 / 10</div>
+          </div>
+          <div class="stats-row" id="statsRow"></div>
+        </div>
+
+        <div id="wrongAnswersList"></div>
+
+        <div class="quiz-actions">
+          <button type="button" class="action-btn" id="tryAnotherTestBtn">Probar otro test</button>
+          <button type="button" class="secondary-btn" id="retryCurrentBtn">Repetir este modelo</button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer-nav">
+      <a class="back-link" href="primeros-auxilios.html">← Volver a Primeros Auxilios</a>
+    </footer>
+  </main>
+
+  <script>
+    // 200 preguntas únicas (10 modelos x 20 preguntas = 200 preguntas sin repetir)
+    // cubriendo UD 1, UD 2 y UD 3.1.
+    // Cada pregunta incluye: q, opts [A, B, C, D] de extensión equilibrada, y ans (0=A, 1=B, 2=C, 3=D) rotada.
+    const EXAM_MODELS = {
+      1: {
+        name: "Modelo A · Simulacro Oficial 1",
+        questions: [
+          {
+            q: "¿Qué caracteriza a una emergencia frente a una urgencia sanitaria?",
+            opts: [
+              "Riesgo vital inminente o pérdida de función vital",
+              "Atención rápida sin amenaza vital a corto plazo",
+              "Molestia leve tratable en consulta programada",
+              "Cuadro estable sin compromiso respiratorio ni cardíaco"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Cuál es el principio básico recomendado al actuar en primeros auxilios?",
+            opts: [
+              "Actuar rápido aunque se dude de la técnica",
+              "No hacer nada antes que realizar algo mal",
+              "Mover siempre a la víctima a un lugar cómodo",
+              "Administrar fármacos habituales sin consultar"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué pena establece el artículo 195 del Código Penal por omisión del deber de socorro?",
+            opts: [
+              "Amonestación verbal y registro administrativo",
+              "Trabajo comunitario de uno a cuatro meses",
+              "Multa de tres a doce meses según la ley",
+              "Inhabilitación temporal de seis a diez meses"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué dos requisitos exige la ley para declinar válidamente la asistencia?",
+            opts: [
+              "Tener seguro médico y estar acompañado",
+              "Presentar dolor leve y rechazar traslado",
+              "Conocer el protocolo y firmar un parte",
+              "Ser mayor de edad y estar en plena facultad mental"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿En qué consiste la fase de Proteger dentro de la regla PAS?",
+            opts: [
+              "Señalizar, acordonar y protegerse uno mismo",
+              "Llamar al 112 indicando el número de heridos",
+              "Valorar el pulso radial y la saturación de oxígeno",
+              "Colocar a la víctima en posición lateral segura"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué eslabón sigue a la activación de emergencias en la cadena de supervivencia?",
+            opts: [
+              "Traslado en vehículo particular al hospital",
+              "Reanimación cardiopulmonar precoz si no respira",
+              "Administración de medicación intravenosa urgente",
+              "Reevaluación periódica manteniendo su postura"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué consecuencia es habitual en los accidentes de tráfico según el temario?",
+            opts: [
+              "Solo contracturas leves sin riesgo interno",
+              "Exclusivamente quemaduras térmicas superficiales",
+              "Fracturas múltiples, hemorragias y traumatismos",
+              "Únicamente cuadros de deshidratación aguda"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué actuación es correcta ante una sospecha de intoxicación por cáusticos?",
+            opts: [
+              "Provocar el vómito de inmediato con agua tibia",
+              "Dar leche abundante para neutralizar el tóxico",
+              "Tumbar boca abajo sin vigilar la vía aérea",
+              "No provocar el vómito bajo ningún concepto"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué color y prioridad corresponden a una víctima con hemorragia exanguinante?",
+            opts: [
+              "Rojo y prioridad 1 de estabilización inmediata",
+              "Amarillo y prioridad 2 con demora mayor a una hora",
+              "Verde y prioridad 3 demorable varias horas",
+              "Negro y prioridad 0 de persona fallecida"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Cuál es la temperatura corporal normal en un adulto sano en la axila?",
+            opts: [
+              "Entre 35,0 y 35,9 grados centígrados",
+              "Entre 36 y 37 grados centígrados en normotermia",
+              "Entre 37,2 y 38,0 grados centígrados",
+              "Entre 38,1 y 38,9 grados centígrados"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué ocurre en la fase de Avisar del protocolo PAS respecto a los datos del suceso?",
+            opts: [
+              "Se avisa solo al familiar más cercano del herido",
+              "Se llama al 112 sin precisar el lugar exacto",
+              "Se informa de lugar, tipo, heridos y datos propios",
+              "Se espera a comprobar constantes antes de llamar"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué define a una urgencia frente a una emergencia respecto a los órganos?",
+            opts: [
+              "Provoca fallo orgánico irreversible en pocos minutos",
+              "Detiene la respiración espontánea de forma brusca",
+              "Exige reanimación inmediata antes de trasladar",
+              "Requiere atención sin amenaza vital a corto plazo"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué debe hacerse con las ampollas en quemaduras según las pautas generales?",
+            opts: [
+              "No romper ampollas ni desgarrar vestimentas",
+              "Pincharlas con aguja estéril y aplicar alcohol",
+              "Retirar la piel levantada con pinzas de cura",
+              "Cubrirlas con algodón seco y apretar fuerte"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué caracteriza al shock hipovolémico según el temario de la asignatura?",
+            opts: [
+              "Obstáculo mecánico al flujo sanguíneo cardíaco",
+              "Disminución drástica del volumen de sangre o líquidos",
+              "Infección bacteriana generalizada con vasodilatación",
+              "Pérdida del tono vascular por lesión medular"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿En qué consiste la maniobra frente-mentón para abrir la vía aérea?",
+            opts: [
+              "Inclinar el tronco hacia delante sin mover cabeza",
+              "Presionar el abdomen por debajo del esternón",
+              "Hiperextender el cuello para evitar obstrucción lingual",
+              "Tirar de la mandíbula sin tocar la frente"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué indica la respiración de Cheyne-Stokes en las alteraciones respiratorias?",
+            opts: [
+              "Respiración profunda y rápida por acidosis metabólica",
+              "Incapacidad de respirar al tumbarse boca arriba",
+              "Esfuerzo respiratorio leve tras caminar despacio",
+              "Patrón asociado a insuficiencia renal y cardíaca"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Cuál es la frecuencia cardíaca normal en reposo en un adulto sano?",
+            opts: [
+              "Entre 60 y 100 pulsaciones por minuto",
+              "Por debajo de 55 pulsaciones por minuto",
+              "Entre 105 y 125 pulsaciones por minuto",
+              "Por encima de 130 pulsaciones por minuto"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué debe comprobarse antes de administrar un analgésico del botiquín?",
+            opts: [
+              "Que el paciente haya comido justo antes",
+              "Comprobar siempre que no exista alergia previa",
+              "Que presente temperatura superior a 39,5 °C",
+              "Que no tenga vendajes ni apósitos colocados"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué tipo de accidente se asocia con mayor frecuencia a quemaduras, heridas y caídas?",
+            opts: [
+              "Accidente de tráfico en vía interurbana",
+              "Accidente deportivo de alta intensidad",
+              "Accidente doméstico en el entorno del hogar",
+              "Accidente por catástrofe natural sísmica"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Cuál es el rango de referencia normal de la saturación de oxígeno o pulsioximetría?",
+            opts: [
+              "Entre el 80% y el 89% en reposo",
+              "Entre el 88% y el 93% en adulto sano",
+              "Entre el 70% y el 85% sin oxígeno",
+              "Entre el 95% y el 100% en condiciones normales"
+            ],
+            ans: 3
+          }
+        ]
+      },
+      2: {
+        name: "Modelo B · Simulacro Oficial 2",
+        questions: [
+          {
+            q: "¿Cuándo se considera que existe una urgencia sanitaria?",
+            opts: [
+              "Cuando hay parada cardíaca o asfixia inmediata",
+              "Cuando se pierde una función vital en segundos",
+              "Cuando requiere atención sin riesgo vital inmediato",
+              "Cuando existe hemorragia masiva incontrolable"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿A quién sanciona también el apartado 2 del artículo 195 del Código Penal?",
+            opts: [
+              "A quien socorre con lentitud por falta de práctica",
+              "A quien avisa al 112 sin conocer la dirección",
+              "A quien espera la llegada de la ambulancia",
+              "A quien impedido no pide auxilio ajeno urgente"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué datos debe transmitirse al llamar al 112 en la fase Avisar?",
+            opts: [
+              "Localización, tipo de accidente, heridos y datos",
+              "Solo el nombre del centro sanitario más cercano",
+              "Únicamente el diagnóstico médico presuntivo",
+              "Matrícula de todos los vehículos detenidos"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Cuál es el tercer eslabón de la cadena de supervivencia ante una PCR?",
+            opts: [
+              "Atención en UVI móvil por equipo especializado",
+              "Uso del desfibrilador externo automático o DEA",
+              "Revisión del botiquín y registro de constantes",
+              "Hidratación oral progresiva tras recuperar pulso"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué lesiones son frecuentes en los accidentes domésticos según el temario?",
+            opts: [
+              "Traumatismos por aplastamiento y onda expansiva",
+              "Lesiones por onda expansiva y radiación",
+              "Quemaduras, heridas y caídas en el hogar",
+              "Fracturas por estrés de alta competición"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué debe hacerse ante un accidentado con posible lesión de columna vertebral?",
+            opts: [
+              "Sentarlo rápido para facilitar su respiración",
+              "Tirar de los brazos para sacarlo del vehículo",
+              "Girar el cuello para comprobar si siente dolor",
+              "Valorar lesión medular antes de evacuar o mover"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué indica la etiqueta amarilla y prioridad 2 en la clasificación de víctimas?",
+            opts: [
+              "Sin riesgo vital inmediato y demorable más de 1 h",
+              "Riesgo vital inminente con parada presenciada",
+              "Lesión leve demorable durante varias horas",
+              "Ausencia de signos vitales tras apertura aérea"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿En qué consiste el shock hipovolémico según la clasificación del temario?",
+            opts: [
+              "Obstrucción mecánica al flujo de entrada o salida",
+              "Descenso brusco de sangre o líquidos circulantes",
+              "Fallo primario del músculo cardíaco como bomba",
+              "Vasodilatación excesiva por pérdida del tono vascular"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Dónde se localiza el control nervioso de la temperatura corporal?",
+            opts: [
+              "En el cerebelo posterior del tronco encefálico",
+              "En la corteza frontal del lóbulo cerebral",
+              "En el hipotálamo situado en el cerebro",
+              "En el bulbo raquídeo de la médula espinal"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Cuál es el rango normal de frecuencia respiratoria en un adulto en reposo?",
+            opts: [
+              "De 30 a 60 respiraciones por minuto",
+              "De 26 a 30 respiraciones por minuto",
+              "De 5 a 9 respiraciones por minuto",
+              "De 12 a 18 respiraciones por minuto"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué se hace cuando la víctima está consciente tras evaluar su respuesta?",
+            opts: [
+              "Dejar en su posición y reevaluar periódicamente",
+              "Iniciar treinta compresiones torácicas de inmediato",
+              "Aplicar descargas eléctricas con el DEA externo",
+              "Forzar la hiperextensión cervical sin motivo"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Cuál es la relación de compresiones y ventilaciones en la RCP del adulto?",
+            opts: [
+              "Quince compresiones y dos insuflaciones de rescate",
+              "Treinta compresiones torácicas y dos ventilaciones",
+              "Cinco compresiones y una ventilación pausada",
+              "Veinte compresiones y cuatro insuflaciones rápidas"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué causa origina el shock cardiogénico según el temario?",
+            opts: [
+              "Pérdida masiva de líquidos por quemaduras extensas",
+              "Reacción alérgica severa por picadura o fármaco",
+              "Fallo del corazón como bomba que reduce gasto",
+              "Obstrucción externa al llenado o vaciado cardíaco"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué se debe evitar en la manipulación de heridas abiertas?",
+            opts: [
+              "Cubrir con gasa estéril sin ejercer presión excesiva",
+              "Avisar al servicio de emergencias si sangra mucho",
+              "Lavarla con suero fisiológico cuando corresponda",
+              "Manipular heridas ni extraer cuerpos extraños"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué antiséptico se cita específicamente para la limpieza de instrumental?",
+            opts: [
+              "Alcohol de 96 grados para limpiar el instrumental",
+              "Agua oxigenada de uso tópico en el hogar",
+              "Clorhexidina en solución acuosa doméstica",
+              "Solución salina estéril en vial unidosis"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Cómo se denomina la temperatura corporal por debajo de 36 °C?",
+            opts: [
+              "Febrícula leve de corta evolución clínica",
+              "Hipotermia por descenso por debajo de 36 °C",
+              "Hipertermia moderada de origen infeccioso",
+              "Normotermia fisiológica en reposo basal"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué es la bradipnea dentro de las alteraciones de la frecuencia respiratoria?",
+            opts: [
+              "Aumento de la profundidad del aire inhalado",
+              "Ausencia completa de respiración durante segundos",
+              "Disminución de la frecuencia respiratoria a 10 rpm",
+              "Dificultad para respirar tumbado en decúbito"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué valores normales corresponden a la presión sistólica y diastólica en adulto?",
+            opts: [
+              "PAS 95–110 mmHg y PAD 45–55 mmHg en reposo",
+              "PAS 150–170 mmHg y PAD 95–110 mmHg en reposo",
+              "PAS 100–115 mmHg y PAD 50–60 mmHg en reposo",
+              "PAS 120–140 mmHg y PAD 60–90 mmHg en adulto"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué implica el objetivo de evitar nuevas lesiones en primeros auxilios?",
+            opts: [
+              "Prevenir complicaciones o daños añadidos al herido",
+              "Realizar tratamientos médicos complejos en la calle",
+              "Sustituir la valoración de los servicios sanitarios",
+              "Mover al accidentado antes de evaluar riesgos"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿En qué consiste la respiración de Kussmaul o acidótica según el temario?",
+            opts: [
+              "Respiración irregular propia de lesiones cerebrales",
+              "Respiración profunda y amplia asociada a acidosis",
+              "Cese prolongado del flujo aéreo pulmonar",
+              "Disnea exclusiva al adoptar el decúbito supino"
+            ],
+            ans: 1
+          }
+        ]
+      },
+      3: {
+        name: "Modelo C · Simulacro Oficial 3",
+        questions: [
+          {
+            q: "¿Cuál es uno de los objetivos básicos de los primeros auxilios?",
+            opts: [
+              "Mantener la vida y evitar nuevas lesiones",
+              "Sustituir el diagnóstico médico hospitalario",
+              "Retrasar el aviso hasta completar la cura",
+              "Aplicar medicación de cualquier tipo disponible"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Cuándo puede existir responsabilidad legal en la actuación del socorrista?",
+            opts: [
+              "Al pedir ayuda al 112 antes de intervenir",
+              "Al causar un mal con intención o grave error",
+              "Al tranquilizar verbalmente a la víctima herida",
+              "Al proteger la zona sin exponerse al peligro"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿En qué consiste la fase Socorrer dentro de la regla PAS?",
+            opts: [
+              "Retirar testigos y despejar la calzada entera",
+              "Solicitar una ambulancia y colgar de inmediato",
+              "Tranquilizar y aplicar protocolos priorizando vida",
+              "Clasificar el botiquín por fecha de caducidad"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Quién realiza el último eslabón de soporte vital avanzado?",
+            opts: [
+              "Cualquier testigo formado en soporte básico",
+              "El primer interviniente con mascarilla facial",
+              "Los acompañantes con un botiquín portátil",
+              "Equipos especializados en UVI móvil u hospital"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué consecuencias se asocian habitualmente a los accidentes laborales?",
+            opts: [
+              "Caídas e intoxicaciones en el entorno laboral",
+              "Ahogamientos en piscina y golpes de calor",
+              "Esguinces por entrenamiento deportivo intenso",
+              "Quemaduras solares por exposición recreativa"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué está prohibido hacer ante un accidente según las pautas generales?",
+            opts: [
+              "Cubrir con una manta para mantener el calor",
+              "Dar de beber o comer a la persona accidentada",
+              "Alejar del peligro de fuego, gas o electricidad",
+              "Hablar con serenidad para tranquilizar al herido"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué tipo de casos corresponden a la categoría verde y prioridad 3?",
+            opts: [
+              "Parada cardiorrespiratoria y shock grave",
+              "Traumatismo craneoencefálico severo inicial",
+              "Traumatismos menores demorables varias horas",
+              "Hemorragia exanguinante sin control posible"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Cuál es un motivo común de shock cardiogénico?",
+            opts: [
+              "Deshidratación grave por diarrea persistente",
+              "Reacción alérgica severa a una picadura",
+              "Neumotórax a tensión o embolia pulmonar",
+              "Infarto agudo de miocardio o arritmias graves"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Cuánto suele aumentar la temperatura respecto a la axila en boca y en recto?",
+            opts: [
+              "Hasta +0,5 °C en boca y +1 °C en recto u oído",
+              "Hasta +1 °C en boca y +2 °C en recto u oído",
+              "Hasta -0,5 °C en boca y +0,5 °C en recto u oído",
+              "No varía respecto a la medición axilar"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Cuál es la frecuencia respiratoria normal en un recién nacido?",
+            opts: [
+              "De 12 a 18 respiraciones por minuto",
+              "De 8 a 12 respiraciones por minuto",
+              "De 18 a 24 respiraciones por minuto",
+              "De 30 a 60 respiraciones por minuto"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué se debe hacer si la víctima no responde tras estimularla suavemente?",
+            opts: [
+              "Pedir ayuda, llamar al 112 y valorar respiración",
+              "Darle líquidos en pequeños sorbos de inmediato",
+              "Colocarla sentada apoyando la espalda en pared",
+              "Esperar diez minutos antes de abrir la vía aérea"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué profundidad de compresión torácica se indica en adultos y niños?",
+            opts: [
+              "Entre 2 y 3 cm con compresión suave",
+              "5 cm y no más de 6 cm en el esternón",
+              "Entre 7 y 8 cm con hundimiento profundo",
+              "Entre 1 y 2 cm con dos dedos centrales"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué define al shock distributivo dentro de la clasificación del temario?",
+            opts: [
+              "Fallo mecánico por taponamiento cardíaco agudo",
+              "Pérdida de sangre por hemorragia externa grave",
+              "Vasodilatación excesiva con mala distribución tisular",
+              "Caída de la contractilidad tras infarto extenso"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué conviene incluir en un botiquín de primeros auxilios además del material?",
+            opts: [
+              "Medicamentos sin prospecto ni fecha visible",
+              "Alcohol puro para curar heridas abiertas profundas",
+              "Solo gasas sin apósitos ni material de cura",
+              "Listado de teléfonos de urgencias y toxicología"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué rango define la febrícula en el adulto según el apunte?",
+            opts: [
+              "De 37,1 a 37,9 grados centígrados",
+              "De 38,0 a 38,4 grados centígrados",
+              "De 38,5 a 39,4 grados centígrados",
+              "Por encima de 40,5 grados centígrados"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué es la apnea según las alteraciones respiratorias del temario?",
+            opts: [
+              "Aumento de la profundidad en cada respiración",
+              "Cese temporal o completo de la respiración",
+              "Respiración rápida de 20 a 24 ciclos por minuto",
+              "Dificultad respiratoria al estar tumbado"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué indica una frecuencia de pulso superior a 100 ppm en el adulto?",
+            opts: [
+              "Bradicardia por debajo de los valores basales",
+              "Normocardia dentro del rango habitual en reposo",
+              "Taquicardia al superar las 100 ppm en adulto",
+              "Hipotensión severa con ausencia de latido"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Cuál es el valor normal de la presión arterial media en el adulto?",
+            opts: [
+              "Entre 65 y 75 mmHg en posición supina",
+              "Entre 110 y 120 mmHg en reposo basal",
+              "Entre 50 y 60 mmHg tras reposo breve",
+              "Entre 90 y 100 mmHg en el adulto sano"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué consecuencias son frecuentes en los accidentes de ocio y tiempo libre?",
+            opts: [
+              "Ahogamientos, golpe de calor y picaduras",
+              "Fracturas múltiples por colisión de vehículos",
+              "Intoxicaciones por gases en cadena de montaje",
+              "Traumatismos por aplastamiento en derrumbes"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Con qué situación se asocia la respiración de Biot en el temario?",
+            opts: [
+              "Con insuficiencia renal e insuficiencia cardíaca",
+              "Con lesiones encefálicas y ritmo irregular",
+              "Con acidosis metabólica y respiración profunda",
+              "Con disnea exclusiva al tumbarse en cama"
+            ],
+            ans: 1
+          }
+        ]
+      },
+      4: {
+        name: "Modelo D · Simulacro Oficial 4",
+        questions: [
+          {
+            q: "¿Qué implica el objetivo de garantizar el traslado en primeros auxilios?",
+            opts: [
+              "Llevar al herido a un centro sanitario adecuado",
+              "Evacuar en coche particular ante cualquier trauma",
+              "Esperar a que remita el dolor sin avisar",
+              "Dar el alta en el lugar tras limpiar la herida"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué debe hacerse antes de iniciar primeros auxilios si la víctima está consciente?",
+            opts: [
+              "Comenzar las compresiones torácicas sin avisar",
+              "Solicitar su consentimiento antes de actuar",
+              "Revisar su documentación y teléfono personal",
+              "Quitarle toda la ropa de abrigo de inmediato"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué se busca al priorizar la atención ante múltiples víctimas?",
+            opts: [
+              "Atender primero a quienes caminan sin ayuda",
+              "Seguir el orden de llegada al lugar del suceso",
+              "Atender primero el riesgo vital inminente",
+              "Empezar por las heridas superficiales visibles"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué lesiones son típicas de los accidentes de ocio y tiempo libre?",
+            opts: [
+              "Fracturas por accidente de tráfico urbano",
+              "Intoxicaciones por gases en línea de montaje",
+              "Traumatismos por derrumbe sísmico grave",
+              "Ahogamientos, golpe de calor y picaduras"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué se debe evitar en la manipulación de heridas y quemaduras?",
+            opts: [
+              "Manipular heridas, sacar cuerpos o romper ampollas",
+              "Proteger la zona con gasas estériles sin apretar",
+              "Retirar a la víctima si hay riesgo eléctrico",
+              "Mantener la calma y hablar con suavidad"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Dónde debe colocarse y mantenerse un botiquín de primeros auxilios?",
+            opts: [
+              "En el baño húmedo y al alcance de todos",
+              "En lugar fresco y seco fuera del alcance infantil",
+              "Cerca de una fuente de calor para conservarlo",
+              "Sin envase original para ahorrar espacio"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Cuál es el origen del shock séptico dentro del shock distributivo?",
+            opts: [
+              "Compresión externa del corazón por líquido",
+              "Pérdida aguda de sangre por herida abierta",
+              "Infección grave y generalizada o sepsis",
+              "Lesión directa en la médula espinal cervical"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué es la hipoxia o alteración por hipotermia según el temario?",
+            opts: [
+              "Fiebre por encima de 38,5 grados centígrados",
+              "Aumento de glucemia y sudoración profusa",
+              "Taquicardia intensa con piel seca y caliente",
+              "Temperatura inferior a 36 °C con lentitud vital"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Cómo se define el ritmo respiratorio normal?",
+            opts: [
+              "Sucesión regular sin pausas entre movimientos",
+              "Alternancia de apneas y respiraciones rápidas",
+              "Inspiraciones cortas y espiraciones silbantes",
+              "Esfuerzo respiratorio solo al incorporarse"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Cuál es la frecuencia cardíaca o pulso normal en un adulto?",
+            opts: [
+              "Menos de 50 pulsaciones por minuto",
+              "Entre 60 y 100 pulsaciones por minuto",
+              "Entre 105 y 130 pulsaciones por minuto",
+              "Más de 130 pulsaciones por minuto"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿En cuánto tiempo debe comprobarse si la víctima respira normalmente?",
+            opts: [
+              "En menos de 30 segundos observando el abdomen",
+              "Entre 15 y 20 segundos palpando el cuello",
+              "En menos de 10 segundos viendo, oyendo y sintiendo",
+              "Durante 1 minuto entero antes de pedir ayuda"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué maniobra abre la vía aérea si se sospecha lesión medular?",
+            opts: [
+              "Hiperextensión forzada del cuello hacia atrás",
+              "Compresión brusca sobre el epigastrio",
+              "Rotación lateral rápida de la cabeza",
+              "Tracción mandibular evitando mover el cuello"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿A qué ritmo se debe ventilar en la RCP básica de un adulto?",
+            opts: [
+              "Una insuflación cada 5 segundos comprobando tórax",
+              "Una insuflación cada 2 segundos de forma rápida",
+              "Una insuflación cada 10 segundos con pausa larga",
+              "Dos insuflaciones seguidas cada segundo"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Cada cuánto tiempo conviene turnarse si hay dos reanimadores en RCP?",
+            opts: [
+              "Cada 30 segundos para evitar cansancio",
+              "Cada 2 minutos para mantener la eficacia",
+              "Cada 5 minutos sin detener el masaje",
+              "Cada 10 minutos tras evaluar el pulso"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué caracteriza al shock obstructivo según el temario?",
+            opts: [
+              "Disminución del volumen líquido por diarrea intensa",
+              "Infección grave generalizada con vasodilatación",
+              "Obstáculo mecánico al flujo sanguíneo cardíaco",
+              "Debilidad intrínseca del músculo cardíaco"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué rango corresponde a la fiebre ligera según la clasificación del temario?",
+            opts: [
+              "De 37,1 a 37,9 grados centígrados",
+              "De 38,5 a 39,4 grados centígrados",
+              "De 39,5 a 40,4 grados centígrados",
+              "De 38,0 a 38,4 grados centígrados"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué indica una frecuencia de pulso inferior a 60 ppm en un adulto?",
+            opts: [
+              "Bradicardia por debajo de 60 pulsaciones",
+              "Taquicardia por encima de 100 pulsaciones",
+              "Hipertensión arterial sistólica marcada",
+              "Aumento normal tras ejercicio aeróbico"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿A partir de qué cifra se indica hipertensión arterial en el apunte?",
+            opts: [
+              "Por encima de 120/70 mmHg en reposo",
+              "Por encima de 140/90 mmHg en medición",
+              "Por encima de 130/80 mmHg en cualquier caso",
+              "Por encima de 110/65 mmHg en adulto"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué se debe hacer con los medicamentos guardados en un botiquín?",
+            opts: [
+              "Sacarlos de su envase para ocupar menos sitio",
+              "Guardar restos de tratamientos antiguos por si acaso",
+              "Conservarlos en su embalaje y prospecto originales",
+              "Dejarlos en estantes bajos accesibles a menores"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué es la disnea dentro de las alteraciones respiratorias del temario?",
+            opts: [
+              "Cese completo de los movimientos respiratorios",
+              "Respiración irregular propia de lesiones cerebrales",
+              "Aumento de frecuencia tras correr suavemente",
+              "Dificultad respiratoria o falta de aire"
+            ],
+            ans: 3
+          }
+        ]
+      },
+      5: {
+        name: "Modelo E · Simulacro Oficial 5",
+        questions: [
+          {
+            q: "¿Cuál es la finalidad del soporte vital básico o SVB?",
+            opts: [
+              "Sustituir y restaurar función cardíaca y pulmonar",
+              "Realizar cirugía urgente en la vía pública",
+              "Sustituir la llamada al 112 en paradas breves",
+              "Medir la presión arterial invasiva en el suelo"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Cómo se evalúa inicialmente el nivel de consciencia de una víctima?",
+            opts: [
+              "Colocándola de lado y dándole agua fresca",
+              "Sujetando hombros, zarandeando suave y hablando alto",
+              "Aplicando una descarga eléctrica con el DEA",
+              "Iniciando compresiones antes de comprobar nada"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué significa el shock anafiláctico dentro del shock distributivo?",
+            opts: [
+              "Reacción alérgica muy severa a fármacos o picaduras",
+              "Fallo mecánico por taponamiento del pericardio",
+              "Sangrado masivo tras una fractura abierta",
+              "Descenso del gasto por arritmia ventricular"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Cómo se denomina la fiebre entre 37,1 y 37,9 grados centígrados?",
+            opts: [
+              "Fiebre muy alta o hiperpirexia severa",
+              "Febrícula dentro del rango de 37,1 a 37,9 °C",
+              "Fiebre moderada de evolución prolongada",
+              "Hipotermia moderada por exposición térmica"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Cuál es la frecuencia respiratoria normal durante el primer año de vida?",
+            opts: [
+              "De 12 a 18 respiraciones por minuto",
+              "De 16 a 20 respiraciones por minuto",
+              "De 26 a 30 respiraciones por minuto",
+              "De 60 a 80 respiraciones por minuto"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué indica una frecuencia de pulso superior a 100 ppm en un adulto?",
+            opts: [
+              "Bradicardia por debajo del límite normal",
+              "Normocardia dentro de los valores habituales",
+              "Hipotensión arterial por pérdida de volumen",
+              "Taquicardia al superar las 100 ppm"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Cuáles son los valores normales de presión sistólica y diastólica en adulto?",
+            opts: [
+              "PAS 120–140 mmHg y PAD 60–90 mmHg",
+              "PAS 90–110 mmHg y PAD 40–55 mmHg",
+              "PAS 150–170 mmHg y PAD 95–110 mmHg",
+              "PAS 100–115 mmHg y PAD 50–60 mmHg"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Cuál es el rango normal de saturación de oxígeno o pulsioximetría?",
+            opts: [
+              "Entre el 85% y el 90% en reposo",
+              "Entre el 95% y el 100% en condiciones normales",
+              "Entre el 75% y el 84% sin oxígeno",
+              "Entre el 90% y el 94% en adulto sano"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué debe hacerse si el reanimador no está capacitado para ventilar?",
+            opts: [
+              "Detener la reanimación hasta que llegue el 112",
+              "Aplicar solo ventilaciones boca a boca sin masaje",
+              "Realizar compresiones torácicas ininterrumpidas",
+              "Dar golpes en el dorso entre compresiones"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Con cuántas ventilaciones de rescate se inicia la RCP en niños y bebés?",
+            opts: [
+              "Con dos ventilaciones suaves previas al masaje",
+              "Con diez ventilaciones rápidas boca a boca",
+              "Sin ventilaciones iniciales en ningún caso",
+              "Con 5 ventilaciones comprobando elevación torácica"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Cuál es la relación de compresiones y ventilaciones en niños y bebés?",
+            opts: [
+              "15 compresiones y 2 insuflaciones tras inicio",
+              "Treinta compresiones y dos ventilaciones siempre",
+              "Veinte compresiones y una ventilación rítmica",
+              "Diez compresiones y dos ventilaciones profundas"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué se hace cuando la víctima recupera la respiración normal tras la RCP?",
+            opts: [
+              "Seguir con compresiones cinco minutos adicionales",
+              "Colocarla en PLS y reevaluar su estado",
+              "Darle líquidos por vía oral de inmediato",
+              "Retirar los parches del DEA sin apagarlo"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué define al shock neurógeno dentro del shock distributivo?",
+            opts: [
+              "Infección bacteriana grave con fiebre alta",
+              "Reacción alérgica severa tras picadura",
+              "Lesión en el sistema nervioso central o médula",
+              "Taponamiento mecánico del saco pericárdico"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué rango corresponde a la fiebre moderada según el temario?",
+            opts: [
+              "De 37,1 a 37,9 grados centígrados",
+              "De 38,0 a 38,4 grados centígrados",
+              "De 39,5 a 40,4 grados centígrados",
+              "De 38,5 a 39,4 grados centígrados"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué define la tensión o fuerza del pulso arterial normal?",
+            opts: [
+              "Se aprecia lleno y palpitante al tacto",
+              "Se comprime con facilidad y resulta débil",
+              "Cambia de ritmo en cada inspiración",
+              "Desaparece al elevar ligeramente la muñeca"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿A partir de qué cifra se indica hipotensión arterial en el apunte?",
+            opts: [
+              "Por encima de 140/90 mmHg en reposo",
+              "Por debajo de 120/60 mmHg según el texto",
+              "Por debajo de 90/50 mmHg en cualquier caso",
+              "Por debajo de 100/70 mmHg en bipedestación"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué es la ortopnea según las alteraciones respiratorias del temario?",
+            opts: [
+              "Respiración lenta de diez ciclos por minuto",
+              "Cese prolongado de la respiración en el sueño",
+              "Incapacidad de respirar tumbado en decúbito",
+              "Aumento de profundidad sin cambios de ritmo"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Cuántas medidas de presión arterial se realizan según el esquema del temario?",
+            opts: [
+              "Una sola toma y se anota la cifra obtenida",
+              "Dos medidas cada cinco minutos y vale la primera",
+              "Cuatro tomas seguidas y se descarta la menor",
+              "3 medidas cada 1 min y valen las 2 últimas"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué se hace si la víctima responde y está consciente tras evaluarla?",
+            opts: [
+              "Iniciar RCP torácica durante dos minutos",
+              "Dejarla como se encontró y reevaluar periódicamente",
+              "Colocar los parches del DEA sobre el tórax",
+              "Practicar la maniobra frente-mentón forzada"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué debe hacerse si la víctima no responde y no respira normalmente?",
+            opts: [
+              "Esperar cinco minutos a que recupere el aliento",
+              "Darle agua en pequeños sorbos para estimularla",
+              "Pedir ayuda, llamar al 112 y abrir vía aérea",
+              "Sentarla en una silla apoyando la cabeza"
+            ],
+            ans: 2
+          }
+        ]
+      },
+      6: {
+        name: "Modelo F · Simulacro Oficial 6",
+        questions: [
+          {
+            q: "¿Cuál es la relación de compresiones y ventilaciones en RCP de adulto?",
+            opts: [
+              "15 compresiones y 2 ventilaciones de rescate",
+              "5 compresiones y 1 ventilación continua",
+              "20 compresiones y 4 ventilaciones lentas",
+              "30 compresiones torácicas y 2 insuflaciones"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué profundidad deben alcanzar las compresiones en adultos y niños?",
+            opts: [
+              "5 cm y no más de 6 cm sobre el esternón",
+              "2 cm como máximo para evitar fracturas",
+              "8 cm dejando hundir la caja torácica",
+              "3 cm exactos con una sola mano"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué rango corresponde a la fiebre moderada?",
+            opts: [
+              "De 37,1 a 37,9 grados centígrados",
+              "De 38,0 a 38,4 grados centígrados",
+              "De 38,5 a 39,4 grados centígrados",
+              "De 39,5 a 40,4 grados centígrados"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué es la apnea dentro de las alteraciones de la respiración?",
+            opts: [
+              "Aumento de la profundidad del aire espirado",
+              "Dificultad respiratoria al tumbarse boca arriba",
+              "Respiración rápida de 20 a 24 ciclos",
+              "Cese temporal o completo de la respiración"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué indica una frecuencia de pulso inferior a 60 ppm en adulto?",
+            opts: [
+              "Bradicardia por debajo de 60 pulsaciones",
+              "Taquicardia por encima de 100 pulsaciones",
+              "Hipertensión arterial sistólica severa",
+              "Aumento normal tras ejercicio intenso"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿A partir de qué cifra se habla de hipertensión arterial según el apunte?",
+            opts: [
+              "Por encima de 120/70 mmHg en reposo",
+              "Por encima de 130/80 mmHg en cualquier caso",
+              "Por encima de 140/90 mmHg en medición",
+              "Por encima de 110/65 mmHg en adulto"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿A qué ritmo se insufla aire en niños y en bebés en la RCP pediátrica?",
+            opts: [
+              "Cada 5 segundos en niños y cada 4 en bebés",
+              "Cada 1 segundo en niños y cada 2 en bebés",
+              "Cada 4 segundos en niños y cada 3 en bebés",
+              "Cada 3 segundos en niños y cada 2 en bebés"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué profundidad de compresión torácica se indica en bebés?",
+            opts: [
+              "4 cm con compresión suave y controlada",
+              "Entre 6 y 7 cm sobre el centro del pecho",
+              "Entre 1 y 2 cm con dos dedos en el abdomen",
+              "Entre 5 y 6 cm igual que en un adulto"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Cómo se cubre la boca y nariz en la ventilación con ambú?",
+            opts: [
+              "Sujetando solo la bolsa con ambas manos",
+              "Pegando mascarilla y sellando con índice y pulgar",
+              "Apoyando el ambú sobre el mentón sin sellar",
+              "Introduciendo la cánula sin cubrir la nariz"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué ocurre al dejar de presionar la bolsa del ambú?",
+            opts: [
+              "Se bloquea la entrada de oxígeno adicional",
+              "Se aplica una descarga eléctrica controlada",
+              "Se facilita la salida pasiva del aire o espiración",
+              "Aumenta la presión en el manguito torácico"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Cuándo se emplea la colocación antero-posterior de parches del DEA?",
+            opts: [
+              "En cualquier adulto con abundante vello torácico",
+              "Solo cuando el desfibrilador no tiene batería",
+              "Únicamente en víctimas con marcapasos visible",
+              "En bebés o niños de menos de 25 kg u 8 años"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué se hace inmediatamente después de que el DEA administre o no descarga?",
+            opts: [
+              "Reiniciar RCP 30:2 durante 2 minutos sin demora",
+              "Apagar el equipo y esperar diez minutos",
+              "Mover al paciente a posición lateral de inmediato",
+              "Comprobar el pulso carotídeo durante medio minuto"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué define a una fiebre continua según su duración y patrón?",
+            opts: [
+              "Duración superior a tres meses consecutivos",
+              "Variación entre máxima y mínima no mayor de 1 °C",
+              "Aparición exclusiva por las tardes tras comer",
+              "Descenso brusco cada seis horas sin fármacos"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Cómo debe colocarse el brazal del tensiómetro durante la medición?",
+            opts: [
+              "Por encima de la manga gruesa del jersey",
+              "Por debajo del codo sobre el antebrazo",
+              "Ajustado al brazo y a la altura del corazón",
+              "Colgando libre sin apoyar el brazo en mesa"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué postura se recomienda durante la medición estándar de la presión arterial?",
+            opts: [
+              "De pie sin apoyo y con los brazos cruzados",
+              "Tumbado boca abajo con el brazo por detrás",
+              "Sentado con las piernas cruzadas sin hablar",
+              "Espalda y pies apoyados, brazo desnudo y quieto"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué representa la profundidad respiratoria de unos 500 cm³?",
+            opts: [
+              "El volumen de aire que entra y sale de pulmones",
+              "El número de ciclos por minuto en reposo",
+              "La simetría entre el hemitórax derecho e izquierdo",
+              "La presión ejercida en la arteria humeral"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué tres acciones forman la comprobación de la respiración?",
+            opts: [
+              "Ver movimiento torácico, oír y sentir aire",
+              "Palpar pulso carotídeo, mirar pupilas y medir TA",
+              "Tomar temperatura axilar, contar pulso y oír",
+              "Abrir boca, revisar encías y medir saturación"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué elementos forman parte del material de cura y vendas del botiquín?",
+            opts: [
+              "Gasas estériles, apósitos, vendas y esparadrapo",
+              "Anticonvulsivos, antibióticos y colirios",
+              "Termómetro digital, pinzas y tijeras de cura",
+              "Alcohol de 96°, povidona yodada y clorhexidina"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué antiséptico se menciona específicamente para limpiar instrumental?",
+            opts: [
+              "Clorhexidina acuosa al dos por ciento",
+              "Alcohol de 96 grados para limpieza instrumental",
+              "Agua oxigenada de uso tópico doméstico",
+              "Solución salina fisiológica en unidosis"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué rango corresponde a la fiebre alta según la clasificación del temario?",
+            opts: [
+              "De 37,1 a 37,9 grados centígrados",
+              "De 38,5 a 39,4 grados centígrados",
+              "De 39,5 a 40,4 grados centígrados",
+              "Por encima de 40,5 grados centígrados"
+            ],
+            ans: 2
+          }
+        ]
+      },
+      7: {
+        name: "Modelo G · Simulacro Oficial 7",
+        questions: [
+          {
+            q: "¿Qué es la disnea dentro de las alteraciones respiratorias?",
+            opts: [
+              "Cese completo de los movimientos respiratorios",
+              "Respiración irregular propia de lesiones cerebrales",
+              "Aumento de frecuencia tras correr suavemente",
+              "Dificultad respiratoria por déficit de oxígeno"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué indica el protocolo START si la víctima no camina y no respira tras abrir vía aérea?",
+            opts: [
+              "Inmediato o prioridad 1 con control de sangrado",
+              "Urgente o prioridad 2 con vigilancia horaria",
+              "Fallecido o prioridad 4 según el diagrama",
+              "Demorable o prioridad 3 en zona de espera"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué clasificación recibe en START quien no camina, respira y tiene FR > 30 rpm?",
+            opts: [
+              "Prioridad 3 demorable con observación simple",
+              "Prioridad 2 urgente si obedece órdenes básicas",
+              "Prioridad 4 si el pulso radial es palpable",
+              "Prioridad 1 inmediato por compromiso respiratorio"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué se asocia a relleno capilar > 2 s o pulso radial ausente en START?",
+            opts: [
+              "Control de hemorragias y prioridad 1 inmediato",
+              "Demora de varias horas y traslado diferido",
+              "Posición lateral de seguridad sin más medidas",
+              "Alta inmediata tras comprobar consciencia"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué diferencia a prioridad 1 de prioridad 2 al valorar si obedece órdenes sencillas?",
+            opts: [
+              "Si obedece es prioridad 1 y si no, prioridad 3",
+              "Si no obedece es prioridad 1 y si sí, prioridad 2",
+              "El estado mental no modifica la prioridad START",
+              "Si no obedece es prioridad 4 y si sí, prioridad 1"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué es la taquipnea en las alteraciones respiratorias descritas?",
+            opts: [
+              "Disminución de la frecuencia a 10 respiraciones",
+              "Ausencia de movimientos torácicos durante 20 s",
+              "Aumento de la frecuencia respiratoria a 20–24 rpm",
+              "Respiración silbante tras inhalar alérgenos"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Cada cuánto tiempo se cambia de lado a un niño colocado en PLS?",
+            opts: [
+              "Cada 5 minutos para comprobar su temperatura",
+              "Cada 15 minutos sin mover la cabeza",
+              "No se cambia de lado hasta llegar al hospital",
+              "Cada 30 minutos según indica el protocolo"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué arterias se mencionan como zonas para tomar el pulso?",
+            opts: [
+              "Temporal, carótida, humeral, radial y femoral",
+              "Subclavia, yugular interna, aorta y pulmonar",
+              "Ilíaca común, mesentérica, renal y esplénica",
+              "Braquial profunda, cubital y palmar superficial"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Cuánto tiempo de reposo previo se indica en el esquema de toma de PA?",
+            opts: [
+              "De 1 a 2 minutos sentados en silencio",
+              "De 3 a 5 minutos en un entorno tranquilo",
+              "De 10 a 15 minutos con las piernas cruzadas",
+              "No requiere reposo si se usa aparato digital"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué elementos opcionales o complementarios se citan en el botiquín?",
+            opts: [
+              "Vendajes de escayola y material quirúrgico",
+              "Sueros intravenosos y equipos de sutura",
+              "Manta térmica, hielo sintético y mascarilla RCP",
+              "Tensiómetro de mercurio y fonendoscopio"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Cómo se denomina la fiebre superior a 40,5 grados centígrados?",
+            opts: [
+              "Febrícula leve de corta evolución",
+              "Fiebre ligera de origen inflamatorio",
+              "Hipotermia severa por pérdida térmica",
+              "Fiebre muy alta por encima de 40,5 °C"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué se debe comprobar antes de administrar un analgésico del botiquín?",
+            opts: [
+              "Asegurarse de que la persona no tenga alergia",
+              "Comprobar que la herida sangre abundantemente",
+              "Colocar primero una manta térmica sobre el torso",
+              "Medir la saturación con el pulsioxímetro"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué es la hiperpnea dentro de las alteraciones de la respiración?",
+            opts: [
+              "Cese completo de los movimientos del tórax",
+              "Respiración irregular propia de lesiones cerebrales",
+              "Aumento de la profundidad del aire respirado",
+              "Dificultad respiratoria al estar acostado"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué debe valorarse además del volumen en la profundidad respiratoria?",
+            opts: [
+              "El color del esmalte ungueal en la mano",
+              "La tensión arterial diastólica del brazo",
+              "La temperatura axilar en grados centígrados",
+              "La simetría entre ambos pulmones al respirar"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué factores pueden modificar las constantes vitales según el temario?",
+            opts: [
+              "Fisiológicos, ambientales, psicológicos y patológicos",
+              "Únicamente la hora del día y el calzado",
+              "Exclusivamente la presión atmosférica local",
+              "Solo la edad y el tipo de ropa utilizada"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué es el «gasping» al comprobar si una víctima respira?",
+            opts: [
+              "Respiración profunda y regular de reposo",
+              "Jadeos o boqueadas que no equivalen a respirar bien",
+              "Silbido espiratorio leve tras ejercicio suave",
+              "Aumento de frecuencia de 12 a 18 ciclos"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué es un desfibrilador externo automático o DEA?",
+            opts: [
+              "Un aparato para medir la saturación sanguínea",
+              "Un instrumento para limpiar heridas y suturar",
+              "Un equipo electrónico que aplica descarga controlada",
+              "Un dispositivo para insuflar oxígeno con bolsa"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué eslabón ocupa el segundo lugar en la cadena de supervivencia?",
+            opts: [
+              "Soporte vital avanzado por equipos especializados",
+              "Activación del sistema de emergencias mediante PAS",
+              "Traslado en ambulancia sin compresiones previas",
+              "Reanimación cardiopulmonar precoz si no respira"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué se debe hacer para mantener el calor del herido ante un accidente?",
+            opts: [
+              "Cubrirlo con manta y hablar con serenidad",
+              "Situarlo junto a un radiador o foco intenso",
+              "Quitarle el abrigo para comprobar su piel",
+              "Aplicar bolsas de hielo sobre todo el tronco"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué debe hacerse al retirar a un accidentado del peligro o agente causal?",
+            opts: [
+              "Dejarlo en el foco si la herida es pequeña",
+              "Alejar o retirar del peligro si no hay riesgo mayor",
+              "Movilizarlo sin precaución aunque duela la espalda",
+              "Darle bebida caliente antes de sacar del riesgo"
+            ],
+            ans: 1
+          }
+        ]
+      },
+      8: {
+        name: "Modelo H · Simulacro Oficial 8",
+        questions: [
+          {
+            q: "¿Qué incluye el instrumental básico del botiquín según el temario?",
+            opts: [
+              "Sonda vesical, bisturí y pinzas de hemostasia",
+              "Telescopio, martillo de reflejos y otoscopio",
+              "Tijeras de cura, pinzas, imperdibles y termómetro",
+              "Desfibrilador portátil, pulsioxímetro y ambú"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué se incluye en los antisépticos domésticos mencionados en el texto?",
+            opts: [
+              "Solo yodo en solución concentrada al diez por ciento",
+              "Únicamente alcohol de 96° en envase opaco",
+              "Exclusivamente suero fisiológico en ampollas",
+              "Povidona yodada, agua oxigenada y clorhexidina"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Con qué cuadro se asocia la respiración de Cheyne-Stokes en el apunte?",
+            opts: [
+              "Con fracturas costales simples sin derrame",
+              "Con insuficiencia renal e insuficiencia cardíaca",
+              "Con alergia cutánea leve tras una picadura",
+              "Con deshidratación leve por calor ambiental"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Con qué alteración se relaciona la respiración de Kussmaul o acidótica?",
+            opts: [
+              "Con hipotermia accidental por inmersión",
+              "Con obstrucción parcial de la faringe nasal",
+              "Con acidosis metabólica y respiración profunda",
+              "Con esguince cervical de grado moderado"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Con qué situación se asocia la respiración de Biot según el temario?",
+            opts: [
+              "Con asma bronquial de predominio nocturno",
+              "Con secreciones abundantes en bronquios finos",
+              "Con dolor torácico al inspirar profundamente",
+              "Con lesiones encefálicas de ritmo irregular"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Cuántas medidas se realizan y cuáles se aprovechan según el esquema?",
+            opts: [
+              "Se hace una sola toma y se anota el resultado",
+              "Se hacen 3 medidas cada 1 min y valen las 2 últimas",
+              "Se hacen 2 medidas cada 5 min y vale la primera",
+              "Se hacen 4 tomas seguidas y se descarta la menor"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué se debe hacer si hay varias víctimas en un accidente según «Qué hacer»?",
+            opts: [
+              "Atender primero a quien hable con mayor volumen",
+              "Contabilizar afectados y atender primero lo más grave",
+              "Evacuar primero a quienes caminen sin ayuda",
+              "Esperar a que lleguen refuerzos sin valorar"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué está prohibido respecto a vendajes o torniquetes ante un accidente?",
+            opts: [
+              "Usar vendaje elástico de sujeción moderada",
+              "Aplicar presión directa limpia con gasa estéril",
+              "Hacer vendajes o torniquetes demasiado apretados",
+              "Elevar la extremidad si no hay contraindicación"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué precaución rige ante una persona electrocutada según el temario?",
+            opts: [
+              "Tocarla con manos húmedas para separarla rápido",
+              "Mojar su ropa con agua antes de desconectar",
+              "Tirar de su cinturón con la corriente activa",
+              "No tocarla mientras siga en contacto eléctrico"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué indica la categoría roja y prioridad 1 en la clasificación asistencial?",
+            opts: [
+              "Tratamiento y estabilización inmediata por riesgo vital",
+              "Demora superior a una hora sin riesgo vital inmediato",
+              "Lesión leve demorable durante varias horas",
+              "Persona fallecida sin posibilidad de reanimación"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué clasificación corresponde a una persona fallecida en la tabla de triaje?",
+            opts: [
+              "Rojo o prioridad 1 de atención urgente",
+              "Negro o prioridad 0 en la clasificación asistencial",
+              "Amarillo o prioridad 2 de demora moderada",
+              "Verde o prioridad 3 de espera prolongada"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Cuál es la frecuencia de compresiones torácicas por minuto en RCP?",
+            opts: [
+              "Entre 60 y 80 compresiones por minuto",
+              "Entre 80 y 90 compresiones por minuto",
+              "Entre 100 y 120 compresiones por minuto",
+              "Entre 130 y 150 compresiones por minuto"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué significa realizar compresiones con expansión torácica total?",
+            opts: [
+              "Mantener el pecho hundido entre compresiones",
+              "Comprimir solo con los dedos sobre el abdomen",
+              "Detener el masaje cada cinco compresiones",
+              "Permitir que el tórax recupere su posición en diástole"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué mide la pulsioximetría o saturación de oxígeno?",
+            opts: [
+              "La saturación de oxígeno en la sangre",
+              "La presión arterial sistólica y diastólica",
+              "La temperatura central del hipotálamo",
+              "El volumen de aire corriente pulmonar"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué duración se cita para clasificar la fiebre según su evolución temporal?",
+            opts: [
+              "Corta menor de una semana o larga mayor de un mes",
+              "Corta menor de 2 semanas o larga mayor de 2 semanas",
+              "Aguda menor de tres días o crónica mayor de un año",
+              "Transitoria menor de 48 horas o persistente"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué se incluye en los apósitos y material de cura del botiquín?",
+            opts: [
+              "Solo vendas de yeso y algodón sin esterilizar",
+              "Únicamente tiritas convencionales de tela",
+              "Exclusivamente compresas de papel absorbente",
+              "Gasas estériles, apósitos adhesivos, tul graso y vendas"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué es la bradipnea según las alteraciones de la respiración?",
+            opts: [
+              "Aumento del volumen de aire en cada inspiración",
+              "Disminución de la frecuencia respiratoria a 10 rpm",
+              "Sensación de falta de aire al estar acostado",
+              "Alternancia de pausas y respiraciones rápidas"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué causas se citan para la fiebre en los detalles de constantes vitales?",
+            opts: [
+              "Infecciosa, inmunológica/inflamatoria, neoplásica, endocrina o central",
+              "Únicamente el esfuerzo físico leve al caminar",
+              "Exclusivamente la exposición solar directa",
+              "Solo la ingesta de líquidos fríos en ayunas"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué se indica respecto al tabaco, cafeína, comida y ejercicio antes de medir PA?",
+            opts: [
+              "Tomar café justo antes para activar la circulación",
+              "Evitarlos previamente e informar si toma medicación",
+              "Hacer ejercicio suave justo antes de sentarse",
+              "No influyen en la medición si el brazal es grande"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué elementos se muestran en el esquema de toma de presión arterial?",
+            opts: [
+              "Pulsioxímetro digital y termómetro timpánico",
+              "Otoscopio neumático y martillo de percusión",
+              "Esfigmomanómetro aneroide, fonendoscopio y monitor",
+              "Glucómetro capilar y estetoscopio fetal"
+            ],
+            ans: 2
+          }
+        ]
+      },
+      9: {
+        name: "Modelo I · Simulacro Oficial 9",
+        questions: [
+          {
+            q: "¿Qué se hace si en START la víctima no camina y no respira, pero SÍ respira al abrir vía aérea?",
+            opts: [
+              "Clasificarla como prioridad 4 o persona fallecida",
+              "Dejarla en espera demorable durante varias horas",
+              "Trasladarla sin reevaluar su vía aérea",
+              "Clasificarla como inmediato o prioridad 1"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué se hace en START si la víctima camina tras preguntarle «¿Camina?»?",
+            opts: [
+              "Clasificarla como demorable o prioridad 3",
+              "Clasificarla como inmediato o prioridad 1",
+              "Aplicar compresiones torácicas de inmediato",
+              "Colocarla en decúbito supino sin movilizar"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué se debe hacer con los restos de medicamentos tras acabar un tratamiento?",
+            opts: [
+              "Guardarlos mezclados en un frasco sin etiqueta",
+              "Desechar restos tras finalizar los tratamientos",
+              "Conservarlos en el coche a temperatura extrema",
+              "Compartirlos con otras personas sin revisar"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué medicación opcional se menciona en el botiquín de primeros auxilios?",
+            opts: [
+              "Antibióticos inyectables y sedantes hospitalarios",
+              "Relajantes musculares potentes y anticoagulantes",
+              "Analgésicos (comprobando alergia) y antihistamínico",
+              "Fármacos oncológicos y anestésicos locales"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué consecuencias son frecuentes en catástrofes naturales según el temario?",
+            opts: [
+              "Solo esguinces leves en articulaciones del tobillo",
+              "Exclusivamente picaduras de insectos en verano",
+              "Únicamente febrícula leve sin traumatismos",
+              "Traumatismos por aplastamiento y asfixia, entre otros"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué se exige en el apartado 1 del artículo 195 del Código Penal?",
+            opts: [
+              "Socorrer a quien esté desamparado y en peligro grave sin riesgo",
+              "Atender heridas aunque suponga peligro mortal propio",
+              "Realizar traslados sanitarios sin vehículo adecuado",
+              "Emitir informes médicos tras prestar auxilio"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué debe hacerse al inicio de la RCP en adultos respecto a la ropa y postura?",
+            opts: [
+              "Colocar boca abajo sobre superficie blanda",
+              "Decúbito supino en suelo firme, aflojar ropa y liberar cuello",
+              "Mantener sentada con las piernas cruzadas",
+              "Cubrir con mantas gruesas antes de comprimir"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué es una emergencia sanitaria según la distinción conceptual del temario?",
+            opts: [
+              "Situación crítica con riesgo vital o de función vital",
+              "Molestia puntual sin riesgo para la vida a corto plazo",
+              "Consulta programada para seguimiento de herida leve",
+              "Cuadro estable sin compromiso cardíaco ni respiratorio"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Cuál es el objetivo de evitar nuevas lesiones en primeros auxilios?",
+            opts: [
+              "Sustituir la asistencia médica hospitalaria urgente",
+              "Impedir complicaciones o daños añadidos al accidentado",
+              "Demorar la llamada al 112 hasta estabilizar al grupo",
+              "Administrar fármacos sin conocer antecedentes clínicos"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué recoge el artículo 195 del Código Penal respecto al deber de socorro?",
+            opts: [
+              "Exime de ayudar si hay testigos en el entorno",
+              "Permite omitir auxilio sin sanción en vía urbana",
+              "Sanciona la omisión del deber de socorro con multa",
+              "Obliga a realizar cirugía menor en plena calle"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué implica el consentimiento de la víctima antes de prestar asistencia?",
+            opts: [
+              "Actuar sin preguntar aunque esté consciente y orientada",
+              "Exigir firma por escrito antes de proteger la zona",
+              "Retirar la ayuda si el herido es menor de edad",
+              "Pedir consentimiento salvo declinación legal válida"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué se debe hacer en la fase Proteger de la regla PAS?",
+            opts: [
+              "Señalizar, acordonar y protegerse uno mismo y al herido",
+              "Llamar al 112 indicando únicamente la edad aproximada",
+              "Comprobar la saturación de oxígeno antes de mirar riesgos",
+              "Colocar a la víctima sentada en un bordillo cercano"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Cuál es el primer eslabón de la cadena de supervivencia ante una PCR?",
+            opts: [
+              "Iniciar compresiones torácicas sin avisar a nadie",
+              "Activar el sistema de emergencias mediante el protocolo PAS",
+              "Aplicar una descarga eléctrica antes de evaluar consciencia",
+              "Trasladar en vehículo particular al centro más próximo"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué consecuencias se asocian a los accidentes deportivos según el temario?",
+            opts: [
+              "Quemaduras químicas por contacto con disolventes",
+              "Intoxicaciones por inhalación de gases industriales",
+              "Fracturas, esguinces y cuadros de deshidratación",
+              "Traumatismos por onda expansiva en catástrofes"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué consecuencias pueden derivarse de la acción humana en accidentes?",
+            opts: [
+              "Únicamente alteraciones leves del ritmo cardíaco",
+              "Solo cuadros de hipotermia por inmersión prolongada",
+              "Exclusivamente esguinces articulares en extremidades",
+              "Heridas, quemaduras y traumatismos de diversa índole"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué está prohibido hacer ante sospecha de intoxicación por cáusticos?",
+            opts: [
+              "Avisar al 112 o consultar con información toxicológica",
+              "Provocar el vómito bajo ningún concepto ni circunstancia",
+              "Mantener la serenidad y observar el estado del afectado",
+              "Evitar darle alimentos o bebidas no indicadas"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Por qué no se debe dar de beber ni comer a una persona accidentada?",
+            opts: [
+              "Porque retrasa la medición de la temperatura axilar",
+              "Porque altera el resultado de la pulsioximetría",
+              "Por el riesgo de aspiración, vómito o agravamiento",
+              "Porque impide colocar el brazal del tensiómetro"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué debe hacerse al valorar múltiples víctimas en un accidente?",
+            opts: [
+              "Contabilizar afectados y atender primero lo más grave",
+              "Atender primero a quienes presenten heridas leves",
+              "Esperar a que lleguen dos ambulancias sin clasificar",
+              "Movilizar a todos los heridos a un mismo lugar"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Cómo se define la categoría amarilla y prioridad 2 en triaje?",
+            opts: [
+              "Riesgo vital inmediato con parada cardíaca presenciada",
+              "Sin riesgo vital inmediato y demorable más de 1 hora",
+              "Lesión leve demorable durante varias horas sin riesgo",
+              "Ausencia de signos vitales tras apertura de vía aérea"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué situaciones se citan como ejemplo de categoría roja y prioridad 1?",
+            opts: [
+              "Contusiones simples y fracturas menores estables",
+              "Quemaduras leves sin compromiso respiratorio ni circulatorio",
+              "PCR presenciadas, shock, TCE grave o hemorragia exanguinante",
+              "Heridas superficiales demorables durante varias horas"
+            ],
+            ans: 2
+          }
+        ]
+      },
+      10: {
+        name: "Modelo J · Simulacro Oficial 10",
+        questions: [
+          {
+            q: "¿Qué causas pueden desencadenar un shock hipovolémico según el temario?",
+            opts: [
+              "Taponamiento cardíaco o embolia pulmonar aguda",
+              "Infección bacteriana generalizada o lesión medular",
+              "Infarto agudo de miocardio o arritmias severas",
+              "Hemorragias graves, deshidratación o quemaduras extensas"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué causas se asocian al shock cardiogénico en el apunte?",
+            opts: [
+              "Infarto de miocardio, arritmias, insuficiencia o válvulas",
+              "Vómitos intensos, diarrea severa o sangrado masivo",
+              "Reacción alérgica grave por picadura o alimento",
+              "Neumotórax a tensión o tromboembolismo pulmonar"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Cuáles son los tres tipos principales de shock distributivo?",
+            opts: [
+              "Hipovolémico, cardiogénico y obstructivo mecánico",
+              "Séptico, anafiláctico y neurógeno según el temario",
+              "Tensional, metabólico y neurogénico periférico",
+              "Hemorrágico, traumático y obstructivo pulmonar"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué ejemplos se citan para el shock obstructivo en la asignatura?",
+            opts: [
+              "Deshidratación extrema y quemaduras de gran extensión",
+              "Sepsis bacteriana y alergia medicamentosa severa",
+              "Embolia pulmonar, taponamiento cardíaco y neumotórax",
+              "Bradicardia sinusal y hipotermia accidental leve"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué se debe hacer con los medicamentos en el mantenimiento del botiquín?",
+            opts: [
+              "Guardarlos sin prospecto para evitar confusiones",
+              "Conservar restos de tratamientos antiguos por si se repiten",
+              "Dejarlos en zonas húmedas o expuestas al calor directo",
+              "Revisar caducidades, desechar restos y guardar envase"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué material de cura se especifica con medida y cantidad en el botiquín?",
+            opts: [
+              "Apósitos estériles adhesivos 5x7 cm (20 unidades)",
+              "Vendas elásticas de diez metros sin envase estéril",
+              "Gasas no estériles a granel en bolsa de tela",
+              "Compresas térmicas reutilizables de un solo uso"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué otros materiales de cura y suero se mencionan en el botiquín?",
+            opts: [
+              "Solo tiritas de tela y algodón hidrófilo suelto",
+              "Parches oculares, Steri-Strip, tul graso y suero fisiológico",
+              "Únicamente esparadrapo ancho y vendas de escayola",
+              "Exclusivamente gasas impregnadas en alcohol de 96°"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué instrumental se incluye en el botiquín de primeros auxilios?",
+            opts: [
+              "Bisturí quirúrgico, cánula traqueal y sonda nasogástrica",
+              "Fonendoscopio clínico, otoscopio y martillo neurológico",
+              "Tijeras de cura, pinzas, imperdibles, termómetro y jeringa",
+              "Desfibrilador bifásico, ambú y monitor multiparamétrico"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué elementos opcionales se citan dentro del apartado «Otros» del botiquín?",
+            opts: [
+              "Antibióticos orales, corticoides y sueros intravenosos",
+              "Vendajes de yeso, grapadoras y suturas reabsorbibles",
+              "Termómetros de mercurio, fonendoscopios y tensiómetros",
+              "Gel quemaduras, relajante muscular, manta térmica y hielo"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué se evalúa en menos de 10 segundos en el paso 2 del protocolo SVB?",
+            opts: [
+              "La consciencia y la respiración normal de la víctima",
+              "La presión arterial sistólica y diastólica en brazo",
+              "La saturación de oxígeno con pulsioxímetro digital",
+              "La temperatura central en el conducto auditivo"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué se hace si la víctima no responde y no respira al comprobar SVB?",
+            opts: [
+              "Dejarla en decúbito lateral y esperar diez minutos",
+              "Gritar pidiendo ayuda, llamar al 112 y abrir vía aérea",
+              "Darle de beber agua fresca en pequeñas cantidades",
+              "Comprobar solo el pulso radial sin abrir la vía aérea"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Dónde se colocan las manos para realizar las compresiones torácicas en RCP?",
+            opts: [
+              "Sobre la apófisis xifoides con los dedos extendidos",
+              "En el cuadrante superior izquierdo del abdomen",
+              "En la mitad inferior del esternón, centro del pecho",
+              "Sobre la clavícula derecha cerca del cuello"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué se indica si el reanimador no está capacitado para realizar ventilaciones?",
+            opts: [
+              "Detener la RCP hasta que llegue el equipo avanzado",
+              "Realizar únicamente ventilaciones boca a nariz lentas",
+              "Aplicar una descarga con el DEA antes de comprimir",
+              "Mantener las compresiones torácicas de forma ininterrumpida"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué se hace tras la evaluación del ritmo por el DEA, haya o no descarga?",
+            opts: [
+              "Reiniciar inmediatamente la RCP 30:2 durante 2 minutos",
+              "Apagar el desfibrilador y esperar a que abra los ojos",
+              "Colocar a la víctima boca abajo y retirar electrodos",
+              "Comprobar la temperatura axilar antes de comprimir"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Cuándo se debe detener la RCP continuada según el protocolo del temario?",
+            opts: [
+              "A los cinco minutos si no hay pulso radial palpable",
+              "Cuando la víctima despierte, se mueva, abra ojos y respire",
+              "Cuando se termine el primer ciclo de treinta compresiones",
+              "Si el socorrista siente cansancio tras un minuto"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Qué rango define la fiebre alta en un adulto según la tabla de constantes?",
+            opts: [
+              "De 37,1 a 37,9 grados centígrados en axila",
+              "De 38,0 a 38,4 grados centígrados en axila",
+              "De 39,5 a 40,4 grados centígrados según la tabla",
+              "Por debajo de 36,0 grados centígrados en reposo"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Qué se debe evitar en la preparación previa a tomar la presión arterial?",
+            opts: [
+              "Sentarse en silencio durante tres a cinco minutos",
+              "Apoyar la espalda y los pies de forma confortable",
+              "Descubrir el brazo y situarlo a la altura del corazón",
+              "Fumar, tomar cafeína, comer o hacer ejercicio antes"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué indica la columna «Notas de medición» para la frecuencia respiratoria?",
+            opts: [
+              "En niños es mayor y el ritmo es regular sin pausas",
+              "En adultos es siempre superior a treinta respiraciones",
+              "Debe medirse únicamente tras un esfuerzo físico",
+              "No presenta diferencias entre adulto y recién nacido"
+            ],
+            ans: 0
+          }
+        ]
+      }
+    };
+
+    const LETTERS = ["A", "B", "C", "D"];
+    let currentModelId = null;
+
+    const modelButtons = document.querySelectorAll(".model-btn");
+    const quizPanel = document.getElementById("quizPanel");
+    const quizTitle = document.getElementById("quizTitle");
+    const quizMeta = document.getElementById("quizMeta");
+    const questionsContainer = document.getElementById("questionsContainer");
+    const quizForm = document.getElementById("quizForm");
+    const resultsBox = document.getElementById("resultsBox");
+    const finalScoreText = document.getElementById("finalScoreText");
+    const statsRow = document.getElementById("statsRow");
+    const wrongAnswersList = document.getElementById("wrongAnswersList");
+
+    function renderModel(modelId) {
+      currentModelId = modelId;
+      const model = EXAM_MODELS[modelId];
+      if (!model) return;
+
+      modelButtons.forEach((btn) => {
+        btn.classList.toggle("active-model", btn.dataset.model === String(modelId));
+      });
+
+      quizTitle.textContent = model.name;
+      quizMeta.textContent = `${model.questions.length} preguntas · Fallos restan 1/3`;
+      resultsBox.classList.remove("visible");
+      wrongAnswersList.innerHTML = "";
+
+      questionsContainer.innerHTML = model.questions
+        .map((item, idx) => {
+          const optionsHtml = item.opts
+            .map((optText, optIdx) => {
+              const letter = LETTERS[optIdx];
+              const inputId = `m${modelId}_q${idx}_o${optIdx}`;
+              return `
+                <label class="option-label" for="${inputId}">
+                  <input type="radio" id="${inputId}" name="q_${idx}" value="${optIdx}" required />
+                  <span><strong>${letter}.</strong> ${optText}</span>
+                </label>
+              `;
+            })
+            .join("");
+
+          return `
+            <article class="question-card">
+              <p class="question-text">${idx + 1}. ${item.q}</p>
+              <div class="options-list">${optionsHtml}</div>
+            </article>
+          `;
+        })
+        .join("");
+
+      quizPanel.classList.add("visible");
+      quizPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function gradeQuiz(event) {
+      event.preventDefault();
+      const model = EXAM_MODELS[currentModelId];
+      if (!model) return;
+
+      let correctCount = 0;
+      let wrongCount = 0;
+      const wrongDetails = [];
+
+      model.questions.forEach((item, idx) => {
+        const selected = quizForm.querySelector(`input[name="q_${idx}"]:checked`);
+        const userAns = selected ? Number(selected.value) : null;
+        if (userAns === item.ans) {
+          correctCount++;
+        } else {
+          wrongCount++;
+          wrongDetails.push({
+            number: idx + 1,
+            question: item.q,
+            userAns,
+            correctAns: item.ans,
+            userText: userAns !== null ? `${LETTERS[userAns]}. ${item.opts[userAns]}` : "Sin responder",
+            correctText: `${LETTERS[item.ans]}. ${item.opts[item.ans]}`
+          });
+        }
+      });
+
+      const totalQuestions = model.questions.length;
+      const rawScoreOutOf10 = ((correctCount - wrongCount / 3) / totalQuestions) * 10;
+      const clampedScore = Math.max(0, rawScoreOutOf10);
+      const formattedScore = clampedScore.toFixed(2).replace(".", ",");
+
+      finalScoreText.textContent = `${formattedScore} / 10`;
+      statsRow.innerHTML = `
+        <span>Aciertos: <strong>${correctCount}</strong></span>
+        <span>Fallos: <strong>${wrongCount}</strong></span>
+        <span>Penalización: <strong>-${(wrongCount / 3).toFixed(2).replace(".", ",")}</strong></span>
+      `;
+
+      if (wrongDetails.length === 0) {
+        wrongAnswersList.innerHTML = `<div class="perfect-msg">¡Excelente! Has respondido correctamente a todas las preguntas de este modelo.</div>`;
+      } else {
+        wrongAnswersList.innerHTML = `
+          <h3 style="font-size: 1.05rem; margin-bottom: 12px; color: #ffffff;">Preguntas falladas y respuesta correcta:</h3>
+          ${wrongDetails
+            .map(
+              (w) => `
+              <div class="wrong-item">
+                <p><strong>${w.number}. ${w.question}</strong></p>
+                <p class="user-wrong-badge">Tu respuesta: ${w.userText}</p>
+                <p class="correct-badge">Respuesta correcta: ${w.correctText}</p>
+              </div>
+            `
+            )
+            .join("")}
+        `;
+      }
+
+      resultsBox.classList.add("visible");
+      resultsBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function resetToTestSelector() {
+      resultsBox.classList.remove("visible");
+      quizPanel.classList.remove("visible");
+      modelButtons.forEach((btn) => btn.classList.remove("active-model"));
+      document.getElementById("modelsGrid").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    modelButtons.forEach((btn) => {
+      btn.addEventListener("click", () => renderModel(btn.dataset.model));
+    });
+
+    quizForm.addEventListener("submit", gradeQuiz);
+
+    document.getElementById("tryAnotherTestBtn").addEventListener("click", resetToTestSelector);
+    document.getElementById("chooseAnotherTopBtn").addEventListener("click", resetToTestSelector);
+    document.getElementById("retryCurrentBtn").addEventListener("click", () => {
+      if (currentModelId) renderModel(currentModelId);
+    });
+  </script>
+</body>
+</html>
