@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pon a prueba tus conocimientos - Primeros Auxilios</title>
+  <style>
+    :root {
+      --board-bg-gradient: radial-gradient(circle at 50% 20%, #263c2c 0%, #18261c 100%);
+      --frame-border: #5a3c24;
+      --frame-shadow: rgba(0, 0, 0, 0.55);
+      --text-main: #f4f6f3;
+      --text-muted: #c7d1c9;
+      --card-text: #162019;
+      --card-subtext: #2c3a30;
+      --c1: #fff099;
+      --c2: #a8c7fa;
+      --c3: #ffd4a3;
+      --c4: #c4f0c2;
+      --c5: #d9c6ff;
+      --c6: #f7b8e8;
+      --c7: #b8ece3;
+      --c8: #ffbeb3;
+      --c9: #cce7ff;
+      --c10: #f3e49c;
+      --ok-bg: rgba(196, 240, 194, 0.16);
+      --ok-border: #7be08a;
+      --err-bg: rgba(255, 138, 128, 0.16);
+      --err-border: #ff8a80;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background-color: #141715;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 16px 16px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 16px;
+    }
+
+    .board-frame {
+      width: 100%;
+      max-width: 1080px;
+      background: var(--board-bg-gradient);
+      border: 10px solid var(--frame-border);
+      border-radius: 18px;
+      box-shadow: 0 22px 50px var(--frame-shadow), inset 0 0 40px rgba(0, 0, 0, 0.35);
+      padding: 42px 44px 36px;
+    }
+
+    h1 {
+      font-size: clamp(1.9rem, 3.8vw, 2.7rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 0.98rem;
+      color: var(--text-muted);
+      margin-bottom: 26px;
+      line-height: 1.45;
+    }
+
+    .models-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .model-btn {
+      border: none;
+      border-radius: 10px;
+      padding: 16px 14px;
+      text-align: left;
+      cursor: pointer;
+      color: var(--card-text);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.32);
+      transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 92px;
+    }
+
+    .model-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 13px 24px rgba(0, 0, 0, 0.42);
+      filter: brightness(1.02);
+    }
+
+    .model-btn:active {
+      transform: translateY(-1px);
+    }
+
+    .model-btn.active-model {
+      outline: 3px solid #ffffff;
+      outline-offset: 2px;
+    }
+
+    .model-title {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 1.03rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .model-sub {
+      font-size: 0.82rem;
+      color: var(--card-subtext);
+      font-weight: 600;
+      line-height: 1.25;
+    }
+
+    .m1 { background-color: var(--c1); }
+    .m2 { background-color: var(--c2); }
+    .m3 { background-color: var(--c3); }
+    .m4 { background-color: var(--c4); }
+    .m5 { background-color: var(--c5); }
+    .m6 { background-color: var(--c6); }
+    .m7 { background-color: var(--c7); }
+    .m8 { background-color: var(--c8); }
+    .m9 { background-color: var(--c9); }
+    .m10 { background-color: var(--c10); }
+
+    .sim-panel {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
+      padding: 28px;
+      margin-bottom: 24px;
+      display: none;
+    }
+
+    .sim-panel.visible {
+      display: block;
+    }
+
+    .sim-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.22);
+    }
+
+    .sim-header h2 {
+      font-size: 1.32rem;
+      color: #ffffff;
+    }
+
+    .sim-badges {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .meta-pill {
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      background: rgba(0, 0, 0, 0.28);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .case-box {
+      background: rgba(12, 21, 15, 0.72);
+      border-left: 4px solid #fff099;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 20px;
+    }
+
+    .case-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #fff099;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .case-narrative {
+      font-size: 0.98rem;
+      line-height: 1.5;
+      color: #f4f6f3;
+    }
+
+    .step-card {
+      background: rgba(16, 26, 19, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 22px;
+    }
+
+    .step-question {
+      font-size: 1.08rem;
+      font-weight: 700;
+      line-height: 1.45;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+
+    .choice-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .choice-btn {
+      width: 100%;
+      text-align: left;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 10px;
+      padding: 14px 16px;
+      color: #f4f6f3;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      cursor: pointer;
+      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .choice-btn:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(255, 255, 255, 0.42);
+      transform: translateY(-1px);
+    }
+
+    .choice-btn:disabled {
+      cursor: default;
+      opacity: 0.92;
+    }
+
+    .choice-btn.choice-wrong {
+      background: var(--err-bg);
+      border-color: var(--err-border);
+      color: #ffe3e0;
+    }
+
+    .choice-btn.choice-correct {
+      background: var(--ok-bg);
+      border-color: var(--ok-border);
+      color: #e9ffea;
+    }
+
+    .choice-letter {
+      font-weight: 800;
+      color: #fff099;
+      flex-shrink: 0;
+    }
+
+    .feedback-box {
+      margin-top: 16px;
+      border-radius: 10px;
+      padding: 13px 16px;
+      font-size: 0.94rem;
+      line-height: 1.45;
+      display: none;
+    }
+
+    .feedback-box.visible {
+      display: block;
+    }
+
+    .feedback-box.error {
+      background: var(--err-bg);
+      border-left: 4px solid var(--err-border);
+      color: #ffd6d2;
+    }
+
+    .feedback-box.success {
+      background: var(--ok-bg);
+      border-left: 4px solid var(--ok-border);
+      color: #e2ffe4;
+    }
+
+    .step-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .action-btn {
+      border: none;
+      border-radius: 8px;
+      padding: 11px 18px;
+      font-size: 0.94rem;
+      font-weight: 700;
+      cursor: pointer;
+      background-color: #c4f0c2;
+      color: #152218;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.28);
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+    }
+
+    .secondary-btn {
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 8px;
+      padding: 10px 15px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      transition: background-color 0.15s ease;
+    }
+
+    .secondary-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .final-score-card {
+      margin-top: 22px;
+      background: rgba(12, 21, 15, 0.88);
+      border: 1px solid rgba(196, 240, 194, 0.35);
+      border-radius: 12px;
+      padding: 22px;
+      display: none;
+    }
+
+    .final-score-card.visible {
+      display: block;
+    }
+
+    .final-score-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .final-score-num {
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: #fff099;
+    }
+
+    .final-summary-text {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .footer-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 0.94rem;
+    }
+
+    .back-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .back-link:hover {
+      color: var(--text-main);
+      text-decoration: underline;
+    }
+
+    @media (max-width: 920px) {
+      .models-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .choice-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .board-frame {
+        padding: 28px 20px 24px;
+      }
+
+      .models-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="board-frame">
+    <h1>Pon a prueba tus conocimientos</h1>
+    <p class="subtitle">
+      10 supuestos prácticos interactivos (UD 1, UD 2 y UD 3.1). Elige la opción correcta en cada botón para avanzar por la situación; al completar el caso verás tu puntuación final.
+    </p>
+
+    <section class="models-grid" aria-label="Supuestos prácticos disponibles" id="modelsGrid">
+      <button type="button" class="model-btn m1" data-case="1">
+        <span class="model-title">☑ Caso 1</span>
+        <span class="model-sub">Accidente de tráfico (40 años)</span>
+      </button>
+      <button type="button" class="model-btn m2" data-case="2">
+        <span class="model-title">☑ Caso 2</span>
+        <span class="model-sub">Víctima inconsciente sin respiración</span>
+      </button>
+      <button type="button" class="model-btn m3" data-case="3">
+        <span class="model-title">☑ Caso 3</span>
+        <span class="model-sub">Caída desde altura y columna</span>
+      </button>
+      <button type="button" class="model-btn m4" data-case="4">
+        <span class="model-title">☑ Caso 4</span>
+        <span class="model-sub">Ingesta accidental de cáustico</span>
+      </button>
+      <button type="button" class="model-btn m5" data-case="5">
+        <span class="model-title">☑ Caso 5</span>
+        <span class="model-sub">Escenario con múltiples heridos</span>
+      </button>
+      <button type="button" class="model-btn m6" data-case="6">
+        <span class="model-title">☑ Caso 6</span>
+        <span class="model-sub">Accidente con corriente eléctrica</span>
+      </button>
+      <button type="button" class="model-btn m7" data-case="7">
+        <span class="model-title">☑ Caso 7</span>
+        <span class="model-sub">Hemorragia y sospecha de shock</span>
+      </button>
+      <button type="button" class="model-btn m8" data-case="8">
+        <span class="model-title">☑ Caso 8</span>
+        <span class="model-sub">Cura doméstica y botiquín</span>
+      </button>
+      <button type="button" class="model-btn m9" data-case="9">
+        <span class="model-title">☑ Caso 9</span>
+        <span class="model-sub">RCP con DEA en adulto</span>
+      </button>
+      <button type="button" class="model-btn m10" data-case="10">
+        <span class="model-title">☑ Caso 10</span>
+        <span class="model-sub">Constantes vitales y evaluación</span>
+      </button>
+    </section>
+
+    <section class="sim-panel" id="simPanel" aria-live="polite">
+      <div class="sim-header">
+        <h2 id="caseTitle">Caso 1 · Accidente de tráfico</h2>
+        <div class="sim-badges">
+          <span class="meta-pill" id="stepCounter">Paso 1</span>
+          <span class="meta-pill" id="errorsCounter">Errores en este caso: 0</span>
+        </div>
+      </div>
+
+      <div class="case-box">
+        <div class="case-label">Situación actual</div>
+        <p class="case-narrative" id="caseNarrative"></p>
+      </div>
+
+      <div class="step-card" id="stepCard">
+        <p class="step-question" id="stepQuestion"></p>
+        <div class="choice-grid" id="choiceGrid"></div>
+        <div class="feedback-box" id="feedbackBox"></div>
+        <div class="step-actions">
+          <button type="button" class="secondary-btn" id="restartCaseBtn">Reiniciar supuesto</button>
+          <button type="button" class="secondary-btn" id="backToCasesBtn">Elegir otro supuesto</button>
+        </div>
+      </div>
+
+      <div class="final-score-card" id="finalScoreCard">
+        <div class="final-score-top">
+          <div>
+            <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 4px;">Puntuación final del supuesto</div>
+            <div class="final-score-num" id="finalScoreValue">10,00 / 10</div>
+          </div>
+          <div class="meta-pill" id="finalErrorsBadge">0 errores acumulados</div>
+        </div>
+        <p class="final-summary-text" id="finalSummaryText"></p>
+        <div class="step-actions" style="margin-top: 0;">
+          <button type="button" class="action-btn" id="anotherCaseFinalBtn">Probar otro supuesto</button>
+          <button type="button" class="secondary-btn" id="repeatCaseFinalBtn">Repetir este supuesto</button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer-nav">
+      <a class="back-link" href="primeros-auxilios.html">← Volver a Primeros Auxilios</a>
+    </footer>
+  </main>
+
+  <script>
+    // 10 supuestos prácticos interactivos basados en UD 1, UD 2 y UD 3.1.
+    // Cada paso tiene 4 opciones de longitud equilibrada y respuesta correcta (ans: 0..3) rotada.
+    // Al acertar, se avanza al siguiente paso o a la rama correspondiente ("nextStepId").
+    const PRACTICAL_CASES = {
+      1: {
+        title: "Caso 1 · Accidente de tráfico (adulto de 40 años)",
+        startNarrative: "Presencias un accidente de tráfico en la vía donde hay un adulto de 40 años implicado y el entorno presenta riesgo por circulación.",
+        startStep: "s1",
+        steps: {
+          s1: {
+            question: "¿Qué harías primero ante este accidente de tráfico?",
+            options: [
+              "Proteger y avisar a emergencias de lugar, heridos y estado",
+              "Sacar de inmediato al conductor tirando de sus brazos",
+              "Darle un vaso de agua para calmar su ansiedad inicial",
+              "Sentarlo en un bordillo sin comprobar la vía ni riesgos"
+            ],
+            ans: 0,
+            errMsg: "Revisa la regla PAS: primero hay que proteger la zona y avisar al 112 detallando lugar, número de heridos y estado.",
+            nextStepId: "s2_walk"
+          },
+          s2_walk: {
+            question: "Tras proteger y avisar al 112, te acercas con precaución. ¿Cuál es la siguiente comprobación clave?",
+            options: [
+              "Medir primero la tensión arterial con brazal y fonendo",
+              "Comprobar si camina por su propio pie tras indicárselo",
+              "Aplicar descargas con el DEA antes de hablar con él",
+              "Romper ampollas o retirar ropa pegada si hay roce"
+            ],
+            ans: 1,
+            errMsg: "En la valoración inicial de triaje/emergencia, el primer filtro rápido consiste en comprobar si la víctima camina.",
+            nextStepId: "s3_breath_situation"
+          },
+          s3_breath_situation: {
+            question: "El adulto de 40 años no camina y permanece tendido. Se plantea la nueva situación según si respira o no: ¿qué debes evaluar ahora?",
+            options: [
+              "Revisar el botiquín para elegir antisépticos y vendas",
+              "Preguntarle si desea tomar algún analgésico habitual",
+              "Comprobar en menos de 10 segundos si respira con normalidad",
+              "Colocarlo boca abajo para comprobar si tiene heridas"
+            ],
+            ans: 2,
+            errMsg: "Si no camina, la situación depende de comprobar en menos de 10 segundos si respira o no respira normalmente.",
+            nextStepId: "s4_branch_breath"
+          },
+          s4_branch_breath: {
+            question: "Al evaluar la respiración, observas que NO respira con normalidad (solo hace jadeos aislados). ¿Qué corresponde hacer?",
+            options: [
+              "Dejarlo quieto diez minutos sin abrir la vía aérea",
+              "Darle de beber sorbos pequeños para que recupere aire",
+              "Sentarlo apoyado atrás sin valorar permeabilidad aérea",
+              "Abrir vía aérea e iniciar RCP (30 compresiones : 2 ventilaciones)"
+            ],
+            ans: 3,
+            errMsg: "Si no respira normalmente, se debe abrir la vía aérea e iniciar de inmediato la RCP con relación 30:2.",
+            nextStepId: null,
+            endSummary: "Has completado el Caso 1 siguiendo la secuencia PAS, comprobación de marcha, evaluación respiratoria y actuación ante ausencia de respiración normal."
+          }
+        }
+      },
+      2: {
+        title: "Caso 2 · Víctima inconsciente sin respiración",
+        startNarrative: "Encuentras a una persona tendida en el suelo de un pasillo que no reacciona cuando le hablas ni al sujetarla con suavidad por los hombros.",
+        startStep: "s1",
+        steps: {
+          s1: {
+            question: "La víctima no responde a estímulos suaves. ¿Qué secuencia inmediata debes activar?",
+            options: [
+              "Esperar sin pedir ayuda hasta que abra los ojos sola",
+              "Pedir ayuda, llamar al 112 y comprobar si respira",
+              "Darle comida o bebida para estimular su consciencia",
+              "Girar bruscamente el cuello para forzar una respuesta"
+            ],
+            ans: 1,
+            errMsg: "Ante una víctima inconsciente, pide ayuda, llama al 112 y comprueba si respira.",
+            nextStepId: "s2"
+          },
+          s2: {
+            question: "Compruebas que no respira. ¿Cómo abres la vía aérea si no sospechas lesión medular?",
+            options: [
+              "Con la maniobra frente-mentón hiperextendiendo el cuello",
+              "Presionando con fuerza el centro del abdomen hacia arriba",
+              "Manteniendo la cabeza flexionada hacia el pecho",
+              "Tapando nariz y boca sin inclinar la cabeza"
+            ],
+            ans: 0,
+            errMsg: "Sin sospecha de lesión medular, la maniobra frente-mentón evita que la lengua obstruya el paso del aire.",
+            nextStepId: "s3"
+          },
+          s3: {
+            question: "Con la vía aérea abierta confirmas que sigue sin respirar. ¿Dónde colocas las manos para comprimir en un adulto?",
+            options: [
+              "Sobre la boca del estómago por debajo de las costillas",
+              "En el hombro izquierdo cerca de la clavícula",
+              "En la mitad inferior del esternón, centro del pecho",
+              "Sobre el cuello a la altura de la arteria carótida"
+            ],
+            ans: 2,
+            errMsg: "En el adulto, las compresiones torácicas se realizan en el centro del pecho, mitad inferior del esternón.",
+            nextStepId: null,
+            endSummary: "Has resuelto correctamente los pasos iniciales de SVB ante una víctima inconsciente sin respiración."
+          }
+        }
+      },
+      3: {
+        title: "Caso 3 · Caída desde altura y columna",
+        startNarrative: "Un trabajador ha caído desde una escalera de tres metros en un taller y refiere intenso dolor en la espalda.",
+        startStep: "s1",
+        steps: {
+          s1: {
+            question: "Tras asegurar el entorno y avisar al 112, ¿qué precaución fundamental debes tener en cuenta?",
+            options: [
+              "Sentarlo rápido en una silla para aliviar el dolor dorsal",
+              "Tirar de sus piernas para estirarlo sobre el suelo",
+              "Moverlo sin precauciones aunque no haya peligro vital",
+              "Valorar posible lesión de columna antes de mover o evacuar"
+            ],
+            ans: 3,
+            errMsg: "En caídas de altura, accidentes de tráfico o aplastamientos hay que valorar siempre posible lesión medular.",
+            nextStepId: "s2"
+          },
+          s2: {
+            question: "La víctima está consciente y respira, pero necesita apertura de vía aérea por posible compromiso. ¿Qué maniobra eliges?",
+            options: [
+              "Tracción mandibular evitando movilizar el cuello",
+              "Hiperextensión forzada del cuello hacia atrás",
+              "Rotación lateral repetida de la cabeza del herido",
+              "Compresión brusca sobre el tórax estando consciente"
+            ],
+            ans: 0,
+            errMsg: "Si se sospecha lesión medular, se emplea la maniobra de tracción mandibular sin mover el cuello.",
+            nextStepId: null,
+            endSummary: "Has aplicado las precauciones de movilización y apertura de vía aérea ante sospecha de lesión de columna."
+          }
+        }
+      },
+      4: {
+        title: "Caso 4 · Ingesta accidental de cáustico",
+        startNarrative: "En un almacén doméstico, un adulto acaba de ingerir accidentalmente un producto limpiador cáustico y está consciente.",
+        startStep: "s1",
+        steps: {
+          s1: {
+            question: "¿Qué medida es indispensable respetar ante esta sospecha de intoxicación por cáusticos?",
+            options: [
+              "Provocar el vómito de inmediato con agua tibia",
+              "No provocar el vómito bajo ningún concepto y avisar",
+              "Forzar la ingesta de grandes cantidades de leche",
+              "Tumbarlo boca abajo sin vigilar su respiración"
+            ],
+            ans: 1,
+            errMsg: "Ante sospecha de intoxicación por productos cáusticos o corrosivos, nunca debe provocarse el vómito.",
+            nextStepId: "s2"
+          },
+          s2: {
+            question: "Mientras esperas indicaciones del 112 o toxicología, ¿qué norma general debes mantener con el afectado?",
+            options: [
+              "No darle de beber ni comer y mantenerlo vigilado",
+              "Ofrecerle alimentos sólidos para absorber el tóxico",
+              "Dejarlo solo en otra estancia hasta que se le pase",
+              "Aplicar alcohol de 96° en los labios sin diluir"
+            ],
+            ans: 0,
+            errMsg: "No se debe dar de beber ni comer a una persona accidentada; se mantiene vigilada y tranquilizada.",
+            nextStepId: null,
+            endSummary: "Has actuado con seguridad ante una ingesta de cáusticos evitando el vómito y la ingesta no indicada."
+          }
+        }
+      },
+      5: {
+        title: "Caso 5 · Escenario con múltiples heridos",
+        startNarrative: "Acudes a un incidente con varias personas afectadas y debes organizar la primera clasificación urgente.",
+        startStep: "s1",
+        steps: {
+          s1: {
+            question: "¿Cuál es el criterio prioritario al atender a múltiples víctimas en el lugar del suceso?",
+            options: [
+              "Atender primero a quienes presenten heridas leves visibles",
+              "Seguir estrictamente el orden de llegada de los testigos",
+              "Atender primero los casos con riesgo vital inminente",
+              "Evacuar antes a quienes caminan sin dificultad"
+            ],
+            ans: 2,
+            errMsg: "Ante múltiples víctimas, se atienden primero aquellas con riesgo vital inminente.",
+            nextStepId: "s2"
+          },
+          s2: {
+            question: "En el triaje START, una víctima no camina, sí respira y tiene una frecuencia respiratoria mayor de 30 rpm. ¿Qué le corresponde?",
+            options: [
+              "Prioridad 3 demorable con espera de varias horas",
+              "Prioridad 1 inmediato por compromiso respiratorio",
+              "Prioridad 4 equivalente a persona fallecida",
+              "Prioridad 2 urgente demorable más de una hora"
+            ],
+            ans: 1,
+            errMsg: "Según el protocolo START, si no camina, respira y tiene FR > 30 rpm, corresponde Prioridad 1 (Inmediato).",
+            nextStepId: null,
+            endSummary: "Has aplicado los criterios de priorización y triaje START ante un incidente con múltiples víctimas."
+          }
+        }
+      },
+      6: {
+        title: "Caso 6 · Accidente con corriente eléctrica",
+        startNarrative: "Una persona ha sufrido una descarga eléctrica y sigue en contacto con un cable o fuente con corriente activa.",
+        startStep: "s1",
+        steps: {
+          s1: {
+            question: "¿Qué debes hacer antes de acercarte a tocar a la persona electrocutada?",
+            options: [
+              "Tirar de su brazo con una mano seca sin cortar luz",
+              "No tocarla mientras siga en contacto con la corriente",
+              "Rociar agua sobre la zona para disipar la carga",
+              "Apartar el cable con un objeto metálico húmedo"
+            ],
+            ans: 1,
+            errMsg: "Nunca se debe tocar a una persona electrocutada mientras siga en contacto con la fuente eléctrica.",
+            nextStepId: "s2"
+          },
+          s2: {
+            question: "Una vez cortada la corriente y asegurada la zona, compruebas que no responde ni respira. ¿Qué inicias?",
+            options: [
+              "Darle de beber y sentarla apoyada en la pared",
+              "Cubrirla con una manta y esperar sin intervenir",
+              "Iniciar la cadena de supervivencia y RCP básica",
+              "Pinchar posibles ampollas con una aguja del botiquín"
+            ],
+            ans: 2,
+            errMsg: "Asegurado el entorno, si la víctima no responde y no respira, se activa emergencia y se inicia RCP.",
+            nextStepId: null,
+            endSummary: "Has seguido la pauta segura ante electrocución: evitar contacto con corriente activa y actuar según el estado vital."
+          }
+        }
+      },
+      7: {
+        title: "Caso 7 · Hemorragia y sospecha de shock",
+        startNarrative: "Atiendes a un herido con sangrado importante y signos compatibles con una caída del volumen circulante.",
+        startStep: "s1",
+        steps: {
+          s1: {
+            question: "¿Qué tipo de shock se produce por disminución drástica del volumen de sangre o líquidos?",
+            options: [
+              "Shock cardiogénico por fallo del músculo cardíaco",
+              "Shock obstructivo por taponamiento mecánico",
+              "Shock hipovolémico por pérdida de sangre o líquidos",
+              "Shock neurógeno por lesión medular exclusiva"
+            ],
+            ans: 2,
+            errMsg: "El shock hipovolémico se debe a una reducción brusca del volumen de sangre o líquidos corporales.",
+            nextStepId: "s2"
+          },
+          s2: {
+            question: "Al controlar el sangrado y acompañar al herido hasta emergencias, ¿qué práctica está prohibida?",
+            options: [
+              "Hacer vendajes o torniquetes demasiado apretados",
+              "Mantenerlo abrigado con una manta y hablarle calmado",
+              "Avisar al 112 informando del estado del herido",
+              "Evitar darle líquidos o alimentos por vía oral"
+            ],
+            ans: 0,
+            errMsg: "Entre las conductas prohibidas ante un accidente figura realizar vendajes o torniquetes demasiado apretados.",
+            nextStepId: null,
+            endSummary: "Has identificado el shock hipovolémico y evitado maniobras perjudiciales durante el control inicial."
+          }
+        }
+      },
+      8: {
+        title: "Caso 8 · Cura doméstica y botiquín",
+        startNarrative: "Vas a realizar una cura sencilla en casa y revisas el botiquín de primeros auxilios.",
+        startStep: "s1",
+        steps: {
+          s1: {
+            question: "¿Cuál es el lugar adecuado para conservar el botiquín de primeros auxilios?",
+            options: [
+              "Un lugar fresco y seco, fuera del alcance infantil",
+              "Encima del radiador o en un baño con vapor",
+              "En el suelo del garaje sin cierre ni etiqueta",
+              "En una bolsa expuesta al sol directo diario"
+            ],
+            ans: 0,
+            errMsg: "El botiquín debe ubicarse en un lugar fresco y seco, fuera del alcance de niños y niñas.",
+            nextStepId: "s2"
+          },
+          s2: {
+            question: "Al revisar los medicamentos del botiquín, ¿qué pauta debes seguir?",
+            options: [
+              "Sacarlos de su envase para ahorrar espacio útil",
+              "Conservar en embalaje original y revisar caducidades",
+              "Guardar restos de antibióticos antiguos por si acaso",
+              "Administrar analgésicos sin preguntar por alergias"
+            ],
+            ans: 1,
+            errMsg: "Los medicamentos deben conservarse en su envase y prospecto originales, revisando caducidades y desechando restos.",
+            nextStepId: null,
+            endSummary: "Has aplicado las normas correctas de ubicación y mantenimiento del botiquín de primeros auxilios."
+          }
+        }
+      },
+      9: {
+        title: "Caso 9 · RCP con DEA en adulto",
+        startNarrative: "Estás realizando RCP a un adulto en parada cardiorrespiratoria y llega un desfibrilador externo automático (DEA).",
+        startStep: "s1",
+        steps: {
+          s1: {
+            question: "¿A qué ritmo y profundidad debes comprimir el tórax del adulto durante la RCP?",
+            options: [
+              "A 70–80 cpm y hundiendo 2 cm como máximo",
+              "A 100–120 cpm y profundidad de 5 cm (máx. 6 cm)",
+              "A 140–160 cpm y hundiendo 8 cm sobre el esternón",
+              "A 50–60 cpm con una sola mano sin soltar el pecho"
+            ],
+            ans: 1,
+            errMsg: "En adultos, la frecuencia es de 100 a 120 compresiones por minuto y la profundidad de 5 cm (no más de 6 cm).",
+            nextStepId: "s2"
+          },
+          s2: {
+            question: "Tras analizar el ritmo el DEA (tanto si da descarga como si no), ¿qué debes hacer de inmediato?",
+            options: [
+              "Reiniciar de inmediato la RCP 30:2 durante 2 minutos",
+              "Apagar el DEA y esperar diez minutos sin actuar",
+              "Colocar a la víctima sentada para comprobar si habla",
+              "Retirar los parches y dejar de comprimir el tórax"
+            ],
+            ans: 0,
+            errMsg: "Tras la evaluación del ritmo por el DEA, haya descarga o no, se reinicia de inmediato la RCP 30:2 durante 2 minutos.",
+            nextStepId: null,
+            endSummary: "Has completado el caso de RCP y uso del DEA aplicando los parámetros y tiempos del protocolo."
+          }
+        }
+      },
+      10: {
+        title: "Caso 10 · Constantes vitales y evaluación",
+        startNarrative: "Debes valorar las constantes vitales de un adulto en reposo siguiendo las pautas de referencia.",
+        startStep: "s1",
+        steps: {
+          s1: {
+            question: "¿Cuál es el rango normal de frecuencia respiratoria en un adulto en reposo?",
+            options: [
+              "De 30 a 60 respiraciones por minuto",
+              "De 26 a 30 respiraciones por minuto",
+              "De 12 a 18 respiraciones por minuto",
+              "De 4 a 8 respiraciones por minuto"
+            ],
+            ans: 2,
+            errMsg: "En el adulto en reposo, la frecuencia respiratoria normal se sitúa entre 12 y 18 respiraciones por minuto.",
+            nextStepId: "s2"
+          },
+          s2: {
+            question: "Al medir la presión arterial en condiciones estandarizadas, ¿qué preparación previa corresponde?",
+            options: [
+              "Reposo de 3–5 min, sin fumar/cafeína y brazo apoyado",
+              "Tomar café justo antes y medir de pie sin apoyo",
+              "Hablar durante toda la toma con las piernas cruzadas",
+              "Colocar el manguito sobre ropa gruesa por debajo del codo"
+            ],
+            ans: 0,
+            errMsg: "La PA se mide tras reposo previo de 3–5 minutos, evitando tabaco, cafeína, comida y ejercicio, con el brazo apoyado.",
+            nextStepId: null,
+            endSummary: "Has completado la valoración de constantes vitales según los rangos y pautas del temario."
+          }
+        }
+      }
+    };
+
+    const LETTERS = ["A", "B", "C", "D"];
+
+    let activeCaseId = null;
+    let currentStepId = null;
+    let stepIndex = 0;
+    let totalErrors = 0;
+    let wrongInCurrentStep = [];
+
+    const modelButtons = document.querySelectorAll(".model-btn");
+    const simPanel = document.getElementById("simPanel");
+    const caseTitle = document.getElementById("caseTitle");
+    const stepCounter = document.getElementById("stepCounter");
+    const errorsCounter = document.getElementById("errorsCounter");
+    const caseNarrative = document.getElementById("caseNarrative");
+    const stepCard = document.getElementById("stepCard");
+    const stepQuestion = document.getElementById("stepQuestion");
+    const choiceGrid = document.getElementById("choiceGrid");
+    const feedbackBox = document.getElementById("feedbackBox");
+    const finalScoreCard = document.getElementById("finalScoreCard");
+    const finalScoreValue = document.getElementById("finalScoreValue");
+    const finalErrorsBadge = document.getElementById("finalErrorsBadge");
+    const finalSummaryText = document.getElementById("finalSummaryText");
+
+    function updateCounters() {
+      const caseObj = PRACTICAL_CASES[activeCaseId];
+      const totalSteps = caseObj ? Object.keys(caseObj.steps).length : 0;
+      stepCounter.textContent = `Paso ${Math.min(stepIndex + 1, totalSteps)} de ${totalSteps}`;
+      errorsCounter.textContent = `Errores en este caso: ${totalErrors}`;
+    }
+
+    function computeFinalScore(errors) {
+      // Escala de 0 a 10 descontando 1,5 puntos por cada error cometido en el supuesto (mínimo 0)
+      const raw = 10 - errors * 1.5;
+      return Math.max(0, raw).toFixed(2).replace(".", ",");
+    }
+
+    function renderStep(stepId) {
+      const caseObj = PRACTICAL_CASES[activeCaseId];
+      if (!caseObj || !caseObj.steps[stepId]) return;
+
+      currentStepId = stepId;
+      wrongInCurrentStep = [];
+      const step = caseObj.steps[stepId];
+
+      updateCounters();
+      stepQuestion.textContent = step.question;
+      feedbackBox.className = "feedback-box";
+      feedbackBox.textContent = "";
+
+      choiceGrid.innerHTML = "";
+      step.options.forEach((optText, idx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "choice-btn";
+        btn.innerHTML = `<span class="choice-letter">${LETTERS[idx]}.</span><span>${optText}</span>`;
+        btn.addEventListener("click", () => handleChoice(idx, btn));
+        choiceGrid.appendChild(btn);
+      });
+    }
+
+    function handleChoice(chosenIdx, clickedBtn) {
+      const caseObj = PRACTICAL_CASES[activeCaseId];
+      const step = caseObj.steps[currentStepId];
+      if (!step) return;
+
+      if (chosenIdx === step.ans) {
+        const allBtns = choiceGrid.querySelectorAll(".choice-btn");
+        allBtns.forEach((b) => { b.disabled = true; });
+        clickedBtn.classList.add("choice-correct");
+
+        feedbackBox.className = "feedback-box success visible";
+        feedbackBox.textContent = "Respuesta correcta. Avanzando a la siguiente situación...";
+
+        setTimeout(() => {
+          if (step.nextStepId) {
+            stepIndex++;
+            renderStep(step.nextStepId);
+          } else {
+            showFinalScore(step.endSummary);
+          }
+        }, 550);
+      } else {
+        if (!wrongInCurrentStep.includes(chosenIdx)) {
+          wrongInCurrentStep.push(chosenIdx);
+          totalErrors++;
+          updateCounters();
+        }
+        clickedBtn.classList.add("choice-wrong");
+        clickedBtn.disabled = true;
+        feedbackBox.className = "feedback-box error visible";
+        feedbackBox.textContent = step.errMsg;
+      }
+    }
+
+    function showFinalScore(summaryText) {
+      stepCard.style.display = "none";
+      const scoreFormatted = computeFinalScore(totalErrors);
+      finalScoreValue.textContent = `${scoreFormatted} / 10`;
+      finalErrorsBadge.textContent = totalErrors === 1 ? "1 error acumulado" : `${totalErrors} errores acumulados`;
+      finalSummaryText.textContent = summaryText || "Supuesto práctico completado.";
+      finalScoreCard.classList.add("visible");
+      finalScoreCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function startCase(caseId) {
+      const caseObj = PRACTICAL_CASES[caseId];
+      if (!caseObj) return;
+
+      activeCaseId = caseId;
+      stepIndex = 0;
+      totalErrors = 0;
+
+      modelButtons.forEach((btn) => {
+        btn.classList.toggle("active-model", btn.dataset.case === String(caseId));
+      });
+
+      caseTitle.textContent = caseObj.title;
+      caseNarrative.textContent = caseObj.startNarrative;
+      finalScoreCard.classList.remove("visible");
+      stepCard.style.display = "block";
+      simPanel.classList.add("visible");
+
+      renderStep(caseObj.startStep);
+      simPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function resetToCaseSelector() {
+      simPanel.classList.remove("visible");
+      finalScoreCard.classList.remove("visible");
+      modelButtons.forEach((btn) => btn.classList.remove("active-model"));
+      document.getElementById("modelsGrid").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    modelButtons.forEach((btn) => {
+      btn.addEventListener("click", () => startCase(btn.dataset.case));
+    });
+
+    document.getElementById("restartCaseBtn").addEventListener("click", () => {
+      if (activeCaseId) startCase(activeCaseId);
+    });
+
+    document.getElementById("repeatCaseFinalBtn").addEventListener("click", () => {
+      if (activeCaseId) startCase(activeCaseId);
+    });
+
+    document.getElementById("backToCasesBtn").addEventListener("click", resetToCaseSelector);
+    document.getElementById("anotherCaseFinalBtn").addEventListener("click", resetToCaseSelector);
+  </script>
+</body>
+</html>
