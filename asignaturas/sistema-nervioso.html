@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Nervioso - Atención Sanitaria</title>
+    <title>Información de apoyo - Atención Sanitaria</title>
     <style>
         :root {
             --bg-board: #2b3a32;
@@ -11,6 +11,7 @@
             --text-chalk: #f4f4f0;
             --postit-yellow: #fff3a8;
             --postit-blue: #a0c4ff;
+            --postit-green: #c4f0c2;
             --text-dark: #2b2b2b;
         }
 
@@ -32,7 +33,7 @@
 
         .board-container {
             width: 100%;
-            max-width: 1000px;
+            max-width: 1040px;
             background-color: var(--bg-board);
             border: 12px solid var(--board-frame);
             border-radius: 16px;
@@ -53,17 +54,23 @@
 
         .sections-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
             padding: 15px 0;
+        }
+
+        @media (max-width: 860px) {
+            .sections-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .section-card {
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 30px 25px;
-            min-height: 200px;
+            padding: 28px 24px;
+            min-height: 215px;
             text-decoration: none;
             color: var(--text-dark);
             border-radius: 6px 6px 6px 18px;
@@ -77,19 +84,20 @@
         }
 
         .section-card h3 {
-            font-size: 1.3em;
+            font-size: 1.25em;
             margin-bottom: 12px;
             font-weight: 700;
         }
 
         .section-card p {
             font-size: 0.95em;
-            opacity: 0.9;
-            line-height: 1.4;
+            opacity: 0.92;
+            line-height: 1.45;
         }
 
         .c-yellow { background-color: var(--postit-yellow); }
         .c-blue   { background-color: var(--postit-blue); }
+        .c-green  { background-color: var(--postit-green); }
 
         .back-nav {
             margin-top: 10px;
@@ -102,7 +110,7 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            opacity: 0.8;
+            opacity: 0.85;
             transition: opacity 0.2s;
         }
 
@@ -116,12 +124,12 @@
 
     <main class="board-container">
         <header>
-            <h1>Información de apoyo - Sistema Nervioso</h1>
+            <h1>Información de apoyo</h1>
         </header>
 
         <section class="sections-grid">
-            <!-- Opción 1: Conceptos generales (Adjunto 2) -->
-            <a href="https://palabrasyfrasesperdidas-dotcom.github.io/El-viaje-/" target="_blank" class="section-card c-yellow">
+            <!-- Opción 1: Conceptos generales -->
+            <a href="https://palabrasyfrasesperdidas-dotcom.github.io/El-viaje-/" target="_blank" rel="noopener" class="section-card c-yellow">
                 <div>
                     <h3>1. Conceptos generales del sistema nervioso</h3>
                     <p>Accede al repositorio interactivo para repasar y profundizar en los conceptos fundamentales.</p>
@@ -129,13 +137,22 @@
                 <span style="font-size: 0.9em; font-weight: bold; margin-top: 15px;">Acceder al recurso &rarr;</span>
             </a>
 
-            <!-- Opción 2: Esquema y evaluación (Adjunto 3) -->
-            <a href="https://palabrasyfrasesperdidas-dotcom.github.io/esquema-sistema-nervioso/" target="_blank" class="section-card c-blue">
+            <!-- Opción 2: Esquema y evaluación -->
+            <a href="https://palabrasyfrasesperdidas-dotcom.github.io/esquema-sistema-nervioso/" target="_blank" rel="noopener" class="section-card c-blue">
                 <div>
                     <h3>2. Esquema del sistema nervioso y evaluación</h3>
                     <p>Consulta los esquemas visuales estructurados y pon a prueba tus conocimientos con la autoevaluación.</p>
                 </div>
                 <span style="font-size: 0.9em; font-weight: bold; margin-top: 15px;">Ver esquema y test &rarr;</span>
+            </a>
+
+            <!-- Opción 3: Práctica paso a paso de ingesta y sondajes -->
+            <a href="https://palabrasyfrasesperdidas-dotcom.github.io/practica-ingesta-sondas/" target="_blank" rel="noopener" class="section-card c-green">
+                <div>
+                    <h3>3. Práctica paso a paso: ingesta y sondajes</h3>
+                    <p>Simulador con ruleta sin repetición para practicar los protocolos según la situación del paciente.</p>
+                </div>
+                <span style="font-size: 0.9em; font-weight: bold; margin-top: 15px;">Iniciar práctica &rarr;</span>
             </a>
         </section>
 
