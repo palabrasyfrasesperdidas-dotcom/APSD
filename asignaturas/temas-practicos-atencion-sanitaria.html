@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Temas Prácticos · Atención Sanitaria - APSD</title>
+  <style>
+    :root {
+      --board-bg-gradient: radial-gradient(circle at 50% 20%, #263c2c 0%, #18261c 100%);
+      --frame-border: #5a3c24;
+      --frame-shadow: rgba(0, 0, 0, 0.55);
+      --text-main: #f4f6f3;
+      --text-muted: #c7d1c9;
+      --banner-bg: rgba(255, 255, 255, 0.06);
+      --banner-accent: #f3c969;
+      --card-1: #fff099;
+      --card-2: #a8c7fa;
+      --card-3: #c4f0c2;
+      --card-4: #ffd4a3;
+      --card-text: #162019;
+      --card-subtext: #2c3a30;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background-color: #141715;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 16px 16px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 16px;
+    }
+
+    .board-frame {
+      width: 100%;
+      max-width: 1080px;
+      background: var(--board-bg-gradient);
+      border: 10px solid var(--frame-border);
+      border-radius: 18px;
+      box-shadow: 0 22px 50px var(--frame-shadow), inset 0 0 40px rgba(0, 0, 0, 0.35);
+      padding: 44px 48px 36px;
+    }
+
+    .header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: clamp(1.9rem, 3.8vw, 2.75rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+    }
+
+    .header-badge {
+      width: 92px;
+      height: 92px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      font-size: 2.3rem;
+    }
+
+    .divider {
+      border: 0;
+      border-top: 1px dashed rgba(255, 255, 255, 0.25);
+      margin-bottom: 22px;
+    }
+
+    .date-banner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--banner-bg);
+      border-left: 4px solid var(--banner-accent);
+      border-radius: 8px;
+      padding: 13px 18px;
+      margin-bottom: 30px;
+      font-size: 0.98rem;
+      line-height: 1.45;
+      color: var(--text-main);
+    }
+
+    .cards-grid-two {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .note-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 225px;
+      padding: 24px;
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--card-text);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.32);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.15s ease;
+      cursor: pointer;
+      border: none;
+      text-align: left;
+      font-family: inherit;
+    }
+
+    .note-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 30px rgba(0, 0, 0, 0.42);
+      filter: brightness(1.02);
+    }
+
+    .note-card.yellow {
+      background-color: var(--card-1);
+    }
+
+    .note-card.blue {
+      background-color: var(--card-2);
+    }
+
+    .note-card h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 12px;
+      color: var(--card-text);
+    }
+
+    .note-card p {
+      font-size: 0.96rem;
+      line-height: 1.5;
+      color: var(--card-subtext);
+    }
+
+    .card-cta {
+      margin-top: 22px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--card-text);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sub-panel {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
+      padding: 28px;
+      margin-bottom: 30px;
+      display: none;
+    }
+
+    .sub-panel.visible {
+      display: block;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-bottom: 16px;
+      margin-bottom: 22px;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.22);
+    }
+
+    .panel-header h2 {
+      font-size: 1.32rem;
+      color: #ffffff;
+    }
+
+    .secondary-btn {
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 8px;
+      padding: 9px 15px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      transition: background-color 0.15s ease;
+    }
+
+    .secondary-btn:hover {
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .resources-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .resource-card {
+      background: rgba(15, 24, 18, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 10px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .resource-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 9px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+      color: #162019;
+      background: var(--card-1);
+    }
+
+    .resource-tag.img-tag {
+      background: var(--card-3);
+    }
+
+    .resource-title {
+      font-size: 1.04rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+
+    .resource-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .resource-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .dl-btn {
+      text-decoration: none;
+      border-radius: 7px;
+      padding: 8px 13px;
+      font-size: 0.87rem;
+      font-weight: 700;
+      background: var(--card-1);
+      color: #162019;
+      transition: filter 0.15s ease, transform 0.12s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .dl-btn:hover {
+      filter: brightness(1.04);
+      transform: translateY(-1px);
+    }
+
+    .dl-btn.secondary-dl {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--text-main);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+    }
+
+    .test-models-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .test-model-btn {
+      border: none;
+      border-radius: 10px;
+      padding: 15px 14px;
+      text-align: left;
+      cursor: pointer;
+      color: var(--card-text);
+      font-family: inherit;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.28);
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+
+    .test-model-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.03);
+    }
+
+    .test-model-btn.active {
+      outline: 3px solid #ffffff;
+      outline-offset: 2px;
+    }
+
+    .test-model-btn strong {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: 3px;
+    }
+
+    .test-model-btn span {
+      font-size: 0.82rem;
+      color: var(--card-subtext);
+      font-weight: 600;
+    }
+
+    .tm-1 { background: var(--card-1); }
+    .tm-2 { background: var(--card-2); }
+    .tm-3 { background: var(--card-3); }
+    .tm-4 { background: var(--card-4); }
+
+    .quiz-area {
+      background: rgba(14, 23, 17, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 12px;
+      padding: 20px;
+      display: none;
+    }
+
+    .quiz-area.visible {
+      display: block;
+    }
+
+    .q-block {
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .q-title {
+      font-weight: 700;
+      font-size: 0.98rem;
+      margin-bottom: 10px;
+      color: #ffffff;
+    }
+
+    .opts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .opt-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 8px;
+      padding: 10px 12px;
+      cursor: pointer;
+      font-size: 0.91rem;
+      line-height: 1.38;
+    }
+
+    .opt-item:hover {
+      background: rgba(255, 255, 255, 0.11);
+    }
+
+    .opt-item input {
+      margin-top: 2px;
+      accent-color: #c4f0c2;
+    }
+
+    .submit-test-btn {
+      border: none;
+      border-radius: 8px;
+      padding: 11px 20px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      background: var(--card-3);
+      color: #162019;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.28);
+    }
+
+    .result-box {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: none;
+    }
+
+    .result-box.visible {
+      display: block;
+    }
+
+    .result-score {
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: var(--card-1);
+      margin-bottom: 6px;
+    }
+
+    .err-detail {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-left: 3px solid #ff8a80;
+      background: rgba(255, 138, 128, 0.12);
+      border-radius: 6px;
+      font-size: 0.89rem;
+    }
+
+    .footer-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 0.94rem;
+    }
+
+    .back-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .back-link:hover {
+      color: var(--text-main);
+      text-decoration: underline;
+    }
+
+    @media (max-width: 860px) {
+      .board-frame {
+        padding: 32px 24px 28px;
+      }
+
+      .cards-grid-two,
+      .resources-grid,
+      .opts-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .test-models-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 520px) {
+      .test-models-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="board-frame">
+    <header class="header-row">
+      <h1>Temas Prácticos · Atención Sanitaria</h1>
+      <div class="header-badge" aria-hidden="true">🩺</div>
+    </header>
+
+    <hr class="divider" />
+
+    <section class="date-banner" aria-label="Examen práctico de Atención Sanitaria">
+      <span aria-hidden="true">🛠️</span>
+      <div><strong>Examen práctico:</strong> 23 de noviembre · Recursos prácticos y test de repaso sobre higiene de manos, antiséptico, apoyo a la ingesta y sondajes/enemas.</div>
+    </section>
+
+    <section class="cards-grid-two" aria-label="Opciones principales de temas prácticos">
+      <button type="button" class="note-card yellow" id="btnOpenDownloads">
+        <div>
+          <h2>1. Apuntes e imágenes de procedimientos</h2>
+          <p>Descarga los apuntes unificados paso a paso y las infografías didácticas creadas para la práctica (higiene de manos, antiséptico casero, ingesta, sonda nasogástrica y enema).</p>
+        </div>
+        <span class="card-cta">Ver y descargar recursos →</span>
+      </button>
+
+      <button type="button" class="note-card blue" id="btnOpenTest">
+        <div>
+          <h2>2. Pon a prueba tus conocimientos</h2>
+          <p>Realiza test de autoevaluación sobre los procedimientos prácticos de Atención Sanitaria (penalización de 1/3 por fallo y corrección detallada al finalizar).</p>
+        </div>
+        <span class="card-cta">Realizar test práctico →</span>
+      </button>
+    </section>
+
+    <section class="sub-panel" id="downloadsPanel" aria-live="polite">
+      <div class="panel-header">
+        <h2>Apuntes e imágenes de procedimientos (carpeta <code>asignaturas</code>)</h2>
+        <button type="button" class="secondary-btn" id="closeDownloadsBtn">Cerrar apartado</button>
+      </div>
+
+      <div class="resources-grid">
+        <article class="resource-card">
+          <div>
+            <span class="resource-tag">Apuntes PDF</span>
+            <h3 class="resource-title">Apuntes unificados de procedimientos sanitarios</h3>
+            <p class="resource-desc">Paso a paso ordenado de apoyo a la ingesta, alimentación por sonda nasogástrica, enema de limpieza/sonda rectal e higiene de manos.</p>
+          </div>
+          <div class="resource-actions">
+            <a class="dl-btn" href="apuntes-procedimientos-sanitarios.pdf" download>Descargar PDF</a>
+            <a class="dl-btn secondary-dl" href="apuntes-procedimientos-sanitarios.pdf" target="_blank" rel="noopener">Abrir</a>
+          </div>
+        </article>
+
+        <article class="resource-card">
+          <div>
+            <span class="resource-tag img-tag">Infografía</span>
+            <h3 class="resource-title">Lavado de manos higiénico (12 pasos)</h3>
+            <p class="resource-desc">Guía visual didáctica desde abrir grifo con el dorso hasta sacudir las manos sobre el lavabo.</p>
+          </div>
+          <div class="resource-actions">
+            <a class="dl-btn" href="lavado-manos-higienico.jpg" download>Descargar imagen</a>
+            <a class="dl-btn secondary-dl" href="lavado-manos-higienico.jpg" target="_blank" rel="noopener">Ver imagen</a>
+          </div>
+        </article>
+
+        <article class="resource-card">
+          <div>
+            <span class="resource-tag img-tag">Infografía</span>
+            <h3 class="resource-title">Lavado por fricción / antiséptico</h3>
+            <p class="resource-desc">Aviso de manos secas, pasos de fricción/antiséptico y recordatorio de lavado higiénico tras manos sucias o 4 lavados antisépticos.</p>
+          </div>
+          <div class="resource-actions">
+            <a class="dl-btn" href="lavado-manos-friccion-antiseptico.jpg" download>Descargar imagen</a>
+            <a class="dl-btn secondary-dl" href="lavado-manos-friccion-antiseptico.jpg" target="_blank" rel="noopener">Ver imagen</a>
+          </div>
+        </article>
+
+        <article class="resource-card">
+          <div>
+            <span class="resource-tag img-tag">Infografía</span>
+            <h3 class="resource-title">Creación de antiséptico casero</h3>
+            <p class="resource-desc">Lavado previo, proporciones (alcohol 96° 250 ml, agua oxigenada 7 ml, agua 30 ml, glicerina 5 ml), agitación y dispensador.</p>
+          </div>
+          <div class="resource-actions">
+            <a class="dl-btn" href="antiseptico-casero.jpg" download>Descargar imagen</a>
+            <a class="dl-btn secondary-dl" href="antiseptico-casero.jpg" target="_blank" rel="noopener">Ver imagen</a>
+          </div>
+        </article>
+
+        <article class="resource-card">
+          <div>
+            <span class="resource-tag img-tag">Infografía</span>
+            <h3 class="resource-title">Lavado de manos quirúrgico: preliminar</h3>
+            <p class="resource-desc">Esterilización de manos y antebrazos, lavabo antisalpicaduras, material del set y pasos preliminares hasta el aclarado.</p>
+          </div>
+          <div class="resource-actions">
+            <a class="dl-btn" href="lavado-quirurgico-preliminar.jpg" download>Descargar imagen</a>
+            <a class="dl-btn secondary-dl" href="lavado-quirurgico-preliminar.jpg" target="_blank" rel="noopener">Ver imagen</a>
+          </div>
+        </article>
+
+        <article class="resource-card">
+          <div>
+            <span class="resource-tag img-tag">Infografía</span>
+            <h3 class="resource-title">Lavado quirúrgico principal y complementario</h3>
+            <p class="resource-desc">Secuencias A–H del lavado principal, lavados complementarios y tercer lavado hasta la muñeca.</p>
+          </div>
+          <div class="resource-actions">
+            <a class="dl-btn" href="lavado-quirurgico-principal-complementario.jpg" download>Descargar imagen</a>
+            <a class="dl-btn secondary-dl" href="lavado-quirurgico-principal-complementario.jpg" target="_blank" rel="noopener">Ver imagen</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="sub-panel" id="testPanel" aria-live="polite">
+      <div class="panel-header">
+        <h2>Pon a prueba tus conocimientos · Procedimientos prácticos</h2>
+        <button type="button" class="secondary-btn" id="closeTestBtn">Cerrar apartado</button>
+      </div>
+
+      <div class="test-models-grid" id="testModelsGrid">
+        <button type="button" class="test-model-btn tm-1" data-t="1">
+          <strong>Test Práctico 1</strong>
+          <span>Higiene de manos y antiséptico</span>
+        </button>
+        <button type="button" class="test-model-btn tm-2" data-t="2">
+          <strong>Test Práctico 2</strong>
+          <span>Lavado quirúrgico y secuencias</span>
+        </button>
+        <button type="button" class="test-model-btn tm-3" data-t="3">
+          <strong>Test Práctico 3</strong>
+          <span>Apoyo a la ingesta y SNG</span>
+        </button>
+        <button type="button" class="test-model-btn tm-4" data-t="4">
+          <strong>Test Práctico 4</strong>
+          <span>Enema de limpieza y pautas</span>
+        </button>
+      </div>
+
+      <div class="quiz-area" id="quizArea">
+        <h3 id="currentTestTitle" style="margin-bottom: 14px; font-size: 1.15rem;"></h3>
+        <form id="practicalQuizForm">
+          <div id="practicalQuestionsList"></div>
+          <button type="submit" class="submit-test-btn">Corregir test (fallos restan 1/3)</button>
+        </form>
+        <div class="result-box" id="practicalResultBox"></div>
+      </div>
+    </section>
+
+    <footer class="footer-nav">
+      <a class="back-link" href="atencion-sanitaria.html">← Volver a Atención Sanitaria</a>
+    </footer>
+  </main>
+
+  <script>
+    const PRACTICAL_TESTS = {
+      1: {
+        title: "Test Práctico 1 · Higiene de manos y antiséptico",
+        questions: [
+          {
+            q: "En el lavado de manos higiénico, ¿cómo se abre y se cierra el grifo?",
+            opts: [
+              "Abrir con dorso de la mano y cerrar con antebrazo",
+              "Abrir con palma de la mano y cerrar con pulgar",
+              "Abrir con antebrazo y cerrar con yema del índice",
+              "Abrir con nudillos y cerrar con papel usado"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Qué condición previa se exige antes de iniciar el lavado por fricción / antiséptico?",
+            opts: [
+              "Tener las manos húmedas tras enjuague previo",
+              "Tener las manos secas antes de comenzar",
+              "Aplicar crema hidratante antes del antiséptico",
+              "Llevar anillos ajustados para frotar mejor"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Cuándo debe realizarse un lavado higiénico de manos en lugar de solo fricción/antiséptico?",
+            opts: [
+              "Tras haber realizado un único lavado con antiséptico",
+              "Siempre que la piel esté ligeramente tibia o seca",
+              "Con manos sucias o tras 4 lavados con antiséptico",
+              "Únicamente antes de ponerse guantes estériles"
+            ],
+            ans: 2
+          },
+          {
+            q: "En la preparación de antiséptico casero (250 ml alcohol 96° y 30 ml agua), ¿qué cantidades corresponden a agua oxigenada y glicerina?",
+            opts: [
+              "Agua oxigenada 15 ml y glicerina 10 ml",
+              "Agua oxigenada 2 ml y glicerina 12 ml",
+              "Agua oxigenada 10 ml y glicerina 2 ml",
+              "Agua oxigenada 7 ml y glicerina 5 ml"
+            ],
+            ans: 3
+          },
+          {
+            q: "Antes de preparar el antiséptico casero, ¿cuál es el paso previo indicado?",
+            opts: [
+              "Lavarse las manos para no contaminar el producto",
+              "Calentar el alcohol al baño maría suavemente",
+              "Verter primero la glicerina sin medir volumen",
+              "Agitar con fuerza hasta formar abundante espuma"
+            ],
+            ans: 0
+          }
+        ]
+      },
+      2: {
+        title: "Test Práctico 2 · Lavado quirúrgico y secuencias",
+        questions: [
+          {
+            q: "¿Cuál es la finalidad principal del lavado de manos quirúrgico?",
+            opts: [
+              "Eliminar polvo visible tras tareas de oficina",
+              "Esterilización de manos y antebrazos con asepsia",
+              "Hidratar la piel seca sin retirar flora transitoria",
+              "Sustituir el uso de guantes y bata en quirófano"
+            ],
+            ans: 1
+          },
+          {
+            q: "Durante el lavado quirúrgico de mano a codo, ¿qué postura mantienen las manos respecto a los codos?",
+            opts: [
+              "Las manos por debajo de los codos en todo momento",
+              "A la misma altura pegadas al torso del cuerpo",
+              "Las manos en la parte superior y codos abajo",
+              "Alternando codos arriba y manos abajo al aclarar"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Con qué parte de la esponja se enjabona de manos a codos en el lavado preliminar?",
+            opts: [
+              "Con la cara lisa sin espuma del envoltorio",
+              "Con el dorso del pulgar sin usar la esponja",
+              "Con la parte de algodón seco sin humedecer",
+              "Con la parte de cepillo con movimientos circulares"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Hasta dónde llega el tercer lavado del bloque quirúrgico complementario?",
+            opts: [
+              "Hasta la muñeca, siguiendo la secuencia de lavado",
+              "Hasta el tercio medio del brazo superior",
+              "Solo hasta las yemas de los dedos sin muñeca",
+              "Hasta el hombro incluyendo la articulación"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Cómo debe caer el agua al aclarar en el lavado quirúrgico?",
+            opts: [
+              "Desde el codo hacia las yemas de los dedos",
+              "Desde las puntas de los dedos hasta el codo",
+              "De forma lateral sobre el antebrazo doblado",
+              "En chorro directo sobre el dorso del pulgar"
+            ],
+            ans: 1
+          }
+        ]
+      },
+      3: {
+        title: "Test Práctico 3 · Apoyo a la ingesta y SNG",
+        questions: [
+          {
+            q: "¿En qué posición se coloca al paciente encamado antes de iniciar la alimentación o SNG?",
+            opts: [
+              "En decúbito prono con almohada bajo el tórax",
+              "En Trendelenburg con los pies elevados",
+              "En posición Fowler para favorecer la ingesta",
+              "En decúbito lateral derecho sin respaldo"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Con qué volumen de agua se comprueba la permeabilidad de la sonda nasogástrica antes de administrar?",
+            opts: [
+              "Con 5 ml de agua en jeringa pequeña",
+              "Con 100 ml de agua a temperatura fría",
+              "Con 10 ml de suero salino hipertónico",
+              "Con 30 ml de agua comprobando permeabilidad"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Cuánto tiempo se deja al paciente en posición Fowler tras administrar la nutrición por SNG?",
+            opts: [
+              "30 minutos observando tolerancia a la dieta",
+              "5 minutos y se tumba inmediatamente plano",
+              "60 minutos sin revisar el esparadrapo",
+              "10 minutos sin irrigar previamente la sonda"
+            ],
+            ans: 0
+          },
+          {
+            q: "Al alimentar a un paciente que NO come solo, ¿qué pauta es correcta respecto a los trozos y el ritmo?",
+            opts: [
+              "Cortar trozos grandes para terminar más rápido",
+              "No cortar trozos grandes y respetar su ritmo",
+              "Ofrecer toda la comida antes de dar líquidos",
+              "Omitir la higiene bucal si ha comido poco"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿Cuál es uno de los pasos finales comunes en todos los procedimientos de apoyo a la ingesta?",
+            opts: [
+              "Dejar los guantes puestos al salir de la habitación",
+              "No anotar incidencias si el paciente está estable",
+              "Recoger material, despedirse, lavarse manos y registrar",
+              "Bajar la cama al mínimo antes de saludar"
+            ],
+            ans: 2
+          }
+        ]
+      },
+      4: {
+        title: "Test Práctico 4 · Enema de limpieza y pautas",
+        questions: [
+          {
+            q: "¿En qué posición se coloca al paciente para administrar un enema de limpieza?",
+            opts: [
+              "En decúbito supino con piernas estiradas",
+              "En posición de Sims izquierda",
+              "En sedestación inclinada hacia delante",
+              "En posición Fowler a 45 grados"
+            ],
+            ans: 1
+          },
+          {
+            q: "¿A qué temperatura aproximada se prepara la solución del enema y a qué altura se coloca el irrigador?",
+            opts: [
+              "A unos 20 °C y a 10–15 cm de altura",
+              "A unos 45 °C y a 90–100 cm de altura",
+              "A unos 36 °C y a unos 40–50 cm de altura",
+              "A unos 30 °C y a ras de la superficie de la cama"
+            ],
+            ans: 2
+          },
+          {
+            q: "¿Cómo debe dirigirse la cánula rectal al introducirla suavemente por el ano (unos 15 cm)?",
+            opts: [
+              "Primero hacia la espalda y luego hacia abajo",
+              "En línea recta vertical sin cambiar dirección",
+              "Primero hacia el ombligo y luego hacia el glúteo",
+              "Primero hacia el ombligo y después horizontalmente"
+            ],
+            ans: 3
+          },
+          {
+            q: "¿Qué se hace si el paciente refiere molestias durante la administración del enema?",
+            opts: [
+              "Cerrar con pinza, esperar que ceda y continuar",
+              "Aumentar la velocidad para terminar cuanto antes",
+              "Retirar la cánula de golpe sin cerrar la llave",
+              "Pedirle que contenga la respiración sin soltar"
+            ],
+            ans: 0
+          },
+          {
+            q: "¿Cuánto tiempo se pide al usuario retener la solución tras administrar el enema?",
+            opts: [
+              "Al menos 1 o 2 minutos sin levantarse",
+              "Al menos 5–10 minutos antes de evacuar",
+              "Al menos 30–40 minutos en decúbito prono",
+              "No hace falta retenerla tras cerrar la cánula"
+            ],
+            ans: 1
+          }
+        ]
+      }
+    };
+
+    const LETTERS = ["A", "B", "C", "D"];
+    let activeTestId = null;
+
+    const downloadsPanel = document.getElementById("downloadsPanel");
+    const testPanel = document.getElementById("testPanel");
+    const quizArea = document.getElementById("quizArea");
+    const currentTestTitle = document.getElementById("currentTestTitle");
+    const practicalQuestionsList = document.getElementById("practicalQuestionsList");
+    const practicalResultBox = document.getElementById("practicalResultBox");
+    const practicalQuizForm = document.getElementById("practicalQuizForm");
+
+    document.getElementById("btnOpenDownloads").addEventListener("click", () => {
+      testPanel.classList.remove("visible");
+      downloadsPanel.classList.add("visible");
+      downloadsPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    document.getElementById("btnOpenTest").addEventListener("click", () => {
+      downloadsPanel.classList.remove("visible");
+      testPanel.classList.add("visible");
+      testPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    document.getElementById("closeDownloadsBtn").addEventListener("click", () => {
+      downloadsPanel.classList.remove("visible");
+    });
+
+    document.getElementById("closeTestBtn").addEventListener("click", () => {
+      testPanel.classList.remove("visible");
+    });
+
+    document.querySelectorAll(".test-model-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.t;
+        activeTestId = id;
+        document.querySelectorAll(".test-model-btn").forEach((b) => b.classList.toggle("active", b.dataset.t === id));
+        const testData = PRACTICAL_TESTS[id];
+        currentTestTitle.textContent = testData.title;
+        practicalResultBox.classList.remove("visible");
+        practicalResultBox.innerHTML = "";
+
+        practicalQuestionsList.innerHTML = testData.questions
+          .map((item, qIdx) => {
+            const optsHtml = item.opts
+              .map((opt, oIdx) => {
+                const inputId = `pt${id}_q${qIdx}_o${oIdx}`;
+                return `
+                  <label class="opt-item" for="${inputId}">
+                    <input type="radio" id="${inputId}" name="pq_${qIdx}" value="${oIdx}" required />
+                    <span><strong>${LETTERS[oIdx]}.</strong> ${opt}</span>
+                  </label>
+                `;
+              })
+              .join("");
+
+            return `
+              <div class="q-block">
+                <p class="q-title">${qIdx + 1}. ${item.q}</p>
+                <div class="opts-grid">${optsHtml}</div>
+              </div>
+            `;
+          })
+          .join("");
+
+        quizArea.classList.add("visible");
+        quizArea.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      });
+    });
+
+    practicalQuizForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const testData = PRACTICAL_TESTS[activeTestId];
+      if (!testData) return;
+
+      let ok = 0;
+      let bad = 0;
+      const errors = [];
+
+      testData.questions.forEach((item, qIdx) => {
+        const chosen = practicalQuizForm.querySelector(`input[name="pq_${qIdx}"]:checked`);
+        const val = chosen ? Number(chosen.value) : null;
+        if (val === item.ans) {
+          ok++;
+        } else {
+          bad++;
+          errors.push({
+            num: qIdx + 1,
+            q: item.q,
+            chosenText: val !== null ? `${LETTERS[val]}. ${item.opts[val]}` : "Sin responder",
+            correctText: `${LETTERS[item.ans]}. ${item.opts[item.ans]}`
+          });
+        }
+      });
+
+      const n = testData.questions.length;
+      const score = Math.max(0, ((ok - bad / 3) / n) * 10).toFixed(2).replace(".", ",");
+
+      practicalResultBox.innerHTML = `
+        <div class="result-score">${score} / 10</div>
+        <div style="font-size: 0.92rem; color: var(--text-muted);">
+          Aciertos: <strong>${ok}</strong> · Fallos: <strong>${bad}</strong> · Penalización: <strong>-${(bad / 3).toFixed(2).replace(".", ",")}</strong>
+        </div>
+        ${
+          errors.length === 0
+            ? `<div style="margin-top: 10px; color: #c4f0c2; font-weight: 600;">¡Perfecto! Sin fallos en este test práctico.</div>`
+            : errors
+                .map(
+                  (err) => `
+                  <div class="err-detail">
+                    <div><strong>${err.num}. ${err.q}</strong></div>
+                    <div style="color: #ff9c96;">Tu respuesta: ${err.chosenText}</div>
+                    <div style="color: #c4f0c2; font-weight: 600;">Correcta: ${err.correctText}</div>
+                  </div>
+                `
+                )
+                .join("")
+        }
+      `;
+      practicalResultBox.classList.add("visible");
+      practicalResultBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+  </script>
+</body>
+</html>
