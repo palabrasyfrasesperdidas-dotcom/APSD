@@ -133,69 +133,6 @@
         .c-peach  { background-color: var(--postit-peach); }
         .c-mint   { background-color: var(--postit-mint); }
 
-        /* VENTANA MODAL "PRÓXIMAMENTE" */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .modal-box {
-            background-color: var(--bg-board);
-            border: 8px solid var(--board-frame);
-            border-radius: 14px;
-            padding: 30px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            color: var(--text-chalk);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .modal-box h2 {
-            font-size: 1.5em;
-            color: var(--postit-yellow);
-        }
-
-        .modal-box p {
-            font-size: 1em;
-            opacity: 0.9;
-        }
-
-        .modal-btn {
-            background-color: var(--board-frame);
-            color: var(--text-chalk);
-            border: none;
-            padding: 10px 20px;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            align-self: center;
-            transition: opacity 0.2s;
-        }
-
-        .modal-btn:hover {
-            opacity: 0.85;
-        }
-
         /* NAVEGACIÓN INFERIOR */
         .back-nav {
             text-align: left;
@@ -250,13 +187,13 @@
             </a>
 
             <!-- 2. Temas prácticos -->
-            <div onclick="mostrarProximamente('Temas prácticos')" class="section-card c-blue">
+            <a href="temas-practicos-atencion-sanitaria.html" class="section-card c-blue">
                 <div>
                     <h3>2. Temas prácticos</h3>
-                    <p>Guías operativas, casos y protocolos para el desarrollo de la parte práctica.</p>
+                    <p>Guías operativas, apuntes, infografías y test prácticos de la asignatura.</p>
                 </div>
                 <span style="font-size: 0.85em; font-weight: bold; margin-top: 15px;">Consultar prácticos &rarr;</span>
-            </div>
+            </a>
 
             <!-- 3. Información de apoyo (Sistema Nervioso) -->
             <a href="sistema-nervioso.html" class="section-card c-mint">
@@ -282,26 +219,6 @@
             <a href="../index.html" class="back-btn">&larr; Volver a la pizarra principal</a>
         </div>
     </main>
-
-    <!-- VENTANA MODAL "PRÓXIMAMENTE" -->
-    <div id="modalProximamente" class="modal-overlay">
-        <div class="modal-box">
-            <h2>⏳ Próximamente</h2>
-            <p id="modalTexto">El contenido de este apartado estará disponible en breve.</p>
-            <button type="button" class="modal-btn" onclick="cerrarProximamente()">Cerrar</button>
-        </div>
-    </div>
-
-    <script>
-        function mostrarProximamente(seccion) {
-            document.getElementById('modalTexto').innerText = `El contenido del apartado "${seccion}" estará disponible próximamente.`;
-            document.getElementById('modalProximamente').classList.add('active');
-        }
-
-        function cerrarProximamente() {
-            document.getElementById('modalProximamente').classList.remove('active');
-        }
-    </script>
 
 </body>
 </html>
