@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pruebas Tipo Test · Itinerario Profesional (IPE)</title>
+  <style>
+    :root {
+      --bg-canvas: #121916;
+      --bg-panel: #1a241f;
+      --bg-card: #223029;
+      --border-soft: rgba(255, 255, 255, 0.13);
+      --text-main: #f3f7f5;
+      --text-muted: #b7c7bf;
+      --accent-gold: #fde047;
+      --accent-mint: #4ade80;
+      --accent-sky: #60a5fa;
+      --accent-rose: #fb7185;
+      --shadow-deep: 0 20px 45px rgba(0, 0, 0, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(74, 222, 128, 0.09), transparent 42%),
+        radial-gradient(circle at 82% 85%, rgba(96, 165, 250, 0.09), transparent 45%),
+        var(--bg-canvas);
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding: 26px 14px;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 1060px;
+      margin: 0 auto;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-soft);
+      border-radius: 20px;
+      box-shadow: var(--shadow-deep);
+      overflow: hidden;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 18px 28px;
+      background: rgba(0, 0, 0, 0.25);
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    .brand {
+      font-weight: 800;
+      font-size: 1.02rem;
+      color: var(--accent-gold);
+    }
+
+    .top-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      border: 1px solid var(--border-soft);
+      padding: 7px 13px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .top-link:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .screen {
+      display: none;
+      padding: 30px 28px 34px;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .hero-block {
+      margin-bottom: 24px;
+    }
+
+    .hero-block h1 {
+      font-size: clamp(1.65rem, 3.2vw, 2.25rem);
+      margin-bottom: 8px;
+    }
+
+    .hero-block p {
+      color: var(--text-muted);
+      line-height: 1.55;
+      font-size: 0.98rem;
+    }
+
+    .models-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .model-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+      transition: transform 0.16s ease, border-color 0.16s ease;
+    }
+
+    .model-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(253, 224, 71, 0.55);
+    }
+
+    .model-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(253, 224, 71, 0.16);
+      color: var(--accent-gold);
+      margin-bottom: 8px;
+    }
+
+    .model-card h2 {
+      font-size: 1.22rem;
+      margin-bottom: 4px;
+    }
+
+    .model-card p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #fde047, #4ade80);
+      color: #101914;
+      border: none;
+      border-radius: 10px;
+      padding: 11px 16px;
+      font-size: 0.94rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.14s ease, filter 0.14s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.04);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      border: 1px solid var(--border-soft);
+      border-radius: 10px;
+      padding: 11px 18px;
+      font-size: 0.94rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .exam-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 22px;
+      padding-bottom: 14px;
+      border-bottom: 1px dashed var(--border-soft);
+    }
+
+    .exam-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--accent-gold);
+    }
+
+    .question-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .q-num {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent-sky);
+      margin-bottom: 6px;
+    }
+
+    .q-prompt {
+      font-size: 1.04rem;
+      font-weight: 700;
+      line-height: 1.45;
+      margin-bottom: 14px;
+    }
+
+    .choices-list {
+      display: grid;
+      gap: 9px;
+    }
+
+    .choice-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 14px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-soft);
+      cursor: pointer;
+      transition: background-color 0.14s ease, border-color 0.14s ease;
+      font-size: 0.94rem;
+      line-height: 1.4;
+    }
+
+    .choice-row:hover {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(253, 224, 71, 0.45);
+    }
+
+    .choice-row input {
+      accent-color: #fde047;
+      cursor: pointer;
+    }
+
+    .submit-bar {
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .score-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(74, 222, 128, 0.45);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .score-main {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent-mint);
+      margin-bottom: 6px;
+    }
+
+    .score-formula {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      margin-bottom: 16px;
+    }
+
+    .stats-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .stat-box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-soft);
+      border-radius: 10px;
+      padding: 10px 15px;
+      font-size: 0.92rem;
+    }
+
+    .errors-section h2 {
+      font-size: 1.35rem;
+      margin-bottom: 14px;
+      color: var(--accent-rose);
+    }
+
+    .error-item {
+      background: var(--bg-card);
+      border: 1px solid rgba(251, 113, 133, 0.4);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    .error-q {
+      font-weight: 700;
+      margin-bottom: 10px;
+      line-height: 1.45;
+    }
+
+    .error-user {
+      color: #fda4af;
+      font-size: 0.92rem;
+      margin-bottom: 6px;
+    }
+
+    .error-right {
+      color: #86efac;
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .all-right-box {
+      background: rgba(74, 222, 128, 0.14);
+      border: 1px solid rgba(74, 222, 128, 0.45);
+      border-radius: 12px;
+      padding: 18px;
+      color: #bbf7d0;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <div class="topbar">
+      <div class="brand">📋 Itinerario Profesional · Pruebas Tipo Test (IPE)</div>
+      <a class="top-link" href="itinerario-profesional.html">← Volver a Itinerario Profesional</a>
+    </div>
+
+    <!-- PANTALLA 1: SELECCIÓN DE 10 MODELOS -->
+    <section class="screen active" id="screenModels" aria-label="Modelos de prueba tipo test">
+      <div class="hero-block">
+        <h1>10 Modelos de Prueba Tipo Test</h1>
+        <p>
+          Cada modelo contiene <strong>20 preguntas</strong> sin repetir entre modelos, con cuatro opciones de longitud equilibrada y orden aleatorio.
+          La calificación se calcula sobre 20 puntos <strong>descontando 1/3 de punto (0,33) por cada respuesta incorrecta</strong> (las preguntas sin responder no descuentan).
+        </p>
+      </div>
+      <div class="models-grid" id="modelsGrid"></div>
+    </section>
+
+    <!-- PANTALLA 2: EXAMEN ACTIVO -->
+    <section class="screen" id="screenExam" aria-label="Realización del modelo de examen">
+      <div class="exam-topbar">
+        <div class="exam-title" id="examModelTitle">Modelo</div>
+        <button type="button" class="btn-secondary" id="btnBackToModelsFromExam">← Elegir otro modelo</button>
+      </div>
+      <form id="examForm"></form>
+      <div class="submit-bar">
+        <button type="button" class="btn-secondary" id="btnBackToModelsBottom">← Elegir otro modelo</button>
+        <button type="button" class="btn-primary" id="btnFinishExam">Corregir y ver nota</button>
+      </div>
+    </section>
+
+    <!-- PANTALLA 3: RESULTADOS Y PREGUNTAS FALLADAS -->
+    <section class="screen" id="screenResults" aria-label="Resultados del examen">
+      <div class="exam-topbar">
+        <div class="exam-title" id="resultsModelTitle">Resultados</div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button type="button" class="btn-secondary" id="btnRetryModel">Repetir modelo</button>
+          <button type="button" class="btn-primary" id="btnBackToModelsFromResults">Volver a los 10 modelos</button>
+        </div>
+      </div>
+
+      <div class="score-card">
+        <div class="score-main" id="finalScoreText">Nota: 0,00 / 20</div>
+        <div class="score-formula">Fórmula aplicada: Aciertos − (Errores ÷ 3), mínimo 0,00 puntos.</div>
+        <div class="stats-row">
+          <div class="stat-box">Aciertos: <strong id="statCorrect">0</strong></div>
+          <div class="stat-box">Fallos: <strong id="statWrong">0</strong></div>
+          <div class="stat-box">Sin responder: <strong id="statBlank">0</strong></div>
+        </div>
+      </div>
+
+      <div class="errors-section" id="errorsSection"></div>
+    </section>
+  </div>
+
+  <script>
+    const MODELS = [{"modelNumber": 1, "title": "Modelo 1", "questions": [{"id": 1, "prompt": "Según el enfoque integral de salud, ¿cómo se concibe este concepto?", "correct": "Como bienestar físico, psíquico y social, más allá de la ausencia de enfermedad.", "distractors": ["Únicamente como la falta de síntomas clínicos o patologías físicas visibles.", "Exclusivamente como el equilibrio psicológico derivado del descanso laboral.", "Como un estado estático de resistencia física frente a agentes externos."]}, {"id": 2, "prompt": "¿Cómo se define la salud laboral en relación con el puesto de trabajo?", "correct": "Como el bienestar físico, mental y social derivado de proteger frente a riesgos.", "distractors": ["Como la ausencia total de accidentes durante el horario de jornada ordinaria.", "Como la capacidad física para mantener ritmos altos sin pausas ni descansos.", "Como el cumplimiento formal de revisiones médicas al inicio del contrato."]}, {"id": 3, "prompt": "¿En qué consiste la bidireccionalidad entre el trabajo y la salud?", "correct": "En una relación mutua donde el trabajo puede dañar o favorecer la salud.", "distractors": ["En que solo la salud previa determina el rendimiento en el puesto laboral.", "En que únicamente las condiciones ambientales afectan al estado físico.", "En que la actividad laboral nunca influye en el equilibrio emocional."]}, {"id": 4, "prompt": "¿Qué efecto pueden generar unas condiciones de trabajo deficientes?", "correct": "Daños laborales, fatiga y estrés en las personas que realizan la tarea.", "distractors": ["Mayor motivación intrínseca y estabilidad emocional en todo el equipo.", "Reducción automática de la carga mental y de los tiempos de ejecución.", "Mejora directa de la capacidad de concentración y del clima laboral."]}, {"id": 5, "prompt": "¿Por qué un trabajo adecuado puede ser positivo para la persona?", "correct": "Porque impulsa el desarrollo personal, el bienestar y la salud integral.", "distractors": ["Porque elimina cualquier exigencia organizativa o de relación social.", "Porque sustituye la prevención por compensaciones económicas mensuales.", "Porque mantiene constantes las tareas sin cambios ni aprendizaje."]}, {"id": 6, "prompt": "¿Qué son las condiciones de trabajo según el epígrafe 2.1.2?", "correct": "Circunstancias bajo las cuales las personas realizan su actividad laboral.", "distractors": ["Normas internas de disciplina aplicables solo al personal directivo.", "Requisitos físicos exigidos únicamente antes de firmar el contrato.", "Medidas de compensación salarial por turnicidad o nocturnidad."]}, {"id": 7, "prompt": "¿En cuántos bloques fundamentales se estructuran las condiciones de trabajo?", "correct": "En cuatro bloques: entorno físico, ambiente laboral, organización y horario.", "distractors": ["En dos bloques: riesgos físicos y compensaciones económicas del convenio.", "En tres bloques: normativa legal, reconocimientos médicos y vacaciones.", "En cinco bloques: formación inicial, turnos, salario, bajas y despidos."]}, {"id": 8, "prompt": "¿Qué caracteriza al bloque de entorno físico y condiciones ambientales?", "correct": "Trabajar en exterior, altura, con ruido, gases contaminantes o calor.", "distractors": ["La comunicación interna entre mandos y la cooperación del equipo.", "La distribución anual de días festivos y la antigüedad en la empresa.", "Las posibilidades de ascenso interno y la evaluación del desempeño."]}, {"id": 9, "prompt": "¿A qué hace referencia el bloque de ambiente laboral en los apuntes?", "correct": "A las relaciones interpersonales predominantes y al clima en el trabajo.", "distractors": ["A la temperatura del aire, la humedad relativa y los niveles de luz.", "A la altura libre del techo, el ancho de pasillos y las salidas de emergencia.", "A la carga máxima levantada manualmente y al uso de grúas asistenciales."]}, {"id": 10, "prompt": "¿Qué factores quedan incluidos en la organización y ejecución del trabajo?", "correct": "Carga laboral, tareas, desarrollo profesional, turnos y uso de equipos.", "distractors": ["Únicamente las temperaturas extremas y los contaminantes químicos.", "Solo los trayectos de ida y vuelta al centro de trabajo habitual.", "Exclusivamente la cobertura económica de la Seguridad Social."]}, {"id": 11, "prompt": "¿Qué aspectos contempla el bloque de horario de trabajo?", "correct": "Duración y distribución de jornada, días laborables, pausas y vacaciones.", "distractors": ["El diseño anatómico de sillas y mesas de oficina y los resguardos de máquinas.", "La clasificación de microorganismos según su capacidad de contagio.", "Las sanciones disciplinarias por incumplimiento de normas internas."]}, {"id": 12, "prompt": "Si un puesto implica trabajar en altura y con ruido ambiental, ¿qué bloque destaca?", "correct": "El bloque de entorno físico y condiciones ambientales del puesto.", "distractors": ["El bloque de relaciones interpersonales y ambiente de equipo.", "El bloque de promoción interna y desarrollo de carrera profesional.", "El bloque de compensación económica por antigüedad en el puesto."]}, {"id": 13, "prompt": "Si las relaciones en el equipo son muy competitivas o jerarquizadas, ¿qué bloque es?", "correct": "El bloque de ambiente laboral dentro de las condiciones de trabajo.", "distractors": ["El bloque de condiciones ambientales y ventilación del local.", "El bloque de requisitos constructivos y superficies mínimas.", "El bloque de señalización de seguridad y evacuación de emergencia."]}, {"id": 14, "prompt": "La rotación a turnos y la complejidad de las tareas pertenecen a:", "correct": "La organización y ejecución del trabajo dentro de las condiciones laborales.", "distractors": ["El bloque de horario de trabajo referido solo a días festivos.", "La clasificación de agentes biológicos según su peligrosidad.", "Las exclusiones legales del concepto de accidente de trabajo."]}, {"id": 15, "prompt": "La duración de la jornada diaria y las pausas establecidas corresponden a:", "correct": "El bloque de horario de trabajo dentro de las condiciones de trabajo.", "distractors": ["La definición de agente material en un suceso o accidente laboral.", "La vigilancia periódica de la salud propia de medicina del trabajo.", "La sustitución de sustancias peligrosas por otras inocuas."]}, {"id": 16, "prompt": "¿Qué diferencia principal existe entre entorno físico y ambiente laboral?", "correct": "Uno trata factores materiales/ambientales y otro las relaciones humanas.", "distractors": ["Uno solo aplica a oficinas y el otro únicamente a trabajos industriales.", "Uno depende de la ley y el otro depende exclusivamente del trabajador.", "No existe diferencia práctica entre ambos conceptos en los apuntes."]}, {"id": 17, "prompt": "¿Qué puede provocar un ambiente laboral tenso y altamente exigente?", "correct": "Malestar, desgaste y dificultades en las relaciones del equipo de trabajo.", "distractors": ["Aumento automático de la altura libre de los locales cerrados.", "Eliminación de los riesgos mecánicos en herramientas manuales.", "Reducción directa de la exposición a agentes biológicos del grupo 4."]}, {"id": 18, "prompt": "¿Qué elemento forma parte de la organización y ejecución del trabajo?", "correct": "La asignación y complejidad de tareas junto con el manejo de equipos.", "distractors": ["La temperatura exterior registrada en el trayecto hacia la empresa.", "El tiempo de retención indicado tras aplicar un enema de limpieza.", "La forma geométrica triangular de las señales de advertencia."]}, {"id": 19, "prompt": "¿En qué bloque encaja la planificación de descansos y vacaciones anuales?", "correct": "En el bloque de horario de trabajo de las condiciones laborales.", "distractors": ["En el bloque de seguridad estructural y materiales de construcción.", "En el bloque de factores químicos y vías de entrada al organismo.", "En el bloque de accidentes ocurridos fuera del ámbito laboral."]}, {"id": 20, "prompt": "¿Por qué es importante analizar las condiciones de trabajo en conjunto?", "correct": "Porque todas influyen en cómo se desarrolla la tarea y en la salud laboral.", "distractors": ["Porque permiten prescindir de evaluar los riesgos de cada puesto.", "Porque sustituyen la necesidad de informar a los trabajadores.", "Porque garantizan que no existan accidentes ni enfermedades laborales."]}]}, {"modelNumber": 2, "title": "Modelo 2", "questions": [{"id": 21, "prompt": "¿Cuál es una consecuencia posible de una mala organización de tareas y turnos?", "correct": "Aparición de fatiga, sobrecarga y deterioro del bienestar laboral.", "distractors": ["Aumento del volumen libre por persona en locales comerciales.", "Cambio del color de las señales de prohibición a color verde.", "Conversión automática de cualquier enfermedad en accidente laboral."]}, {"id": 22, "prompt": "Dentro de las condiciones de trabajo, ¿qué se evalúa al revisar el horario?", "correct": "La jornada, su reparto, los días laborables, pausas y vacaciones.", "distractors": ["El anclaje de estanterías y la resistencia de barandillas en escaleras.", "La concentración de gases tóxicos y la vía digestiva de absorción.", "El grado de despersonalización propio del síndrome de burnout."]}, {"id": 23, "prompt": "¿Cómo se define el riesgo laboral en el epígrafe 2.2.1 de los apuntes?", "correct": "Como la posibilidad de sufrir un daño con ocasión del trabajo.", "distractors": ["Como la certeza absoluta de que ocurrirá una lesión grave en la tarea.", "Como el coste económico que asume la empresa tras una baja médica.", "Como la obligación legal de realizar reconocimientos médicos anuales."]}, {"id": 24, "prompt": "¿Qué tres elementos se contemplan para definir un riesgo laboral?", "correct": "Agente material, tipo de suceso o accidente e identificación del daño.", "distractors": ["Turno de trabajo, salario base y antigüedad en la plantilla.", "Causa externa, sanción administrativa y duración de la incapacidad.", "Protección colectiva, equipo individual y plan de evacuación."]}, {"id": 25, "prompt": "En el ejemplo de una escalera sin barandillas, ¿qué representa la escalera?", "correct": "El agente material vinculado al riesgo de caída en altura.", "distractors": ["La identificación final del daño corporal sufrido por el trabajador.", "El tipo de suceso o accidente ocurrido durante la maniobra.", "Una medida de protección colectiva instalada en el suelo."]}, {"id": 26, "prompt": "En un accidente por caída en altura, ¿qué es 'caída en altura'?", "correct": "El tipo de suceso o accidente mediante el cual se materializa el riesgo.", "distractors": ["El agente material o herramienta defectuosa del puesto de trabajo.", "La identificación médica del daño o lesión provocada al cuerpo.", "Una exclusión legal por fuerza mayor ajena a la actividad."]}, {"id": 27, "prompt": "En el análisis de un riesgo laboral, ¿a qué corresponde 'identificación del daño'?", "correct": "A la lesión concreta provocada, como una fractura o traumatismo.", "distractors": ["A la superficie o máquina donde se inicia la situación peligrosa.", "Al horario de entrada y salida del centro de trabajo.", "Al documento donde se registran las ausencias de la plantilla."]}, {"id": 28, "prompt": "¿Qué son los factores de riesgo laboral según los apuntes?", "correct": "Acciones o situaciones potenciales capaces de causar daños al actualizarse.", "distractors": ["Lesiones irreversibles que siempre derivan en incapacidad permanente.", "Normas internas redactadas exclusivamente por los representantes sindicales.", "Medidas técnicas que eliminan por completo cualquier peligro posible."]}, {"id": 29, "prompt": "¿En cuántos grandes tipos se clasifican los factores de riesgo en el manual?", "correct": "En seis tipos: mecánicos, físicos, químicos, biológicos, ergonómicos y psicosociales.", "distractors": ["En tres tipos: físicos, químicos y administrativos del centro.", "En cuatro tipos: ambientales, estructurales, legales y económicos.", "En cinco tipos: posturales, térmicos, eléctricos, visuales y auditivos."]}, {"id": 30, "prompt": "¿Qué define jurídicamente a un accidente de trabajo?", "correct": "Lesión corporal por cuenta ajena con ocasión o por consecuencia del trabajo.", "distractors": ["Deterioro lento y progresivo por exposición prolongada a sustancias.", "Cualquier molestia física ocurrida durante el descanso vacacional.", "Daño material en máquinas sin lesión corporal para el trabajador."]}, {"id": 31, "prompt": "¿Cuáles son los tres requisitos indispensables del accidente de trabajo?", "correct": "Lesión corporal, trabajo por cuenta ajena y relación de causalidad.", "distractors": ["Turno de mañana, contrato indefinido y presencia de testigos.", "Uso de EPI, informe policial y baja superior a quince días.", "Exposición química, evolución lenta y cuadro oficial aprobado."]}, {"id": 32, "prompt": "¿Qué es un accidente in itinere según los casos especiales incluidos?", "correct": "El sufrido al ir o volver al puesto de trabajo en el trayecto habitual.", "distractors": ["El ocurrido dentro del centro durante una pausa de comida reglamentaria.", "El derivado de una enfermedad crónica previa al inicio del contrato.", "El causado por realizar tareas personales ajenas a la empresa."]}, {"id": 33, "prompt": "¿Qué otros supuestos se incluyen como accidentes de trabajo en el manual?", "correct": "Los sufridos en cargos electivos sindicales y actos de salvamento ligados al trabajo.", "distractors": ["Únicamente los ocurridos en desplazamientos internacionales de negocios.", "Solo los producidos en talleres con más de cincuenta trabajadores.", "Exclusivamente los que ocurren durante el primer mes de prueba."]}, {"id": 34, "prompt": "¿Qué queda excluido legalmente del concepto de accidente de trabajo?", "correct": "La fuerza mayor extraña al trabajo y la imprudencia temeraria del trabajador.", "distractors": ["Los accidentes ocurridos al desplazarse de ida o vuelta al trabajo.", "Las lesiones sufridas al intervenir en un salvamento vinculado al empleo.", "Los daños físicos provocados por herramientas del puesto asignado."]}, {"id": 35, "prompt": "Un terremoto o un rayo que afectan al centro encajan como:", "correct": "Fuerza mayor extraña al trabajo, excluida como accidente laboral.", "distractors": ["Accidente in itinere protegido por la normativa de prevención.", "Enfermedad profesional del grupo de agentes físicos ambientales.", "Acto de salvamento laboral con cobertura automática de accidente."]}, {"id": 36, "prompt": "¿Qué caracteriza a la imprudencia temeraria excluida del accidente de trabajo?", "correct": "Una actuación gravemente arriesgada e injustificada del propio trabajador.", "distractors": ["Un pequeño despiste habitual derivado de la fatiga o la rutina diaria.", "El seguimiento estricto de las instrucciones preventivas de la empresa.", "El uso de un equipo de protección individual entregado por el centro."]}, {"id": 37, "prompt": "¿Cómo se define una enfermedad profesional en el epígrafe 2.2.2?", "correct": "Alteración lenta y progresiva por sustancias o agentes del cuadro oficial.", "distractors": ["Lesión súbita y violenta producida por un golpe inesperado en el turno.", "Cualquier malestar pasajero sin relación con las condiciones laborales.", "Daño provocado exclusivamente por caídas desde escaleras o andamios."]}, {"id": 38, "prompt": "¿Qué real decreto recoge el cuadro legal oficial de enfermedades profesionales?", "correct": "El Real Decreto 1299/2006, estructurado en seis grupos de agentes.", "distractors": ["El Real Decreto 486/1997, dedicado a lugares de trabajo seguros.", "La Ley 31/1995, centrada en los principios generales preventivos.", "El Real Decreto 39/1997, regulador de los servicios de prevención."]}, {"id": 39, "prompt": "¿En cuántos grupos se estructura el cuadro oficial del RD 1299/2006?", "correct": "En seis grupos según el agente causante de la enfermedad profesional.", "distractors": ["En tres grupos según la gravedad económica de la prestación.", "En cuatro grupos según la edad y antigüedad del trabajador.", "En ocho grupos según el tamaño de la plantilla de la empresa."]}, {"id": 40, "prompt": "¿Cuál es la diferencia clave entre accidente de trabajo y enfermedad profesional?", "correct": "Uno es súbito y fechable; el otro es lento, progresivo y por exposición.", "distractors": ["Uno solo ocurre en oficinas y el otro únicamente en el transporte.", "Uno no requiere relación con el trabajo y el otro siempre es repentino.", "No existe diferencia práctica entre ambos en los casos de examen."]}]}, {"modelNumber": 3, "title": "Modelo 3", "questions": [{"id": 41, "prompt": "Si un daño se produce de forma súbita, violenta y en un momento concreto, es:", "correct": "Un accidente de trabajo, por su carácter brusco y localizable en el tiempo.", "distractors": ["Una enfermedad profesional, por su evolución lenta y continuada.", "Una medida de protección colectiva aplicada en la zona de trabajo.", "Un factor de riesgo ergonómico asociado a la carga vocal."]}, {"id": 42, "prompt": "Si una patología aparece de forma insidiosa tras años expuestos a un agente, es:", "correct": "Una enfermedad profesional, derivada de exposición continuada en el tiempo.", "distractors": ["Un accidente in itinere, ocurrido durante el desplazamiento diario.", "Un suceso de fuerza mayor extraña al ámbito laboral.", "Una señal de advertencia de forma triangular en color amarillo."]}, {"id": 43, "prompt": "¿Qué consecuencias puede sufrir la víctima y su familia tras un daño laboral?", "correct": "Pérdida de salud, merma de ingresos, cambio de rol y carga familiar.", "distractors": ["Aumento de ingresos netos y reducción de gastos en el hogar.", "Eliminación de cualquier carga asistencial o repercusión emocional.", "Mejora inmediata de la capacidad física y del descanso nocturno."]}, {"id": 44, "prompt": "¿Qué consecuencias directas puede afrontar la empresa ante daños laborales?", "correct": "Pérdida de tiempo productivo, indemnizaciones, recargos y sanciones.", "distractors": ["Reducción de costes de seguro y ausencia total de conflictos internos.", "Mejora automática de la imagen corporativa sin medidas preventivas.", "Aumento de la productividad diaria sin impacto en la organización."]}, {"id": 45, "prompt": "¿Cuáles son costes indirectos para la empresa derivados de daños laborales?", "correct": "Deterioro de la imagen corporativa, conflictividad y mal clima laboral.", "distractors": ["Multas administrativas directas y recargos económicos de prestaciones.", "Pago de indemnizaciones fijadas por resolución judicial o administrativa.", "Compra de extintores y sustitución de lámparas fundidas del taller."]}, {"id": 46, "prompt": "¿Qué consecuencias recaen sobre la sociedad por los daños profesionales?", "correct": "Costes en prestaciones de Seguridad Social, bajas largas y saturación sanitaria.", "distractors": ["Menor gasto público en sanidad y reducción de prestaciones asistenciales.", "Aumento del tiempo libre disponible sin impacto en los servicios públicos.", "Desaparición de las incapacidades temporales en todos los sectores."]}, {"id": 47, "prompt": "¿Cuál de los siguientes es un coste directo y no indirecto para la empresa?", "correct": "Indemnizaciones, recargos de prestaciones o sanciones económicas.", "distractors": ["El deterioro de la reputación o imagen externa de la organización.", "La conflictividad interna y el deterioro del clima entre compañeros.", "La pérdida de confianza de los clientes tras un suceso grave."]}, {"id": 48, "prompt": "¿Qué efecto tiene una baja laboral prolongada a nivel social?", "correct": "Incrementa el gasto en prestaciones y presiona los recursos sanitarios.", "distractors": ["Reduce el número de sustituciones y simplifica la gestión de turnos.", "Elimina las necesidades de rehabilitación física o psicológica.", "Disminuye los costes de la Seguridad Social en el ámbito laboral."]}, {"id": 49, "prompt": "¿Qué implica la 'relación de causalidad' en un accidente de trabajo?", "correct": "Que exista vínculo entre el trabajo realizado y la lesión sufrida.", "distractors": ["Que el trabajador haya firmado un parte médico antes de lesionarse.", "Que el accidente ocurra exclusivamente dentro del turno de noche.", "Que participen al menos tres personas en la actividad laboral."]}, {"id": 50, "prompt": "¿Qué ocurre si un trabajador sufre una lesión grave por imprudencia temeraria?", "correct": "Queda excluida legalmente como accidente de trabajo según los apuntes.", "distractors": ["Se considera accidente in itinere con recargo automático de prestaciones.", "Se clasifica como enfermedad profesional del grupo de agentes físicos.", "Se tramita siempre como acto de salvamento en el puesto laboral."]}, {"id": 51, "prompt": "¿Cuál de estos supuestos se considera accidente de trabajo por caso especial?", "correct": "El accidente ocurrido al ir o volver del puesto de trabajo (in itinere).", "distractors": ["El daño causado por una catástrofe natural ajena a la actividad.", "La lesión provocada por una imprudencia temeraria del trabajador.", "El desgaste crónico por exposición continuada a un contaminante."]}, {"id": 52, "prompt": "Un atrapamiento en una máquina durante el turno laboral es un ejemplo de:", "correct": "Accidente de trabajo, al existir lesión, cuenta ajena y causalidad.", "distractors": ["Enfermedad profesional, al tratarse de un proceso lento y gradual.", "Fuerza mayor extraña al trabajo, sin relación con la actividad.", "Medida organizativa para mejorar la comunicación en el equipo."]}, {"id": 53, "prompt": "¿Qué aspecto distingue el enfoque práctico de accidente y enfermedad laboral?", "correct": "La rapidez de aparición frente a la evolución lenta por exposición.", "distractors": ["El número de páginas del convenio colectivo aplicable al sector.", "La necesidad de disponer de aparcamiento en el centro de trabajo.", "La presencia de un botiquín en la entrada principal del edificio."]}, {"id": 54, "prompt": "¿Qué puede suponer para la familia el daño grave de un trabajador?", "correct": "Menor entrada de ingresos y mayores cargas asistenciales o emocionales.", "distractors": ["Menor dedicación de cuidados y reducción de gastos domésticos.", "Ausencia de cambios en la organización familiar o en la economía.", "Incremento automático de las horas de descanso de todos los miembros."]}, {"id": 55, "prompt": "¿Qué supone para la empresa la pérdida de tiempo productivo tras un daño?", "correct": "Interrupciones o retrasos en la actividad y menor rendimiento operativo.", "distractors": ["Ahorro de recursos humanos sin necesidad de reorganizar el trabajo.", "Mejora inmediata de la cohesión del equipo sin intervenir en el riesgo.", "Reducción de los costes asociados a la gestión del puesto afectado."]}, {"id": 56, "prompt": "¿Qué se analiza al identificar el agente material de un riesgo laboral?", "correct": "El elemento, máquina, herramienta o superficie implicada en el riesgo.", "distractors": ["La cuantía exacta de la prestación económica de la Seguridad Social.", "El nombre del responsable de recursos humanos de la empresa.", "El número de días de vacaciones pendientes del trabajador."]}, {"id": 57, "prompt": "¿Cómo se define la prevención de riesgos laborales en el epígrafe 2.3?", "correct": "Medidas adoptadas o previstas en la empresa para evitar o disminuir riesgos.", "distractors": ["Sanciones aplicadas tras ocurrir un accidente grave en el centro.", "Trámites administrativos posteriores al alta médica del trabajador.", "Compensaciones económicas pagadas para aceptar un mayor peligro."]}, {"id": 58, "prompt": "¿En qué fases de la actividad empresarial deben preverse las medidas preventivas?", "correct": "En todas las fases de la actividad de la empresa, de forma anticipada.", "distractors": ["Solo tras producirse el primer accidente o incidente en el puesto.", "Únicamente durante el periodo de incorporación de nuevo personal.", "Exclusivamente al finalizar cada trimestre del ejercicio económico."]}, {"id": 59, "prompt": "Según el diagrama oficial de la página 34, ¿cuál es un objetivo preventivo?", "correct": "Favorecer los aspectos positivos del trabajo y el desarrollo personal.", "distractors": ["Aumentar la carga de trabajo para reducir el número de empleados.", "Sustituir la formación preventiva por multas a los trabajadores.", "Limitar la prevención únicamente a la revisión de extintores."]}, {"id": 60, "prompt": "¿Cuál es el segundo gran objetivo de la prevención en el diagrama oficial?", "correct": "Minimizar los efectos negativos como accidentes, enfermedades y estrés.", "distractors": ["Evitar cualquier evaluación de riesgos en los puestos de trabajo.", "Trasladar toda la responsabilidad preventiva a la mutua colaboradora.", "Reducir el tiempo de descanso para adelantar el cierre de jornada."]}]}, {"modelNumber": 4, "title": "Modelo 4", "questions": [{"id": 61, "prompt": "¿Qué finalidad tienen las medidas de prevención propiamente dichas?", "correct": "Eliminar o reducir el riesgo directamente en su origen antes de que dañe.", "distractors": ["Curar las lesiones una vez que ya se ha producido el accidente.", "Calcular el importe de las indemnizaciones tras un siniestro laboral.", "Sustituir la seguridad colectiva por un seguro privado de accidentes."]}, {"id": 62, "prompt": "¿Qué persiguen las medidas de protección frente a un riesgo laboral?", "correct": "Reducir las consecuencias o impacto del riesgo si llega a materializarse.", "distractors": ["Impedir que se elabore un plan de prevención en la empresa.", "Aumentar la exposición del trabajador para probar su resistencia física.", "Evitar el uso de equipos de protección individual en cualquier caso."]}, {"id": 63, "prompt": "¿Qué ejemplo corresponde a una medida de protección en los apuntes?", "correct": "El uso de Equipos de Protección Individual (EPIs) ante un riesgo.", "distractors": ["La eliminación completa del origen del peligro antes de empezar.", "La sustitución de una tarea peligrosa por otra sin riesgo alguno.", "El diseño inicial del puesto para que no exista peligro material."]}, {"id": 64, "prompt": "¿Qué especialidad preventiva busca evitar y neutralizar accidentes de trabajo?", "correct": "La seguridad en el trabajo, analizando espacios, máquinas y electricidad.", "distractors": ["La medicina del trabajo, centrada en reconocimientos médicos periódicos.", "La psicosociología aplicada, enfocada en la carga mental y el acoso.", "La higiene industrial, centrada en agentes químicos y biológicos."]}, {"id": 65, "prompt": "¿En qué se centra principalmente la seguridad en el trabajo?", "correct": "En espacios físicos, máquinas, herramientas e instalaciones eléctricas.", "distractors": ["En los reconocimientos médicos individuales y la vigilancia clínica.", "En la prevención del mobbing y el burnout mediante apoyo psicológico.", "En el control de agentes biológicos y contaminantes ambientales."]}, {"id": 66, "prompt": "¿Qué especialidad preventiva controla agentes ambientales para evitar enfermedades?", "correct": "La higiene industrial, actuando sobre agentes físicos, químicos y biológicos.", "distractors": ["La ergonomía, adaptando exclusivamente los horarios de vacaciones.", "La seguridad en el trabajo, centrada solo en sanciones disciplinarias.", "La medicina del trabajo, encargada de calcular recargos de prestaciones."]}, {"id": 67, "prompt": "¿Qué agentes analiza la higiene industrial para prevenir enfermedades profesionales?", "correct": "Agentes físicos, químicos y biológicos presentes en el entorno laboral.", "distractors": ["Únicamente las relaciones jerárquicas y el clima del equipo.", "Solo los trayectos de ida y vuelta al domicilio del trabajador.", "Exclusivamente los costes indirectos por pérdida de imagen."]}, {"id": 68, "prompt": "¿Cuál es el objetivo principal de la ergonomía según los apuntes?", "correct": "Adaptar el entorno, equipos y tareas a las capacidades de la persona.", "distractors": ["Analizar los cuadros legales de enfermedades profesionales vigentes.", "Sustituir las revisiones médicas por controles de asistencia diaria.", "Imponer ritmos de trabajo constantes sin atender a la fatiga."]}, {"id": 69, "prompt": "¿Qué capacidades de la persona tiene en cuenta la ergonomía?", "correct": "Capacidades anatómicas, fisiológicas y psicológicas del trabajador.", "distractors": ["Únicamente la capacidad económica y el nivel de estudios previos.", "Solo la resistencia cardiovascular en pruebas físicas anuales.", "Exclusivamente la rapidez de escritura en teclados informáticos."]}, {"id": 70, "prompt": "¿Qué estudia la disciplina de psicosociología en el ámbito laboral?", "correct": "Factores organizativos, demandas y relaciones que afectan la salud mental.", "distractors": ["La resistencia mecánica de vigas, andamios y escaleras fijas.", "La concentración de vapores tóxicos mediante mediciones químicas.", "La limpieza y desinfección de suelos y superficies en el centro."]}, {"id": 71, "prompt": "¿Qué problemas laborales aborda especialmente la psicosociología?", "correct": "Estrés laboral, síndrome de burnout y situaciones de acoso laboral.", "distractors": ["Fracturas óseas por golpes con herramientas o caídas de altura.", "Dermatitis por contacto directo con sustancias corrosivas ácidas.", "Lesiones por descargas eléctricas en cuadros de baja tensión."]}, {"id": 72, "prompt": "¿Qué función corresponde a la medicina del trabajo dentro de la prevención?", "correct": "Vigilar la salud, hacer reconocimientos periódicos y detectar daños precoces.", "distractors": ["Diseñar resguardos mecánicos para sierras y prensas industriales.", "Medir niveles de ruido ambiental y colocar paneles acústicos.", "Establecer el horario de apertura y cierre de los comercios."]}, {"id": 73, "prompt": "¿Por qué son importantes los reconocimientos médicos en medicina del trabajo?", "correct": "Porque permiten vigilar la salud y detectar precozmente daños laborales.", "distractors": ["Porque sustituyen la obligación de evaluar los riesgos del puesto.", "Porque eliminan la necesidad de formar e informar a la plantilla.", "Porque eximen a la empresa de adoptar medidas de protección."]}, {"id": 74, "prompt": "¿Qué norma regula los principios generales de la acción preventiva en el artículo 15?", "correct": "La Ley 31/1995, de Prevención de Riesgos Laborales (LPRL).", "distractors": ["El Real Decreto 486/1997, sobre condiciones de los lugares de trabajo.", "El Real Decreto 1299/2006, sobre el cuadro de enfermedades profesionales.", "El Estatuto de los Trabajadores en su capítulo sobre vacaciones."]}, {"id": 75, "prompt": "¿Cuál es el primer principio de la acción preventiva en el artículo 15 de la LPRL?", "correct": "Evitar los riesgos, suprimiendo el peligro cuando sea técnicamente posible.", "distractors": ["Evaluar los riesgos que no se puedan evitar de forma inmediata.", "Combatir los riesgos en su origen mediante equipos individuales.", "Dar instrucciones a los trabajadores tras ocurrir un accidente."]}, {"id": 76, "prompt": "¿Qué debe hacerse con los riesgos que no se puedan evitar según la LPRL?", "correct": "Evaluarlos para conocer su magnitud y actuar de forma adecuada sobre ellos.", "distractors": ["Ignorarlos hasta que produzcan una baja laboral prolongada.", "Trasladarlos siempre al trabajador sin medidas de control.", "Compensarlos con un plus salarial sin realizar evaluación alguna."]}, {"id": 77, "prompt": "¿Qué significa 'combatir los riesgos en su origen' en la acción preventiva?", "correct": "Actuar sobre la fuente que genera el riesgo antes de que afecte al trabajador.", "distractors": ["Esperar a que aparezca la lesión para aplicar el tratamiento médico.", "Sancionar al trabajador cuando no utiliza un equipo de protección.", "Anotar el incidente en el registro sin modificar el proceso."]}, {"id": 78, "prompt": "¿Qué implica el principio de 'adaptar el trabajo a la persona'?", "correct": "Adecuar puestos, equipos y métodos de trabajo a quien los desempeña.", "distractors": ["Obligar a todas las personas a adaptarse a un único puesto rígido.", "Prescindir de criterios ergonómicos para acelerar la producción.", "Elegir las herramientas más baratas aunque dificulten la tarea."]}, {"id": 79, "prompt": "¿Qué indica el principio de 'tener en cuenta la evolución de la técnica'?", "correct": "Incorporar avances técnicos que mejoren la seguridad en el trabajo.", "distractors": ["Mantener equipos obsoletos aunque existan alternativas más seguras.", "Cambiar de maquinaria cada mes sin criterios preventivos.", "Sustituir la prevención técnica por avisos verbales informales."]}, {"id": 80, "prompt": "¿En qué consiste 'sustituir lo peligroso por lo que entrañe poco o ningún peligro'?", "correct": "Elegir sustancias o procesos menos nocivos o inocuos frente a los peligrosos.", "distractors": ["Ocultar el peligro de un producto para no alarmar a la plantilla.", "Mezclar productos químicos sin comprobar su compatibilidad previa.", "Usar productos peligrosos sin etiqueta si se conocen de memoria."]}]}, {"modelNumber": 5, "title": "Modelo 5", "questions": [{"id": 81, "prompt": "¿Qué exige el principio de 'planificar la prevención' según el artículo 15?", "correct": "Integrar técnica, organización, condiciones de trabajo y factores ambientales.", "distractors": ["Actuar de forma improvisada según surjan los problemas cada día.", "Planificar únicamente la compra de material de oficina anual.", "Separar las medidas ambientales de la organización del trabajo."]}, {"id": 82, "prompt": "¿Qué prioridad establece la LPRL entre protección colectiva e individual?", "correct": "Antepone la protección colectiva al uso de equipos de protección individual.", "distractors": ["Sitúa siempre los EPIs por encima de cualquier medida colectiva.", "Considera ambos tipos de protección totalmente equivalentes en todo caso.", "Elimina la protección colectiva cuando se entregan guantes o gafas."]}, {"id": 83, "prompt": "¿Qué obligación recoge el principio de 'dar las debidas instrucciones a los trabajadores'?", "correct": "Informar y formar de manera clara y continua sobre riesgos y medidas.", "distractors": ["Entregar un manual extenso sin explicarlo ni resolver dudas.", "Dar instrucciones solo cuando el trabajador solicite un cambio de puesto.", "Limitar la información a los jefes de sección o encargados."]}, {"id": 84, "prompt": "Si se instala una barandilla perimetral en una zona elevada, ¿qué principio se aplica?", "correct": "Antepone la protección colectiva frente a la protección individual.", "distractors": ["Aplica únicamente una medida de compensación económica salarial.", "Sustituye la seguridad en el trabajo por vigilancia médica periódica.", "Clasifica el suceso como enfermedad profesional de evolución lenta."]}, {"id": 85, "prompt": "Si se cambia un disolvente muy tóxico por otro menos nocivo, ¿qué principio es?", "correct": "Sustituir lo peligroso por lo que entrañe poco o ningún peligro.", "distractors": ["Combatir el riesgo mediante sanciones disciplinarias internas.", "Planificar la prevención sin tener en cuenta el entorno laboral.", "Considerar el producto como un agente biológico del grupo 1."]}, {"id": 86, "prompt": "¿Qué disciplina preventiva interviene ante una postura forzada repetitiva al teclear?", "correct": "La ergonomía, adaptando el puesto y los elementos a la persona.", "distractors": ["La higiene industrial, midiendo la concentración de bacterias.", "La medicina del trabajo, calculando la indemnización por accidente.", "La seguridad estructural, revisando la cimentación del edificio."]}, {"id": 87, "prompt": "¿Qué disciplina preventiva analiza el riesgo de contacto eléctrico en un cuadro?", "correct": "La seguridad en el trabajo, centrada en instalaciones y equipos.", "distractors": ["La psicosociología, centrada en el clima y el apoyo emocional.", "La ergonomía, centrada en la postura al levantar cargas pesadas.", "La medicina del trabajo, centrada en pruebas analíticas clínicas."]}, {"id": 88, "prompt": "¿Qué disciplina preventiva evalúa el riesgo por inhalación de vapores químicos?", "correct": "La higiene industrial, enfocada en contaminantes y agentes ambientales.", "distractors": ["La ergonomía, enfocada en el reparto de días de vacaciones anuales.", "La psicosociología, enfocada en la resolución de conflictos grupales.", "La seguridad vial, enfocada en las normas de circulación urbana."]}, {"id": 89, "prompt": "¿Qué disciplina preventiva analiza la sobrecarga mental y el conflicto de rol?", "correct": "La psicosociología, al estudiar factores organizativos y psíquicos.", "distractors": ["La higiene industrial, al medir la humedad relativa del local.", "La seguridad en el trabajo, al revisar resguardos de máquinas.", "La ergonomía, al comprobar la altura mínima de las estanterías."]}, {"id": 90, "prompt": "¿Qué disciplina preventiva realiza los reconocimientos de salud específicos?", "correct": "La medicina del trabajo, con función preventiva y de vigilancia sanitaria.", "distractors": ["La seguridad en el trabajo, mediante inspección de vías de evacuación.", "La higiene industrial, mediante filtros de ventilación en conductos.", "La ergonomía, mediante ajuste de sillas y mesas de trabajo."]}, {"id": 91, "prompt": "¿Cuál es el propósito de integrar todos los elementos al planificar la prevención?", "correct": "Lograr una acción preventiva coherente que abarque toda la actividad.", "distractors": ["Reducir el número de reuniones de coordinación en la empresa.", "Evitar que los mandos participen en la organización del trabajo.", "Limitar el control de riesgos a las horas extraordinarias."]}, {"id": 92, "prompt": "¿Qué diferencia hay entre evitar un riesgo y evaluar un riesgo no evitable?", "correct": "Evitar suprime el peligro; evaluar mide su magnitud para controlarlo.", "distractors": ["Evitar es medir el daño; evaluar es comprar equipos de protección.", "Evitar aplica solo a oficinas; evaluar aplica solo a almacenes.", "No existe diferencia entre ambos principios en la Ley 31/1995."]}, {"id": 93, "prompt": "¿Qué busca el principio de adaptar el trabajo a la persona en la elección de equipos?", "correct": "Que los equipos se ajusten a las características de quienes los usan.", "distractors": ["Que las personas soporten cualquier equipo sin importar su diseño.", "Que se elijan equipos complejos aunque dificulten la tarea segura.", "Que no se revisen las condiciones de uso de las herramientas."]}, {"id": 94, "prompt": "¿Por qué las instrucciones a los trabajadores deben ser comprensibles y continuadas?", "correct": "Para que conozcan los riesgos y apliquen bien las medidas preventivas.", "distractors": ["Para cumplir un trámite formal sin que se entienda el contenido.", "Para sustituir las medidas técnicas por avisos verbales puntuales.", "Para que el trabajador asuma la responsabilidad de diseñar el plan."]}, {"id": 95, "prompt": "¿Qué supone anteponer la protección colectiva en un puesto con riesgo de caída?", "correct": "Instalar protecciones generales antes de depender solo de arneses o EPIs.", "distractors": ["Entregar un casco y prescindir de barandillas o redes de seguridad.", "Permitir el paso sin protección si el trabajador tiene experiencia.", "Registrar el riesgo como inevitable sin tomar medidas en el puesto."]}, {"id": 96, "prompt": "¿Qué relación existe entre prevención y protección en los apuntes?", "correct": "La prevención actúa sobre el origen del riesgo; la protección reduce el daño.", "distractors": ["La prevención actúa tras el accidente; la protección elimina el origen.", "Ambas significan exactamente lo mismo y se aplican indistintamente.", "La protección sustituye a la prevención en todos los sectores."]}, {"id": 97, "prompt": "¿Qué norma se cita en el epígrafe 3.1 sobre entorno físico de trabajo?", "correct": "El Real Decreto 486/1997, relativo a los lugares de trabajo.", "distractors": ["El Real Decreto 1299/2006, sobre enfermedades profesionales.", "La Ley 31/1995, sobre el cuadro de grupos biológicos.", "El Real Decreto 39/1997, sobre normas de señalización vial."]}, {"id": 98, "prompt": "¿Cuál es la altura libre mínima general desde el suelo hasta el techo en locales?", "correct": "Al menos 3 metros, reducible a 2,5 metros en locales comerciales y oficinas.", "distractors": ["Al menos 2 metros en todos los locales sin ninguna excepción posible.", "Al menos 4 metros en oficinas, despachos y comercios de barrio.", "Al menos 1,8 metros en cualquier estancia con presencia de personal."]}, {"id": 99, "prompt": "¿En qué supuestos puede reducirse la altura libre mínima a 2,5 metros?", "correct": "En locales comerciales, oficinas y despachos según el Documento 3.1.", "distractors": ["En naves industriales con maquinaria pesada y grúas puente.", "En almacenes con estanterías de gran altura y carretillas.", "En cualquier espacio donde se manipulen agentes biológicos."]}, {"id": 100, "prompt": "¿Qué superficie libre mínima por trabajador se indica en el Documento 3.1?", "correct": "Una superficie libre mínima de 2 metros cuadrados por trabajador.", "distractors": ["Una superficie libre mínima de 10 metros cuadrados por trabajador.", "Una superficie libre mínima de 0,8 metros cuadrados por trabajador.", "Una superficie libre mínima de 5 metros cuadrados por trabajador."]}]}, {"modelNumber": 6, "title": "Modelo 6", "questions": [{"id": 101, "prompt": "¿Qué volumen libre mínimo por trabajador se establece en los espacios de trabajo?", "correct": "Un volumen libre mínimo de 10 metros cúbicos por trabajador.", "distractors": ["Un volumen libre mínimo de 2 metros cúbicos por trabajador.", "Un volumen libre mínimo de 25 metros cúbicos por trabajador.", "Un volumen libre mínimo de 3 metros cúbicos por trabajador."]}, {"id": 102, "prompt": "¿Cómo deben ser los suelos de los lugares de trabajo según los apuntes?", "correct": "Fijos, estables, sin resbalones ni pendientes peligrosas para el tránsito.", "distractors": ["Inclinados de forma pronunciada para facilitar el drenaje rápido.", "Deslizantes y con desniveles bruscos entre las zonas de paso.", "Cubiertos de materiales sueltos para amortiguar caídas de objetos."]}, {"id": 103, "prompt": "¿Qué anchura mínima deben tener las escaleras en los lugares de trabajo?", "correct": "Una anchura mínima de 1 metro según los requisitos constructivos.", "distractors": ["Una anchura mínima de 0,5 metros en cualquier tipo de escalera.", "Una anchura mínima de 2 metros incluso en accesos secundarios.", "Una anchura mínima de 0,8 metros con peldaños irregulares."]}, {"id": 104, "prompt": "¿Qué regla se indica respecto a las escaleras de caracol en los apuntes?", "correct": "Están prohibidas, salvo que sean escaleras de servicio.", "distractors": ["Están permitidas en cualquier acceso principal de oficinas.", "Son obligatorias en todos los edificios de más de dos plantas.", "Pueden instalarse sin barandillas si tienen menos de 1 metro."]}, {"id": 105, "prompt": "¿Qué anchura mínima se indica para los pasillos en los lugares de trabajo?", "correct": "Pasillos de al menos 1 metro de ancho para circular con seguridad.", "distractors": ["Pasillos de al menos 0,5 metros de ancho en zonas de tránsito.", "Pasillos de al menos 3 metros de ancho en cualquier estancia.", "Pasillos de al menos 0,6 metros de ancho incluso con cargas."]}, {"id": 106, "prompt": "¿Qué anchura mínima se señala para las puertas exteriores en los apuntes?", "correct": "Puertas exteriores de al menos 0,8 metros de anchura mínima.", "distractors": ["Puertas exteriores de al menos 2,5 metros de anchura mínima.", "Puertas exteriores de al menos 0,4 metros de anchura mínima.", "Puertas exteriores de al menos 1,8 metros de anchura mínima."]}, {"id": 107, "prompt": "¿Cómo deben abrir las salidas de emergencia y qué condiciones deben cumplir?", "correct": "Hacia el exterior, bien señalizadas y libres de cualquier obstáculo.", "distractors": ["Hacia el interior del local y cerradas con llave durante la jornada.", "Hacia cualquier lado sin necesidad de señalización visible.", "Hacia el exterior pero bloqueadas con cajas de almacenaje temporal."]}, {"id": 108, "prompt": "¿Qué medida básica se indica para las estanterías en el almacenaje?", "correct": "Anclarlas firmemente a la pared o al suelo y entre sí para evitar vuelcos.", "distractors": ["Dejarlas sin anclar para poder moverlas cargadas con facilidad.", "Apoyarlas únicamente sobre cajas de cartón en zonas de paso.", "Inclinarlas ligeramente hacia el pasillo para sacar mejor las cajas."]}, {"id": 109, "prompt": "¿Dónde deben colocarse las cargas más pesadas en las estanterías?", "correct": "En los estantes más bajos, reservando los superiores para cargas ligeras.", "distractors": ["En los estantes más altos para liberar espacio en la zona inferior.", "En cualquier estante indistintamente si la estantería es metálica.", "En el borde exterior de los estantes superiores sin sujeción."]}, {"id": 110, "prompt": "¿Qué límite de altura se menciona al apilar elementos que comprometan estabilidad?", "correct": "No superar los 2 metros de altura ni apilar en exceso comprometiendo estabilidad.", "distractors": ["No superar los 5 metros de altura en cualquier tipo de apilamiento.", "No superar los 0,8 metros de altura en estanterías fijas de pared.", "No existe límite de altura siempre que las cajas sean de cartón."]}, {"id": 111, "prompt": "¿Qué medida preventiva es obligatoria al manejar máquinas peligrosas?", "correct": "Mantener revisiones técnicas y usar resguardos que impidan el acceso.", "distractors": ["Retirar los resguardos de seguridad para trabajar más deprisa.", "Utilizar máquinas sin revisar si funcionan con normalidad aparente.", "Sustituir los resguardos físicos por un cartel de aviso verbal."]}, {"id": 112, "prompt": "¿Qué son los resguardos en el manejo de maquinaria según los apuntes?", "correct": "Elementos físicos que actúan como barrera ante zonas peligrosas.", "distractors": ["Documentos de registro de las horas de funcionamiento de la máquina.", "Equipos de protección individual que se colocan en las manos.", "Señales luminosas colocadas fuera del centro de trabajo."]}, {"id": 113, "prompt": "¿Qué ejemplos de EPIs se citan junto al manejo de máquinas en los apuntes?", "correct": "Guantes, calzado de seguridad y pantallas faciales reglamentarias.", "distractors": ["Camisetas de algodón, zapatillas deportivas y gafas de sol.", "Tapones auditivos de espuma y cronómetros de control de tiempos.", "Extintores portátiles, camillas plegables y botiquines murales."]}, {"id": 114, "prompt": "¿Qué indica el color ROJO en la señalización de los espacios de trabajo?", "correct": "Prohibición, parada de emergencia, desconexión y lucha contra incendios.", "distractors": ["Obligación de realizar una acción o usar un equipo de protección.", "Situación de seguridad, vuelta a la normalidad y rutas de auxilio.", "Advertencia de peligro, atención y precaución en la zona."]}, {"id": 115, "prompt": "¿Qué formas geométricas corresponden a las señales de color ROJO?", "correct": "Círculo o rectángulo según el tipo de señal roja indicada.", "distractors": ["Únicamente triángulo equilátero con borde negro grueso.", "Exclusivamente rombo o estrella de cuatro puntas visibles.", "Solo octógono regular con fondo blanco y letras negras."]}, {"id": 116, "prompt": "¿Qué significa el color AMARILLO o AMARILLO-ANARANJADO en señalización?", "correct": "Advertencia de peligro, atención y precaución ante un riesgo.", "distractors": ["Prohibición absoluta de paso o parada de emergencia de equipos.", "Obligación de emplear un equipo de protección individual concreto.", "Salida de emergencia, vía de evacuación o puesto de socorro."]}, {"id": 117, "prompt": "¿Qué forma geométrica tiene la señal de advertencia de color amarillo?", "correct": "Triángulo equilátero según la tabla de señalización del manual.", "distractors": ["Círculo completo con franja diagonal de color rojo.", "Cuadrado o rectángulo alargado de fondo verde intenso.", "Pentágono regular con borde azul y pictograma blanco."]}, {"id": 118, "prompt": "¿Qué representa el color AZUL en la señalización de los espacios de trabajo?", "correct": "Obligación de realizar una acción o usar un equipo de protección.", "distractors": ["Prohibición de acceso o material de lucha contra incendios.", "Situación de seguridad y rutas de salvamento o auxilio.", "Peligro de explosión o presencia de sustancias inflamables."]}, {"id": 119, "prompt": "¿Qué forma geométrica corresponde a las señales de obligación de color AZUL?", "correct": "Círculo según el epígrafe de señalización de los apuntes.", "distractors": ["Triángulo equilátero con vértice orientado hacia arriba.", "Rectángulo vertical con fondo verde y flecha direccional.", "Rombo amarillo con pictograma en color negro mate."]}, {"id": 120, "prompt": "¿Qué indica el color VERDE en la señalización de seguridad?", "correct": "Situación de seguridad, vuelta a la normalidad, salidas y auxilio.", "distractors": ["Prohibición de manipular interruptores o parada de emergencia.", "Advertencia de riesgo eléctrico, caída o sustancia peligrosa.", "Obligación de llevar casco o calzado de seguridad en el puesto."]}]}, {"modelNumber": 7, "title": "Modelo 7", "questions": [{"id": 121, "prompt": "¿Qué formas geométricas tienen las señales de salvamento o socorro (VERDE)?", "correct": "Rectángulo o cuadrado según la señalización de seguridad.", "distractors": ["Triángulo equilátero o círculo con franja transversal.", "Únicamente círculo azul con pictograma en color blanco.", "Solo rombo anaranjado con borde negro sin texto."]}, {"id": 122, "prompt": "Si una señal muestra un triángulo amarillo de advertencia, ¿qué transmite?", "correct": "Atención y precaución ante un peligro presente en el entorno.", "distractors": ["Obligación estricta de ponerse guantes antes de entrar.", "Ubicación de un extintor o pulsador de alarma contra incendios.", "Condición segura de evacuación y vuelta a la normalidad."]}, {"id": 123, "prompt": "Si una señal es circular y de color azul, ¿qué exige al trabajador?", "correct": "La obligación de realizar una acción o usar un equipo indicado.", "distractors": ["La prohibición de circular por esa zona o tocar el equipo.", "La existencia de una salida de socorro o botiquín cercano.", "La presencia de un riesgo biológico del cuarto grupo."]}, {"id": 124, "prompt": "¿Dónde se ubican las señales de rutas de evacuación y auxilio?", "correct": "En señales de color verde, con forma rectangular o cuadrada.", "distractors": ["En señales triangulares de color amarillo-anaranjado.", "En señales circulares de color rojo con franja cruzada.", "En señales triangulares de color azul con borde blanco."]}, {"id": 125, "prompt": "¿Qué ocurre si se apilan materiales sin límite comprometiéndose la estabilidad?", "correct": "Se genera un riesgo de caída o desplome en el almacenaje.", "distractors": ["Se mejora la ventilación y se reduce la humedad ambiental.", "Se cumple el requisito de superficie libre por trabajador.", "Se convierte el espacio en una salida de emergencia válida."]}, {"id": 126, "prompt": "¿Por qué las salidas de emergencia deben estar libres de obstáculos?", "correct": "Para permitir una evacuación rápida y segura sin tropiezos ni bloqueos.", "distractors": ["Para almacenar temporalmente palés y cajas de poco peso.", "Para reducir la temperatura interior del local en verano.", "Para evitar tener que instalar señalización verde en la puerta."]}, {"id": 127, "prompt": "¿Qué se busca al colocar los materiales más pesados en estantes bajos?", "correct": "Evitar sobreesfuerzos en altura y mejorar la estabilidad del conjunto.", "distractors": ["Ocupar menos espacio en el suelo de los pasillos principales.", "Evitar tener que anclar las estanterías a paredes o suelos.", "Aumentar la altura libre del techo hasta los tres metros."]}, {"id": 128, "prompt": "¿Qué mide el requisito de 10 m³ por trabajador en el Documento 3.1?", "correct": "El volumen libre mínimo de aire disponible por cada persona trabajadora.", "distractors": ["La capacidad máxima de carga de las estanterías de almacenaje.", "La anchura mínima exigida en pasillos y puertas exteriores.", "La temperatura máxima permitida en oficinas durante el verano."]}, {"id": 129, "prompt": "¿Qué mide el requisito de 2 m² por trabajador en los espacios de trabajo?", "correct": "La superficie libre mínima disponible por cada persona en el local.", "distractors": ["La altura mínima entre el suelo y el techo de una oficina.", "La velocidad máxima del aire en corrientes no calurosas.", "El tiempo mínimo de permanencia tras una evacuación."]}, {"id": 130, "prompt": "¿Qué precaución debe tomarse con los suelos en las zonas de paso?", "correct": "Que sean fijos, estables, antideslizantes y sin pendientes peligrosas.", "distractors": ["Que tengan revestimientos brillantes y pulidos en las rampas.", "Que carezcan de sujeción para adaptar su nivel a cada tarea.", "Que presenten escalones aislados sin señalizar en los pasillos."]}, {"id": 131, "prompt": "¿Cuándo se admite una escalera de caracol según los apuntes?", "correct": "Únicamente cuando tenga carácter de escalera de servicio.", "distractors": ["En cualquier acceso principal de locales de pública concurrencia.", "Siempre que tenga menos de 2,5 metros de altura total.", "Cuando no existan otros accesos en edificios de oficinas."]}, {"id": 132, "prompt": "¿Qué función cumple un resguardo en una máquina con partes móviles?", "correct": "Impedir el acceso físico a las zonas peligrosas de la máquina.", "distractors": ["Aumentar las revoluciones del motor para acelerar el trabajo.", "Sustituir la revisión técnica periódica del fabricante.", "Registrar los descansos realizados por el operador."]}, {"id": 133, "prompt": "¿Qué elemento forma parte de los requisitos constructivos del RD 486/1997?", "correct": "Altura libre, superficie y volumen por trabajador, suelos, escaleras y puertas.", "distractors": ["Cálculo de indemnizaciones y recargos por accidente laboral.", "Clasificación de sustancias según su toxicidad en el organismo.", "Pautas de respiración para reducir la carga vocal docente."]}, {"id": 134, "prompt": "¿Por qué es clave mantener en buen estado las máquinas y herramientas?", "correct": "Para prevenir fallos mecánicos o accidentes durante su manejo.", "distractors": ["Para evitar tener que colocar señales en el centro de trabajo.", "Para eliminar la necesidad de cumplir los límites térmicos.", "Para reducir la duración legal de las vacaciones anuales."]}, {"id": 135, "prompt": "¿Qué indica una señal rectangular verde con pictograma de salida o auxilio?", "correct": "Una situación de seguridad, vía de evacuación o recurso de auxilio.", "distractors": ["Una prohibición estricta de paso para personas no autorizadas.", "Un aviso de peligro mecánico por atrapamiento o golpe.", "Una obligación de usar protección auditiva o ocular."]}, {"id": 136, "prompt": "¿Qué se pretende con el orden y limpieza en los lugares de trabajo?", "correct": "Reducir caídas, tropiezos, golpes y facilitar el trabajo seguro.", "distractors": ["Prescindir de las salidas de emergencia en locales pequeños.", "Aumentar la velocidad del aire por encima de 0,25 m/s.", "Evitar la clasificación de los agentes biológicos en grupos."]}, {"id": 137, "prompt": "En locales cerrados con trabajos sedentarios, ¿entre qué valores debe estar la temperatura?", "correct": "Entre 17 °C y 27 °C en términos generales según los apuntes.", "distractors": ["Entre 10 °C y 18 °C durante todo el año sin distinción.", "Entre 25 °C y 35 °C para mantener un ambiente cálido.", "Entre 5 °C y 15 °C en oficinas y despachos administrativos."]}, {"id": 138, "prompt": "En trabajos sedentarios en locales cerrados, ¿cuál es el rango térmico en invierno?", "correct": "Entre 17 °C y 24 °C según el epígrafe de temperatura y calidad del aire.", "distractors": ["Entre 23 °C y 27 °C como intervalo térmico invernal.", "Entre 12 °C y 16 °C como temperatura recomendada en invierno.", "Entre 25 °C y 30 °C para evitar corrientes de aire frío."]}, {"id": 139, "prompt": "En trabajos sedentarios en locales cerrados, ¿cuál es el rango térmico en verano?", "correct": "Entre 23 °C y 27 °C según los datos indicados en el manual.", "distractors": ["Entre 15 °C y 20 °C como rango habitual de verano.", "Entre 17 °C y 22 °C como límite máximo estival.", "Entre 28 °C y 34 °C en locales con aire acondicionado."]}, {"id": 140, "prompt": "¿Entre qué porcentajes debe situarse la humedad relativa en locales cerrados?", "correct": "Entre el 30 % y el 70 % de humedad relativa ambiental.", "distractors": ["Entre el 5 % y el 20 % para mantener el aire seco.", "Entre el 75 % y el 95 % para evitar la sequedad ocular.", "Entre el 10 % y el 25 % en oficinas con pantallas."]}]}, {"modelNumber": 8, "title": "Modelo 8", "questions": [{"id": 141, "prompt": "¿Qué velocidad de aire no debe superarse en corrientes molestas en ambientes no calurosos?", "correct": "No deben superarse los 0,25 m/s en ambientes no calurosos.", "distractors": ["No deben superarse los 2,5 m/s en cualquier tipo de local.", "No deben superarse los 5,0 m/s en despachos y aulas.", "No deben superarse los 0,05 m/s en naves ventiladas."]}, {"id": 142, "prompt": "¿Qué molestias puede originar una iluminación inadecuada en el puesto?", "correct": "Fatiga visual, escozor, visión borrosa, cefaleas y tropiezos.", "distractors": ["Fracturas óseas por caída de objetos desde estanterías altas.", "Intoxicación digestiva por ingestión accidental de disolventes.", "Aumento de la humedad relativa por encima del setenta por ciento."]}, {"id": 143, "prompt": "¿Cómo debe gestionarse la iluminación en los puestos de trabajo según los apuntes?", "correct": "Combinando luz natural y artificial y evitando deslumbramientos o parpadeos.", "distractors": ["Empleando únicamente luz artificial intensa sin ventanas ni reflejos.", "Colocando pantallas justo frente a ventanas sin control de brillo.", "Manteniendo niveles bajos de luz para ahorrar energía en todo momento."]}, {"id": 144, "prompt": "¿Cómo se define el ruido ambiental en el epígrafe 3.2 de los apuntes?", "correct": "Como cualquier sonido no deseado que puede causar daños y malestar.", "distractors": ["Como cualquier sonido musical emitido a bajo volumen en la oficina.", "Como el murmullo suave producido por la conversación normal.", "Como la ausencia total de sonidos en un espacio cerrado."]}, {"id": 145, "prompt": "¿Qué trastornos puede provocar el ruido ambiental además de daños auditivos?", "correct": "Trastornos psicológicos como irritabilidad, fatiga y estrés laboral.", "distractors": ["Mejora de la concentración y mayor precisión en tareas finas.", "Reducción de la presión arterial y descanso profundo inmediato.", "Aumento de la agudeza visual en trabajos con pantalla."]}, {"id": 146, "prompt": "¿Sobre qué tres vectores actúan las medidas preventivas frente al ruido?", "correct": "En el foco, en la transmisión y en la persona trabajadora.", "distractors": ["En el horario, en el salario y en el contrato temporal.", "En la humedad, en la altura del techo y en las escaleras.", "En el registro de bajas, en las multas y en las vacaciones."]}, {"id": 147, "prompt": "Colocar paneles acústicos o aislar paredes frente al ruido actúa sobre:", "correct": "La transmisión del sonido entre el foco emisor y la persona.", "distractors": ["El foco original del ruido sustituyendo la máquina ruidosa.", "La persona trabajadora mediante protectores auditivos individuales.", "La calidad de la iluminación natural de las ventanas."]}, {"id": 148, "prompt":
